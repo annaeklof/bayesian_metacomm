@@ -1,0 +1,81 @@
+
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,xcolor,microtype}
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage[numbers,comma,sort&compress]{natbib}
+\usepackage[top=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[compact,small]{titlesec}
+
+\newcommand{\ud}{\textrm{d}}
+\newcommand{\ol}[1]{\overline{#1}}
+\newcommand{\rem}[1]{\textcolor{red}{\text{#1}}}
+\newcommand{\citeapos}[1]{\citeauthor{#1}'s (\citeyear{#1})}
+
+\setlength{\parindent}{0mm}
+\setlength{\parskip}{2mm}
+
+%\bibpunct{(}{)}{,}{a}{}{,}
+
+
+\begin{document}
+
+\title{Ecology Letters \emph{Methods} Proposal}
+\author{}
+\date{}
+
+
+\maketitle
+
+%\vspace{-1.0cm}
+
+
+\section*{Title:}
+
+A Bayesian network approach to trophic metacommunities shows habitat loss accelerates top species extinctions
+
+
+\section*{Author list:}
+
+\textit{Johanna H\"aussler}, PhD candidate (email: \texttt{johanna.haeussler@idiv.de})\\
+German Centre for Integrative Biodiversity Research (iDiv), Halle-Jena-Leipzig\\
+Institute of Biodiversity, Friedrich Schiller University Jena, Germany
+
+\textit{Gy\"orgy Barab\'as}, Assistant professor (email: \texttt{gyorgy.barabas@liu.se})\\
+Division of Theoretical Biology, Dept.\ IFM, Link\"oping University, Sweden\\
+MTA-ELTE Theoretical Biology and Evolutionary Ecology Research Group, Budapest, Hungary
+
+\textit{Anna Ekl\"of}, Associate professor (email: \texttt{anna.eklof@liu.se})\\
+Division of Theoretical Biology, Dept.\ IFM, Link\"oping University, Sweden
+
+
+\section*{Author qualifications:}
+\textit{Johanna H\"aussler} will be handing in her PhD thesis this year. Her work focuses on combining food web ecology with metacommunity theory to study biodiversity dynamics in meta-food-webs, the effects of spatial changes on food web structure, and in general, understanding the factors influencing the stability of ecological networks at the landscape scale. 
+
+\textit{Gy\"orgy Barab\'as}'s research focuses on understanding the stability and robustness of ecological networks (with an emphasis of species-rich systems), eco-evolutionary dynamics, and coexistence theory viewed through the lens of sensitivity analysis.
+
+\textit{Anna Ekkl\"of} is an associate professor in theoretical biology. Her field of research is ecological networks and the main focus is understanding their structure, the driving forces behind the structures and how this is related to how they respond to disturbances. She also has a particular interest in how spatial distributions of trophic interactions influence food web structure and robustness.
+
+
+\newpage
+
+
+\section*{Proposal}
+
+Habitat loss is one of the main drivers of species extinctions \citep{Tylianakis2008, Haddad2015}, yet its effect on complex communities such as food webs remains mostly unknown. This is because systematic explorations of this topic are scarce \citep{Pillai2011, Eklof2012} and mostly confined to studying small food webs and/or landscapes, often due to computational limitations \citep{Liao2016, Liao2017JAE, Liao2017RSPB, Ryser2019}. Here we address this problem by developing a novel approach to studying trophic metacommunities. Our method combines classic metapopulation models \cite{HanskiOvaskainen2000, OvaskainenHanski2001, HanskiOvaskainen2003} on fragmented landscapes with a Bayesian network representation \cite{Eklofetal2013MEE} of trophic interactions for calculating local extinction rates. This allows us to efficiently explore how the negative effects of habitat loss are transferred in the whole metacommunity. We illustrate the advantages and applications of our new approach in three ways.
+
+First, we show that, due to its computational efficiency, our framework can be applied to much larger food webs and landscapes than would be feasible with fully-fledged dynamical models. This efficiency is combined with tractability: the method also yields analytical insight into how and why habitat fragmentation deconstructs food webs.
+
+Second, since our method is built on classical metapopulation theory \cite{OvaskainenHanski2001}, it allows us to repurpose many of the theory's known properties to aid the analysis of trophic metacommunities. For example, we can rank the habitat patches of the landscape with respect to their importance to the persistence of the metacommunity as a whole. We employ this patch ranking to study how progressive habitat loss affects species extinctions in model food webs. Surprisingly, and importantly from a conservation perspective, removing patches in random order turns out to be almost indistinguishable in its effects from the worst-case scenario of removing the most valuable patches first.
+
+Third, we demonstrate that our framework can be readily applied to empirical systems using the plant-mammal Serengeti food web dataset \cite{Baskerville2011} as a case study, to illustrate the potential effects of progressive habitat loss on an iconic but threatened trophic metacommunity. 
+
+
+\bibliographystyle{unsrt}
+\bibliography{biblio.bib}
+
+
+\end{document}
+

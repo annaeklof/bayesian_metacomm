@@ -1,0 +1,11 @@
+*~
+*.Rhistory
+*.DS_Store
+*.aux
+*.log
+*.bbl
+*.blg
+*.synctex.gz
+.git-credentials
+data/summaries_round1/
+data/results_round1/

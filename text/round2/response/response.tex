@@ -1,0 +1,337 @@
+
+\documentclass[11pt]{article}
+
+\usepackage{graphicx, amsmath, amsfonts, amssymb, amsxtra, bm}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[protrusion=true, expansion=true]{microtype}
+\usepackage[authoryear]{natbib}
+\usepackage[font={small}, bf]{caption}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{txfonts}
+\usepackage{xr}
+
+\newcommand{\SI}{SM}
+\newcommand{\ud}{\text{d}}
+\newcommand{\mat}[1]{\bm{#1}}
+\newcommand{\cov}{\text{cov}}
+\newcommand{\rem}[1]{\textcolor{red}{\textrm{#1}}}
+\newcommand{\citeapos}[1]{\citeauthor{#1}'s (\citeyear{#1})}
+\let\originalleft\left
+\let\originalright\right
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+\renewcommand{\right}{\aftergroup\egroup\originalright}
+\newcommand{\FdL}[1]{\textcolor{Cerulean}{\textrm{#1}}}
+\renewcommand{\thefigure}{R\arabic{figure}}
+\renewcommand{\thetable}{R\arabic{table}}
+\renewcommand{\theequation}{R\arabic{equation}}
+\newcommand{\us}{\rm \setlength{\leftskip}{0.3cm} \setlength{\rightskip}{0.3cm}}
+\newcommand{\them}{\it \setlength{\leftskip}{0cm} \setlength{\rightskip}{0cm}}
+
+
+\setlength{\parskip}{0.8em}
+\setlength{\parindent}{0em}
+\bibpunct{(}{)}{,}{a}{}{,}
+\clubpenalty = 10000
+\widowpenalty = 10000
+\graphicspath{{./}}
+\externaldocument[SI:]{../appendix}
+\externaldocument[main:]{../manuscript}
+
+
+\begin{document}
+
+\begin{flushright}
+  Dr.~John Drake\\
+  Senior Editor\\
+  Ecology Letters
+\end{flushright}
+
+
+\begin{flushleft}
+\textbf{Manuscript number: } \texttt{ELE-00187-2020} \\
+``A Bayesian network approach to trophic metacommunities shows habitat loss accelerates top species extinctions''\\
+Johanna H\"aussler, Gy\"orgy Barab\'as \& Anna Eklöf
+\end{flushleft}
+
+
+Dear Dr.~Drake,
+
+Thank you for taking the time to consider our manuscript for publication in \textit{Ecology Letters}. We have revised the manuscript and written detailed point-by-point responses to the reviewers' comments below.
+% Authors should use concise writing, avoid giving several duplicate citations to support the same statement, and consider moving to Supplementary Information materials that are beyond the interest of most general readers who wish to understand what was done in general terms.
+
+We thank you once again for your time.
+
+\bigskip
+
+Best regards,
+
+Johanna H\"aussler, Gy\"orgy Barab\'as \& Anna Eklöf
+
+
+\section*{Response to reviewer comments}
+
+\subsection*{Reviewer 1}
+
+\them
+
+This paper presents a new modelling approach for predicting patterns of occupancy in bottom-up driven trophic metacommunities. This novel approach uses Bayesian networks to predict which species should persist in each patch on a landscape, given an assumed dispersal model and functional form for how local extinction risks should depend on the fraction of prey resources available to each predator. The authors demonstrate how to use this approach to estimate the effect of habitat restrictions in four scenarios assuming different patterns of baseline mortality and dispersal, and under three different scenarios of habitat remove. The authors also demonstrate what patterns of habitat loss this model would predict for a terrestrial food web, parameterized using predator-prey relationships from a Serengeti food web data set.
+
+The author's approach to developing the Bayesian network model is rigorously constructed, and carefully explained. I found the thorough discussion of the method in box 1 and in S1 to be very helpful, and I think this approach has the potential to be very useful for modelling extinction scenarios across landscapes. However, I do have one substantial concern with the paper, as well as some more minor comments.
+
+\us
+
+We thank the Reviewer for the exceptionally careful reading of our manuscript, the detailed comments, the encouragement, and the constructive criticism and helpful suggestions for improvement.
+
+\them
+
+My primary concern is that the Bayesian network model makes several strong assumptions about ecological interactions, and there is no evidence given in the paper to determine whether those assumptions are justified based on evidence from real food webs, or to assess how robust the predictions of extinction patterns are to violations of those assumptions. The primary results of the paper, that extinction rates will generally increase with trophic level and with removing highly connected habitats, are in line with the broader literature on spatial patterns of extinction. This model may be very useful for making quantitative predictions for large food webs and for identifying critical habitats to protect, but for that to be the case, it is important that it is able to accurately predict extinction patterns. Any model that is useful for understanding specific cases should be validated either by showing it makes accurate specific conditions, or that the assumptions the model is based on are consistent with empirical facts \citep{IvesAgrawal2005}.
+
+\us
+
+As said above, the primary results of the paper that extinction rates will generally increase with trophic level and with removing highly connected habitats are in line with the broader literature on spatial patterns of extinction. To that extent, the model's predictions are in line with observed empirical facts. Beyond that, we know for a fact that some of the assumptions (such as no top-down effects) are absolutely wrong. Nevertheless, as mentioned above, another way to assure the usefulness of a model is to show that it makes robust predictions. To this end, we have re-done some of our analyses relaxing the assumption that each prey item contributes a fixed fraction to predators' diets (see below).
+
+\them
+
+One of the core assumptions of the author's model is that extinction risk depends functionally on the fraction of a species' total resources that are available within a given patch. I am not aware of any ecological research on how extinction risk might vary with the fraction of prey available to a predator, and this particular assumption does have an odd consequence; it means that if there are two otherwise equivalent species, but one of the species is able to prey on an additional resource that happens to be absent from a patch, that more generalist species will be more likely to go extinct than the first one. An alternative assumption would be that extinction risk would depend on the absolute number of resources available within a patch, but I suspect the model would show very different patterns of extinction. I would recommend that the authors include either strong empirical evidence for the justification the current functional form, or a supplementary analysis to show that the predicted outcomes are robust to the assumption.
+
+\us
+
+First, argue that the example of the referee is not as strange as it looks. Second, implement simulations where extinction is not a function of the fraction of prey lost, but of their identity (i.e., assign weights to each prey, measuring how much the predator likes them). We assign weights to match \ldots empirical pattern (look for them).
+
+\them
+
+A second core assumption of this model is that extinction risks only depend on bottom-up effects. While the authors are careful to note this limitation (page 14 line 14) and recommend that if ``in a given system, top-down effects are deemed important, other methods should be used instead'', there is no guidance on when top-down effects are expected to be important, and the model used here has not been demonstrated to be able to accurately predict extinction patterns in the presence of potential top-down effects. I would recommend a comparison of spatial extinction patterns predicted by the Bayesian network approach to those predicted by a dynamical metacommunity model, as used in \citet{Ryser2019}, to verify if this approach produces qualitatively similar extinction patterns compared to a dynamic model.
+
+\us
+
+Reproduce Figure~S2 in Ryser et al with Bayesian approach?
+
+\them
+
+Other notes:
+
+Page 4, line 55: It would have been useful to me to have the broad model assumptions stated in text prior to the formal model description, especially the assumptions that extinction rates only depend on the number of available resources (not presence of competitors or prey), and that extinction rates varied with fraction of available resources.
+
+\us
+
+We rearranged the text
+
+\them
+
+Page 5 line 5: The notation is a bit confusing here. $M^{kl}_i$ is stated to be a species-specific landscape matrix, but from the equation it is clear that it is the k-by-l'th entry of a specific matrix.
+
+\us
+
+Now we say they are modeled using a species-dependent landscape matrix, whose $(k,l)$th entry $M_i^{kl}$ gives the dispersal rate of species $i$ from patch $l$ to patch $k$.
+
+\them
+
+Page 5, line 9-12: this text is a bit unclear, as it is confusing an extinction rate with a probability. A probability of extinction only makes sense in a specific time frame. It is also unclear what is meant by ``the first term of a Poisson distribution''. I would recommend rephrasing this along the lines of ``within-patch extinction is modelled as a Poisson process with a rate $E_i^k$, so the probability of extinction occurring within one time period is $\delta_i^k = 1- \exp(-E_i^k)$, from which [\ldots]''.
+
+\us
+
+We have rewritten the sentence in the suggested way.
+
+\them
+
+Page 6, line 43:56: why are these in a different order than in the figure? For instance, why does \#1 on this list correspond to figure 2C, whereas \#2 corresponds to figure 2A?
+
+\us
+
+We have changed the ordering to match the list.
+
+\them
+
+Page 8, line 52: ``In the best-case scenario, unless consumer response to prey absence is described by a strongly concave function'': this should refer to a specific panel figure 2.
+
+\us
+
+We have added the subfigure reference.
+
+\them
+
+Page 9, line 18: dispersal rates may not always increase with trophic level, and may actually decrease in some ecosystems \citep{Pedersenetal2016}. For instance, \citet{Beisneretal2006} show evidence that higher trophic level species (zooplankton, fish) in lakes disperse more rarely than smaller organisms based on community dissimilarity patterns, and \citet{Villarinoetal2018} show the same phenomenon with plankton based on body sizes.
+
+\us
+
+This is a fair point---we now mention that this assumption need not hold in all systems.
+
+\them
+
+Page 11, line 18: Why was this specific species chosen?
+
+\us
+
+It is the only basal species that is also the sole member of a spatial group. So it was a natural choice. But there is no need to do this; in fact, we have done the analysis with another basal species' metapopulation capacity (see figure below).
+
+\them
+
+Page 14, line 25: It is also important to note another limitation of this approach; the calculation of extinction rates depends very heavily on the assumption of the separation of time scales between extinction and colonization, as the Bayesian network method of calculating extinction probability assumes that there is no chance of an extinction cascade within a patch being stopped by a colonist of a prey species arriving midway through; i.e. mass effects are also assumed not to play a role in extinction dynamics. This approach also explicitly assumes that everything is in (quasi)equilibrium when calculating local extinction rates, so likely will not work to calculate e.g. extinction debts or out-of-equilibrium patch occupancy dynamics.
+
+\us
+
+Indeed, this is the case, we mentioned it in the Methods in passing, but now bring it up again here.
+
+\them
+
+Figure 2: I would recommend labelling the axes of the insets. Currently, the functional forms show how extinction risk changes with fraction of prey items missing, but a causal reader could easily infer that they represent probability of survival with fraction of prey present, as the natural ordering for the x-axis would be to range from 0\% of prey available to 100\% of prey available. I would also recommend only plotting integer trophic levels (rather than the fractional trophic levels), as the extra lines make the figure more visually difficult to understand, without giving extra information on the dynamics.
+
+\us
+
+We have revised the figure insets and changed the plot to show integer trophic levels (we did thesame in all corresponding figures in the supplement as well).
+
+\them
+
+S1, page 1: B(f) refers to the extinction probability as a function of the number of resources, but the appendix also discusses a specific species, B. This means that equation S2 and S3 are needlessly confusing to understand; I would suggest using different notation for the function B(f). 
+
+\us
+
+We changed the notation for $B(f)$, to \ldots
+
+\them
+
+S1, page 2: ``In this quasi-equilibrium state, there is some constant probability of going extinct'': this is unclear; does this mean there is some constant rate of extinction per unit time, or some constant probability of a given species being extinct at any given point in time? Is it the probability of going extinct before the arrival of the next colonist? Also, it would help to clarify that this means local (within patch) extinction, as the focus of the paper is on how metacommunity dynamics may affect that rate of global extinctions.
+
+\us
+
+We revised the text (the rate of going extinct is constant through time). We also clarified that this refers to local extinction.
+
+\them
+
+S1 page 2, equation S9: I think this relates to my previous question; I may be missing something here, but I don't understand why the probability of patch occupancy for a given prey species is multiplied by one minus their probability of persistence in the patch. Naively, it seems like the probability that a prey is not present in a patch is given simply by $(1-p_{\text{prey}}^k)$, given that has already been found iteratively based on the resources present below it in the food web. If $\delta_R^k$ is the probability of going extinct in a fixed period (where it's assumed that no colonization events take place) then the current notation makes sense (i.e. if a focal species only has one prey item, it will go extinct in a given time period if it's prey is not present at the start of a time period (dependent on $p_{\text{prey}}^k$) or if that prey item goes extinct during the period ($\delta_R^k$) but this needs to be clarified in text.
+
+\us
+
+Clarify that we assume constant rates, which lead to constant probabilities per unit time---from which we infer the rates. So it's just as described above.
+
+\them
+
+\subsection*{Reviewer 2 (Dominique Gravel)}
+
+This manuscript reports an investigation of the effect of habitat loss in a trophic metacommunity model. The model is a natural extension of previous ones used to investigate the effect of spatial dynamics on food web structure. Consumers are subject to colonization and extinction dynamics following a spatially explicit representation of Levins' model, with the additional feature that their extinction rate increases with the lost of prey. It builds on the Bayesian network representation of interactions to represent interaction mediated extinctions. The main analysis consists of removing patches and exploring the fraction of persisting species according to different scenarios. The main conclusions are that higher trophic levels are more sensitive to habitat loss and that some patches are more important than others to maintain metapopulation capacities.
+
+I particularly appreciated certain aspects of the model : 
+
+\begin{itemize}
+\item It generalizes previous approaches using the spatially explicit formulation of Hanski and collaborators of the Levins model;
+\item It nicely integrates a technique of network robustness analysis within a metacommunity framework, allowing a smoother representation of extinction probabilities and sequences;
+\item It accounts for size/trophic level variation in colonization and extinction probabilities (in agreement with conclusions of Guzman et al.)
+\end{itemize}
+That said, there are also (known and acknowledged) limitations of the model :
+\begin{itemize}
+\item Only extinction depends on interactions, while previous models and a an empirical analysis (Cirtwill and Stouffer, 2015 GEB) have shown that both that it could also impact colonization;
+\item The analysis (as most robustness analyses too) relies only on a bottom-up view of the world, neglecting potential effects of trophic cascades and indirect interactions on extinctions.
+\end{itemize}
+
+\us
+
+\them
+
+The manuscript itself is very well prepared, I do not have specific comments other than figure 3 should appear before figure 2.
+
+\us
+
+We have changed the order of the figures.
+
+\them
+
+My overall feeling is that this study could be a nice and welcome contribution to metacommunity ecology, but that several lines of investigation could be developed further to take advantage of the strengths of the modelling approach. As it is, most of the results could have been derived from previous trophic metacommunity models. A good example of this is Figure 3, which is basically the same result obtained by Holt in several of his contributions to island biogeography and \citet{Calcagnoetal2011} who generalized this theory later. I don't mean that Figure 3 is useless, but the analysis of metapopulation capacity could further build on the spatially explicit nature of the model. For instance, landscapes with aggregated patches could be compared and see how it influences lambda for different trophic levels with different dispersal distances. 
+
+\us
+
+Maybe analyze landscapes ranging from gridlike to random arrangement.
+
+\them
+
+What follows are suggestions, it is up to the authors to decide what to do with them :
+
+- I think that the most original contribution of the study is the inclusion of explicit space following Hanski's work on metapopulation capacity. But unfortunately the analysis does not build on it, the same results could have been derived using a island-mainland approach (again, nothing in Figure 3 is taking advantage of explicit space). There are several ways to build on this, among them :
+
+\us
+
+Side note: Figures~1-2 all depend on the spatial structure. Also, the fact that the best-case scenario is so different from the worst and random is due to the explicit spatial arrangement and removal (Figure~1).
+
+\them
+
+\begin{itemize}
+\item Contribution of individual patches to metapopulation carrying capacity could be explored;
+  
+\us
+
+That \emph{is} what we're doing (see above). We now emphasize this better in our text.
+
+\them
+
+\item Only dispersal links in the spatial network could be removed, allowing an analysis of fragmentation in addition to habitat loss;
+
+\us
+
+We have redone our analyses by removing, instead of randomly chosen patches, randomly chosen links. Once a link is removed between two patches, no species can travel between them, regardless of their dispersal ability. We compare the outcome of this random link removal experiment with the random patch removal. Results are \ldots
+
+\them
+
+\end{itemize}
+
+- The analysis could also build further on how Bayesian networks are used to study represent extinction sequences:
+
+\begin{itemize}
+\item It would be interesting to define a "metacommunity robustness" index, similar to the robustness analysis of topological networks (e.g. the amount of habitat loss a metacommunity could stand before 50\% of the species are going extinct). This index could be calculated for the whole food web and perhaps per trophic level, since higher trophic levels will have lower robustness
+
+\us
+
+The problem is that such a metric would give different robustness values depending on landscape layout, order of patch removal, etc. While this direction is definitely interesting, we feel that its magnitude is beyond the scope of this work.
+
+\them
+
+\item Further, it would be interesting to compare the extinction sequence that is observe if one conduct a traditional node deletion numerical experiment vs a patch removal experiment. Are species extinctions following the same sequence ? At the same rate ? Such an analysis (which is easy to run) would provide a more process-based interpretation of extinction sequences, a common critique of such analyses.
+
+\us
+
+(Maybe do this after all other chages are done.)
+
+\them
+
+\end{itemize}
+
+- I also have two technical remarks about the representation of how interactions impact extinction:
+
+\begin{itemize}
+\item A smoother and conceptually similar way to account for the cumulative effects of prey availability on extinction probability was introduced before by \citet{Cazellesetal2015}. The formulation in this model, inspired by Lotka-Volterra equations, is not as elegant and computationally efficient as a Bayesian network, but it has the advantage of integrating variation in the contribution of each species to function B(f).
+
+\us
+
+We now mention \citet{Cazellesetal2015}. Also, we don't need to use the $B(f)$ function; we can make extinction likelihoods a function of the individual prey items and consumers' reliance on them (see our comment to Reviewer 1).
+
+\them
+
+\item Further, I disagree with the interpretation that it is impossible to have a top-down effect in Bayesian representation of interactions (P14). Equation B1 could easily be modified such that it is the number of predators that is influencing the baseline extinction rate, instead of the number (or fraction) of prey. Again, \citet{Cazellesetal2015} implemented both in their formulation.
+
+\us
+
+(Check Cazelles paper). This is probably technically true; the Bayesian network can be turned around. The problem is that it's difficult to justify a form of top-down extinction. (Should extinction likelihood \emph{increase} with number of consumers? If so, then are prey the most likely to go extinct if they have all their consumers present?) There are too many possible implementations.
+
+We changed our text. We no longer say this is impossible to implement. Instead, we say it is a bit arbitrary to do so.
+
+\them
+
+\end{itemize}
+
+
+\section*{Comments from the Editor}
+
+The authors have greatly interested two reviewers who nonetheless have some rather substantial criticisms. If these can be satisfactorily addressed (and the novelty and generality of the proposed method clearly established), the work could be published in Ecology Letters.
+
+\us
+
+\them \rm
+
+
+\newpage
+\bibliographystyle{../elsarticle-harv}
+\bibliography{../biblio}
+
+
+\end{document}
+
