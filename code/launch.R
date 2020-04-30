@@ -1,26 +1,19 @@
 
 require(tidyverse)
 
-landscs <- Sys.glob("../data/landscapes/landscape*.csv")[1:5]
-spinputs <- Sys.glob("../data/species_input/web*.csv")
-spfs <- c("basal", "top")
+landscs <- Sys.glob("../data/landscapes/gridlike*.csv")
+spinputs <- Sys.glob("../data/species_input/web50350*.csv")[c(3,6, 7, 8)]
+spfs <- "basal" ## spfs <- c("basal", "top")
 outputdir <- "../data/results/"
-alpha <- 1
-beta <- 1
+alpha <- c(1, 5)
+beta <- c(5, 1)  
 
-tab <- expand.grid(landsc=landscs, spinput=spinputs, spf=spfs,
-                   outputdir=outputdir, alpha=alpha, beta=beta,
-                   stringsAsFactors=FALSE) %>%
-    as_tibble %>%
+tab <- expand_grid(landsc=landscs, spinput=spinputs, spf=spfs,
+                   outputdir=outputdir, alpha=alpha, beta=beta) %>%
     mutate(web=paste0("../data/webs/",
                       str_split_fixed(basename(spinput), "_", 2)[,1], ".csv")) %>%
-    select(web, landsc, spinput, spf, outputdir, alpha, beta)
-
-tab <- tab %>% filter(web=="../data/webs/web5351.csv",
-                      spf=="top",
-                      spinput %in% c("../data/species_input/web5351_001.csv",
-                                     "../data/species_input/web5351_006.csv",
-                                     "../data/species_input/web5351_007.csv"))
+    select(web, landsc, spinput, spf, outputdir, alpha, beta) ##%>%
+    ##filter(alpha!=beta) ## only non-linear fforms of prey loss
 
 for (r in 1:nrow(tab)) {
     jobname <- sprintf("SBN_%03d.sh", r)
@@ -28,13 +21,13 @@ for (r in 1:nrow(tab)) {
     writeLines(c(
         paste("#!/bin/bash"),
         paste("#SBATCH -J", jobname),
-        paste("#SBATCH -A liu-2018-29"),
-        paste("#SBATCH -t 05:00:00"),
+        paste("#SBATCH -A liu-2017-00089-2"),
+        paste("#SBATCH -t 12:00:00"),
         paste("#SBATCH --mem=16000"),
         paste("#SBATCH -n 1"),
         paste("#"),
         paste("# Run single task in foreground"),
-        paste("module add R/3.5.1-nsc1-gcc-2018a"),
+        paste("module add R/3.6.0-nsc1-gcc-7.3.0"),
         paste("cd", Sys.getenv("PWD")),
         paste("Rscript run_instance.R", paste(tab[r,], collapse=" ")),
         paste("#"),
@@ -44,4 +37,3 @@ for (r in 1:nrow(tab)) {
     system(paste("sbatch", jobname))
     Sys.sleep(0.1)
 }
-
