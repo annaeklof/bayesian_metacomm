@@ -2,7 +2,7 @@
 require(tidyverse)
 
 landscs <- Sys.glob("../data/landscapes/gridlike*.csv")
-spinputs <- Sys.glob("../data/species_input/web50350*.csv")[c(3,6, 7, 8)]
+spinputs <- Sys.glob("../data/species_input/web50350*.csv")[c(3, 6, 7, 8)]
 spfs <- "basal" ## spfs <- c("basal", "top")
 outputdir <- "../data/results/"
 alpha <- c(1, 5)
