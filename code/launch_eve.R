@@ -8,8 +8,9 @@ outputdir <- "../data/results/"
 alpha <- c(1, 5)
 beta <- c(5, 1)  
 
-tab <- expand_grid(landsc=landscs, spinput=spinputs, spf=spfs,
-                   outputdir=outputdir, alpha=alpha, beta=beta) %>%
+#note: expand_grid does not work on the cluster (probably because of an older R version)
+tab <- expand.grid(landsc=landscs, spinput=spinputs, spf=spfs,
+                   outputdir=outputdir, alpha=alpha, beta=beta, stringsAsFactors = FALSE) %>% 
     mutate(web=paste0("../data/webs/",
                       str_split_fixed(basename(spinput), "_", 2)[,1], ".csv")) %>%
     select(web, landsc, spinput, spf, outputdir, alpha, beta) ##%>%
