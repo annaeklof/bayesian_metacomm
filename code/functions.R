@@ -4,6 +4,7 @@ require(igraph)
 require(NetIndices)
 require(tidyverse)
 
+
 ## Randomly draw patch coordinates. 
 ## Input:
 ## - N: number of patches in the landscape, 
@@ -55,12 +56,13 @@ bayesian_ext <- function(sp, spdat, A, nreps, alpha, beta) {
             filter(patch==unique(spdat$patch)[k]) %>% 
             mutate(d=1-(1-delta)*p) %>% 
             pull(d)
-        for (i in 1:nreps) {
-            extinct <- 1*(runif(nrow(A))<deltas)
-            frac <- as.numeric(A[sp,] %*% extinct / sum(A[sp,]))
-            Pext <- be + (1 - be) * pbeta(frac, alpha, beta) ## prob of extinction
-            if (runif(1)<Pext) marginal[k] <- marginal[k] + 1
-        }
+        marginal[k] <- getMarginal(A[sp,], deltas, be, alpha, beta, nreps)
+        ## for (i in 1:nreps) {
+        ##     extinct <- 1*(runif(nrow(A))<deltas)
+        ##     frac <- as.numeric(A[sp,] %*% extinct / sum(A[sp,]))
+        ##     Pext <- be+(1-be)*pbeta(frac, alpha, beta) ## prob of extinction
+        ##     if (runif(1)<Pext) marginal[k] <- marginal[k] + 1
+        ## }
     }
     return(marginal/nreps)
 }

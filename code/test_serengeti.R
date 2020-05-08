@@ -30,7 +30,8 @@ end
 ")
 
 ## turn the above Julia code to an R function
-bayes_ntw_MC <- JuliaFunction(bayes_ntw_MC_jul)
+bayes_jul <- JuliaFunction(bayes_ntw_MC_jul)
+bayes_ntw_MC <- function(A, Pb, a, b, N) juliaGet(bayes_jul(A, Pb, a, b, N))
 
 ## Create adjacency matrix from a data frame of edges.
 ## Input:
@@ -76,11 +77,11 @@ Pb <- rep(0.1, nrow(serengeti)) ## baseline extinction probabilities
 
 a_par <- 1 ## alpha parameter of Beta CFD
 b_par <- 1 ## beta parameter of Beta CFD
-N <- 1000000 ## number of iterations of Monte Carlo simulation
+N <- 10000 ## number of iterations of Monte Carlo simulation
 
 ## benchmark no. 1: Julia code
 t0_jl <- Sys.time() ## record time at start of evaluation of Julia function
-bayes_ntw_MC(serengeti, Pb, a_par, b_par, N) %>% juliaGet ## Bayes eval
+bayes_ntw_MC(serengeti, Pb, a_par, b_par, N) ## Bayes eval
 t1_jl <- Sys.time() ## record time at the end of evaluation
 
 ## benchmark no. 2: R code

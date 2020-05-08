@@ -1,4 +1,6 @@
 
+require(Rcpp)
+sourceCpp("bayes_marginal.cpp")
 require(igraph, quietly=TRUE)
 require(tidyverse, quietly=TRUE)
 source("functions.R")
@@ -13,9 +15,9 @@ if (length(clargs) > 0) { ## command-line arguments
   alpha <- as.numeric(clargs[6]) ## 1st parameter of beta distr (Bayesian network)
   beta <- as.numeric(clargs[7]) ## 2nd parameter of beta distr (Bayesian network)
 } else { ## sample input parameters, if no command line arguments are given
-  web <- "../data/webs/FloridaIslandE1.csv"
+  web <- "../data/webs/test.csv"
   landsc <- "../data/landscapes/landscape_001.csv"
-  spinput <- "../data/species_input/FloridaIslandE1_001.csv"
+  spinput <- "../data/species_input/test.csv"
   spf <- "basal"
   outputdir <- "../data/results/"
   alpha <- 1
@@ -36,16 +38,18 @@ N <- length(landscape[,1]) ## number of patches in the landscape
 spdat0 <- generate_spdat(web, spinput, landsc) %>%
   add_column(delta=0, lambda=0, p=0.5, pvalues=0)
 
-  spdat0 <- sim_metacomm(A, spdat0, nreps, alpha, beta) %>%
-    add_column(prem=0,
-               web=web,
-               spinput=spinput,
-               landsc=landsc,
-               spf=spf,
-               seed=seed,
-               alpha=alpha,
-               beta=beta,
-               scenario="all")
+system.time(
+spdat0 <- sim_metacomm(A, spdat0, nreps, alpha, beta) %>%
+  add_column(prem=0,
+             web=web,
+             spinput=spinput,
+             landsc=landsc,
+             spf=spf,
+             seed=seed,
+             alpha=alpha,
+             beta=beta,
+             scenario="all")
+)
 
 spdat <- spdat0
 
