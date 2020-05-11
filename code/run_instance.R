@@ -1,4 +1,7 @@
 
+require(Rcpp, quietly=TRUE)
+sourceCpp("c_functions.cpp")
+require(NetIndices, quietly=TRUE)
 require(igraph, quietly=TRUE)
 require(tidyverse, quietly=TRUE)
 source("functions.R")
