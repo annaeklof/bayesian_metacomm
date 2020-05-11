@@ -1,6 +1,4 @@
 
-require(Rcpp)
-sourceCpp("bayes_marginal.cpp")
 require(igraph, quietly=TRUE)
 require(tidyverse, quietly=TRUE)
 source("functions.R")
