@@ -1,4 +1,4 @@
 species,pi,xi,kernel,TL,OI,FT
 species1,0.2,0.055,Exponential,1.0,0,basal
-species2,0.2,0.055,Exponential,2.0,0,herbivore
-species3,0.2,0.055,Exponential,2.5,0,carnivore
+species2,0.3,0.065,Exponential,2.0,0,herbivore
+species3,0.4,0.1,Exponential,2.5,0,carnivore
