@@ -76,7 +76,7 @@ NumericVector itersol(NumericVector p, NumericMatrix M, NumericVector d) {
       g=g*E_inverse; // colonization*(inverse extinction)
       p_next=g/(g+1); // iteration map: g/(g+1)
     } // end of for iter
-    if (sum(pow(result-p_next, 2))<1e-8) converge=1; // has result converged?
+    if (sum(pow(result-p_next, 2))<1.0e-8) converge=1; // has result converged?
     result=p_next; // in either case, update result with current estimate of p
   } // end of while
   return(result);
