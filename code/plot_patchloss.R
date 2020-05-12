@@ -11,9 +11,10 @@
 
 plot_patchloss <- function(data, webs, paramss, scenarioss, spfs, a, b, basals, ptitle, labnames){
 
-  data <- data %>% 
-    mutate(scenario=factor(scenario, levels=c("best-case scenario", "worst-case scenario", "random scenario")))
-  
+  data <- data %>% filter(params %in% paramss) %>% 
+    mutate(scenario=factor(scenario, levels=c("best-case scenario", "worst-case scenario", "random scenario")),
+        params=factor(params,levels=c(paramss[4],paramss[1], paramss[2], paramss[3])))
+          
   ## Extract top species extinction:
   temp <- data %>% filter(web==webs, spf==spfs, scenario %in% scenarioss, params %in% paramss, alpha == a, beta == b) 
   topextinct <- temp %>% filter(species==topsp, lambda<1) %>%  ## NOTE: max(species) != topsp !!!
@@ -23,19 +24,19 @@ plot_patchloss <- function(data, webs, paramss, scenarioss, spfs, a, b, basals, 
   
   ## Define theme and colour palette:
   theme_set(theme_bw()) ## set black and white theme
-  colourCount <- data$TL05 %>% unique %>% length
+  colourCount <- data$ITL %>% unique %>% length
   getPalette  <- colorRampPalette(brewer.pal((11),"RdYlBu"))
   cpalette <- rev(getPalette(colourCount+1))
-  cpalette <- cpalette[-6]
+  cpalette <- cpalette[-4]
   
   if(basals == FALSE) data <- data %>% filter(FT != "basal") 
   
   data %>% filter(web == webs, params %in% paramss, spf==spfs, alpha == a, beta == b, scenario %in% scenarioss) %>%
-    group_by(web, params, scenario, prem, TL05) %>%
+    group_by(web, params, scenario, prem, ITL) %>%
     summarise(meanlambda=mean(lambda,na.rm=TRUE), sdlambda=sd(lambda, na.rm=TRUE)) %>% ungroup %>% 
     rename(`Patches removed`=prem) %>%
     ggplot() +
-    aes(x=`Patches removed`, y=meanlambda, colour=as.factor(TL05), fill=as.factor(TL05)) +
+    aes(x=`Patches removed`, y=meanlambda, colour=as.factor(ITL), fill=as.factor(ITL)) +
     scale_color_manual(values=cpalette) +
     scale_fill_manual(values=cpalette) +
     geom_hline(yintercept=1, linetype="dashed", alpha=0.3) +
@@ -43,9 +44,9 @@ plot_patchloss <- function(data, webs, paramss, scenarioss, spfs, a, b, basals, 
     geom_line(show.legend=FALSE) +
     geom_ribbon(aes(ymin=meanlambda-sdlambda, ymax=meanlambda+sdlambda),colour=NA, alpha=0.3) +
     facet_grid(scenario~params, 
-        labeller=labeller(.rows = label_value, .cols = as_labeller(labnames, label_parsed))) + 
-    guides(fill=guide_legend(title="Trophic levels", override.aes=list(size=5, alpha=1), reverse=TRUE)) + 
+        labeller=labeller(.rows = label_value, .cols = as_labeller(labnames, label_parsed))) +
+    guides(fill=guide_legend(title="Trophic levels", override.aes=list(size=5, alpha=1), reverse=TRUE)) +
     ggtitle(ptitle) +
-    theme(text = element_text(size=15), axis.text.x = element_text(angle=75, hjust=1)) + 
-    ylab("Metapopulation capacity") 
+    theme(text = element_text(size=15), axis.text.x = element_text(angle=75, hjust=1)) +
+    ylab("Metapopulation capacity")
 }
