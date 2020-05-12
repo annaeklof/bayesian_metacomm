@@ -1,10 +1,10 @@
 
 require(Rcpp, quietly=TRUE)
-sourceCpp("bayes_marginal.cpp")
+sourceCpp("c_functions.cpp")
 require(NetIndices, quietly=TRUE)
 require(igraph, quietly=TRUE)
 require(tidyverse, quietly=TRUE)
-source("functions_old.R")
+source("functions.R")
 
 ##spdat_ref <- read_csv("../data/results/test_serengeti.csv")
 
@@ -60,4 +60,5 @@ bind_rows(
   ggplot +
   aes(x=ref, y=sim, colour=TL) +
   geom_point() +
+  geom_abline(slope=1, intercept=0) +
   theme_bw()

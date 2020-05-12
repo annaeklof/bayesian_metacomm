@@ -1,56 +1,41 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// calculate local extinction probs (deltas) of a focal species, in each patch
+
+// calculate local extinction probs (deltas) of a focal species in a focal patch
 // Input:
 // - Arow: one row of the food web's adjacency matrix, corresponding to the
 //         focal species
-// - pmat: matrix of patch occupancies; pmat(i,k) is species i's occupancy of
-//         patch k
-// - dmat: matrix of extinction probabilities; dmat(i,k) is species i's extinction
-//         probability in patch k
-// - pi_sp: baseline extinction probabilities of the focal species in each patch
+// - deltas: vector of species' extinction probs in focal patch
+// - be: baseline extinction probability of focal species in focal patch
 // - alpha: first parameter of the Beta distribution
 // - beta: second parameter of the Beta distribution
-// - nreps: number of iterations for the Monte Carlo sim of the Bayesian network
+// - reps: number of iterations for the Monte Carlo sim of the Bayesian network
 // Output:
-// - vector of extinction probabilities for focal species in each patch
+// - no of times the focal species in the focal patch went extinct (out of reps)
 // [[Rcpp::export]]
-NumericVector getdelta(NumericVector Arow, NumericMatrix pmat,
-                          NumericMatrix dmat, NumericVector pi_sp,
-                          double alpha, double beta, int reps) {
+int getMarginal(NumericVector Arow, NumericVector deltas, double be,
+                double alpha, double beta, int reps) {
   int S=Arow.size(); // number of species
-  int N=pmat.ncol(); // number of patches
-  int rep, prodsum, tot, i, k;
-  double frac, pext;
-  NumericVector extinct(S), rands_e(S), rands_r(reps), result(N);
-  if (sum(Arow)==0) { // if species is basal:
-    result=pi_sp; // extiction probs are the baseline values
-  } else { // if species is nonbasal:
-    for (k=0; k<N; k++) { // for each patch:
-      result[k]=0.0; // zero out local extinction prob
-      rands_r=Rcpp::runif(reps); // generate (reps) random numbers for future use
-      for (rep=0; rep<reps; rep++) { // for (reps) repetitions:
-        prodsum=0; // cumulative sum of product of Arow[i] and extinct[i]
-        tot=0; // sum of Arow's entries (row sum of A[sp,])
-        rands_e=Rcpp::runif(S); // generate S random numbers, for future use
-        for (i=0; i<S; i++) { // for each species:
-          // extinct if random value is less than 1-(1-delta)*p in local patch
-          extinct[i]=(rands_e[i]<(1-(1-dmat(i,k))*pmat(i,k)) ? 1 : 0);
-          prodsum+=Arow[i]*extinct[i]; // is ith species extinct?
-          tot+=Arow[i]; // accumulate sum of entries of Arow
-        } // end of for i
-        frac=(double)prodsum/((double)tot); // fraction of extinct species
-        // extinction probability of focal species (Bayesian NW formula):
-        pext=pi_sp[k]+(1-pi_sp[k])*R::pbeta(frac, alpha, beta, true, false);
-        // extinct if random number is less than pext
-        result[k]+=(rands_r[rep]<pext ? 1.0 : 0.0);
-      } // end of for rep
-      result[k]/=(double)reps; // divide result by number of repetitions
-    } // end of for k
-  } // end of else
-  return(result);
+  int rep, prodsum, tot, i, marginal=0;
+  double randnum, frac, pext;
+  NumericVector extinct(S), rands_e(S), rands_r=Rcpp::runif(reps);
+  for (rep=0; rep<reps; rep++) {
+    prodsum=0; // cumulative sum of product of Arow[i] and extinct[i]
+    tot=0; // sum of Arow's entries (row sum of A[sp,])
+    rands_e=Rcpp::runif(S); // generate S random numbers, for future use
+    for (i=0; i<S; i++) { // for each species:
+      extinct[i]=(rands_e[i]<deltas[i] ? 1 : 0); // extinct or extant?
+      prodsum+=Arow[i]*extinct[i]; // is ith species extinct?
+      tot+=Arow[i]; // accumulate sum of entries of Arow
+    } // end of for i
+    frac=(double)prodsum/((double)tot); // fraction of extinct prey
+    pext=be+(1-be)*R::pbeta(frac, alpha, beta, true, false); // Bayesian NW eq
+    marginal+=(rands_r[rep]<pext ? 1 : 0); // extinct if random number < pext
+  }
+  return(marginal);
 }
+
 
 // obtain equilibrium patch occupancies numerically
 // Input:

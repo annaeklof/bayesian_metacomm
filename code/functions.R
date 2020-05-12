@@ -30,6 +30,37 @@ create_adj_matrix <- function(edgelist) {
     return(A[o,o])
 }
 
+## Monte Carlo evaluation of Bayesian network for a single species
+## Input:
+## - sp: name (as character string) of focal species
+## - spdat: species information table
+## - A: adjacency matrix
+## - nreps: number of iterations for the Monte Carlo sim of the Bayesian network
+## - alpha: first parameter of the Beta distribution
+## - beta: second parameter of the Beta distribution
+## Output:
+## - a vector of length N (number of patches), each containing the marginal
+##   extinction probability in patch k of species sp
+bayesian_ext <- function(sp, spdat, A, nreps, alpha, beta) {
+    N <- length(unique(spdat$patch)) ## no of patches
+    marginal <- rep(0, N) ## marginal ext prob of sp in all patches
+    for (k in 1:N) { ## for each patch:
+        be <- spdat$pi[spdat$species==sp][k] ## baseline ext prob of sp in patch k
+        deltas <- spdat %>% ## marginal ext probs of all species in kth patch
+            filter(patch==unique(spdat$patch)[k]) %>% 
+            mutate(d=1-(1-delta)*p) %>% 
+            pull(d)
+        marginal[k] <- getMarginal(A[sp,], deltas, be, alpha, beta, nreps)
+        ## for (i in 1:nreps) {
+        ##     extinct <- 1*(runif(nrow(A))<deltas)
+        ##     frac <- as.numeric(A[sp,] %*% extinct / sum(A[sp,]))
+        ##     Pext <- be+(1-be)*pbeta(frac, alpha, beta) ## prob of extinction
+        ##     if (runif(1)<Pext) marginal[k] <- marginal[k] + 1
+        ## }
+    }
+    return(marginal/nreps)
+}
+
 ## Create disperal matrix M. 
 ## Input: - coords: patch coordinatexs x and y, 
 ## - kernel: type of dispersal kernel (species-specific), 
@@ -147,30 +178,21 @@ generate_spdat <- function(webfile, datfile, landscapefile){
 ## - a species information table (spdat) updated with the correct equilibrium
 ##   marginal extinction probabilities delta_i^k and patch occupancies p_i^k
 sim_metacomm <- function(A, spdat, nreps, alpha, beta) {
-    pmat <- spdat %>% ## matrix of patch occupancies p
-        select(patch, species, p) %>%
-        spread(species, p) %>%
-        select(-patch) %>%
-        as.matrix %>%
-        t
-    dmat <- spdat %>% ## matrix of delta values
-        select(patch, species, delta) %>%
-        spread(species, delta) %>%
-        select(-patch) %>%
-        as.matrix %>%
-        t
     for (sp in rownames(A)) {
-        M <- get_matrix(coords=cbind(spdat$x[spdat$species==sp],
+        M <- get_matrix(coords=cbind(spdat$x[spdat$species==sp], 
                                      spdat$y[spdat$species==sp]), 
                         kernel=spdat$kernel[spdat$species==sp][1],
-                        xi=spdat$xi[spdat$species==sp][1]) ## dispersal matrix
-        pi_sp <- spdat$pi[spdat$species==sp] ## baseline extinction probs
-        dmat[sp,] <- getdelta(A[sp,], pmat, dmat, pi_sp, alpha, beta, nreps)
-        pmat[sp,] <- itersol(pmat[sp,], M, dmat[sp,])
-        ## write back species' patch occupancies
-        spdat$p[spdat$species==sp] <- pmat[sp,]
-        ## write back species' delta values
-        spdat$delta[spdat$species==sp] <- dmat[sp,]
+                        xi=spdat$xi[spdat$species==sp][1]) ## dispersal matrix  
+        if (sum(A[sp,])==0) { ## basal species
+            spdat$delta[spdat$species==sp] <- spdat$pi[spdat$species == sp]
+        } else { ## consumer species
+            spdat$delta[spdat$species==sp] <- bayesian_ext(sp, spdat, A,
+                                                           nreps, alpha, beta)
+        }
+        converge <- FALSE ## test for convergence: iterate 10 times, compare with
+        ## solve for equilibrium patch occupancies numerically
+        spdat$p[spdat$species==sp] <- itersol(spdat$p[spdat$species==sp], M,
+                                              spdat$delta[spdat$species==sp])
         ## calculate sp's metapopultion capacity
         spdat$lambda[spdat$species==sp] <- calc_metapopcapacity(spdat, sp)
         ## calculate relative patch values
