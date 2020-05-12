@@ -1,10 +1,10 @@
 
 require(Rcpp, quietly=TRUE)
-sourceCpp("bayes_marginal.cpp")
+sourceCpp("c_functions.cpp")
 require(NetIndices, quietly=TRUE)
 require(igraph, quietly=TRUE)
 require(tidyverse, quietly=TRUE)
-source("functions_old.R")
+source("functions.R")
 
 clargs <- commandArgs(trailingOnly=TRUE)
 if (length(clargs) > 0) { ## command-line arguments
