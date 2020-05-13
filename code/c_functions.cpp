@@ -17,19 +17,19 @@ using namespace Rcpp;
 int getMarginal(NumericVector Arow, NumericVector deltas, double be,
                 double alpha, double beta, int reps) {
   int S=Arow.size(); // number of species
-  int rep, prodsum, tot, i, marginal=0;
-  double randnum, frac, pext;
+  int rep, i, marginal=0;
+  double randnum, frac, pext, prodsum, tot;
   NumericVector extinct(S), rands_e(S), rands_r=Rcpp::runif(reps);
   for (rep=0; rep<reps; rep++) {
-    prodsum=0; // cumulative sum of product of Arow[i] and extinct[i]
-    tot=0; // sum of Arow's entries (row sum of A[sp,])
+    prodsum=0.0; // cumulative sum of product of Arow[i] and extinct[i]
+    tot=0.0; // sum of Arow's entries (row sum of A[sp,])
     rands_e=Rcpp::runif(S); // generate S random numbers, for future use
     for (i=0; i<S; i++) { // for each species:
-      extinct[i]=(rands_e[i]<deltas[i] ? 1 : 0); // extinct or extant?
+      extinct[i]=(rands_e[i]<deltas[i] ? 1.0 : 0.0); // extinct or extant?
       prodsum+=Arow[i]*extinct[i]; // is ith species extinct?
       tot+=Arow[i]; // accumulate sum of entries of Arow
     } // end of for i
-    frac=(double)prodsum/((double)tot); // fraction of extinct prey
+    frac=prodsum/tot; // fraction of extinct prey
     pext=be+(1-be)*R::pbeta(frac, alpha, beta, true, false); // Bayesian NW eq
     marginal+=(rands_r[rep]<pext ? 1 : 0); // extinct if random number < pext
   }
