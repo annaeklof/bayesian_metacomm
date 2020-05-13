@@ -39,7 +39,6 @@ N <- length(landscape[,1]) ## number of patches in the landscape
 spdat0 <- generate_spdat(web, spinput, landsc) %>%
   add_column(delta=0, lambda=0, p=0.5, pvalues=0)
 
-system.time(
 spdat0 <- sim_metacomm(A, spdat0, nreps, alpha, beta) %>%
   add_column(prem=0,
              web=web,
@@ -50,7 +49,6 @@ spdat0 <- sim_metacomm(A, spdat0, nreps, alpha, beta) %>%
              alpha=alpha,
              beta=beta,
              scenario="all")
-)
 
 spdat <- spdat0
 
