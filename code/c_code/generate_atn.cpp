@@ -248,9 +248,9 @@ static void output(gsl_matrix *Ap, gsl_matrix *A, gsl_matrix *H, gsl_vector *mas
     FILE *file1,*file2, *file3, *file4; 
      
 // file 1: web_*.out
-    char web_out[99] = "web_";
+    char web_out[99] = "A_";
 	strcpy(web_out,directory);
-	strcat(web_out,"web_");
+	strcat(web_out,"A_");
 	strcat(web_out,C_bash_Sb); 
 	strcat(web_out,C_bash_Sc);
 	strcat(web_out,"_");
@@ -269,9 +269,9 @@ static void output(gsl_matrix *Ap, gsl_matrix *A, gsl_matrix *H, gsl_vector *mas
     fclose(file1);
     
 // file 3: A_*.out
-    char A_out[99] = "A_";
+    char A_out[99] = "Aw_";
 	strcpy(A_out,directory);
-	strcat(A_out,"A_");
+	strcat(A_out,"Aw_");
 	strcat(A_out,C_bash_Sb); 
 	strcat(A_out,C_bash_Sc);
 	strcat(A_out,"_");

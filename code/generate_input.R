@@ -13,8 +13,14 @@ if (length(clargs) > 0) { ## command-line arguments
 } else { ## sample input parameters, if no command line arguments are given
   outputdir <-  "../data/species_input/"
   webdir <-  "../data/webs/"
-  webs <- Sys.glob("../data/webs/*.csv")
+  webs <- Sys.glob("../data/webs/web50350.csv")
 }
+
+webs <- c("../data/webs/web503501.csv", 
+          "../data/webs/web503502.csv", 
+          "../data/webs/web503503.csv", 
+          "../data/webs/web503504.csv", 
+          "../data/webs/web503505.csv")
 
 webs <- sub('\\.csv$', '', basename(webs)) 
 

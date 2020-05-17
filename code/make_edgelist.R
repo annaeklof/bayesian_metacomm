@@ -22,12 +22,13 @@ make_edgelist <- function(cwebfile ){
   return(web)
 }
 
-webs <- Sys.glob("../data/c_webs/w*.out") ## list of web files
+webs <- Sys.glob("../data/c_webs/A_*.csv") ## list of web files
 outputdir <- Sys.glob("../data/c_webs/") ## list of web files
 w <- webs[1]
 
 for(w in webs){
-  outfile <- sub('\\.out$', '', w) %>% paste0(.,".csv")
+  temp <- w %>% str_split(.,"A_",simplify=TRUE)
+  outfile <- paste0(temp[1], "web", temp[,2])
   make_edgelist(w) %>% write_csv(outfile)
 }
 
