@@ -28,7 +28,7 @@ int getMarginal(NumericVector Arow, NumericVector deltas, double be,
       extinct[i]=(rands_e[i]<deltas[i] ? 1.0 : 0.0); // extinct or extant?
       prodsum+=Arow[i]*extinct[i]; // is ith species extinct?
       tot+=Arow[i]; // accumulate sum of entries of Arow
-    } // end of for i
+    }
     frac=prodsum/tot; // fraction of extinct prey
     pext=be+(1-be)*R::pbeta(frac, alpha, beta, true, false); // Bayesian NW eq
     marginal+=(rands_r[rep]<pext ? 1 : 0); // extinct if random number < pext
@@ -39,30 +39,30 @@ int getMarginal(NumericVector Arow, NumericVector deltas, double be,
 
 // obtain equilibrium patch occupancies numerically
 // Input:
-// - p: vector of initial patch occupancies of focal species
+// - p0: vector of initial patch occupancies of focal species
 // - M: dispersal matrix of focal species
 // - d: vector of extinction probabilities of focal species
 // Output:
 // - vector of updated patch occupancies for focal species in each patch
 // [[Rcpp::export]]
-NumericVector itersol(NumericVector p, NumericMatrix M, NumericVector d) {
-  int N=p.size(); // number of patches
+NumericVector itersol(NumericVector p0, NumericMatrix M, NumericVector d) {
+  int N=p0.size(); // number of patches
   int converge=0; // variable to check whether numerical iteration has converged
   int iter, k, l;
-  NumericVector p_next(N), result=p, E_inverse(N), g(N);
-  for (k=0; k<N; k++) E_inverse[k]=-1/log(1-d[k]); // the inverse extinction rates
+  NumericVector p_next(N), result=p0, Einv(N), g(N);
+  Einv=-1/log(1-d); // the inverse extinction rates
   while (!converge) { // if solution hasn't converged yet:
     p_next=result; // initialize next occupancy values to the current ones
     for (iter=0; iter<10; iter++) { // for ten iterations:
       for (k=0; k<N; k++) { // calculate principal map g: colonization/extinction
-        g[k]=0; // initialize ith value of principal map
-        for (l=0; l<N; l++) g[k]=g[k]+M(k,l)*p_next[l]; // colonization (M %*% p)
-      } // end of for k
-      g=g*E_inverse; // colonization*(inverse extinction)
-      p_next=g/(g+1); // iteration map: g/(g+1)
-    } // end of for iter
+        g[k]=0.0; // initialize ith value of principal map
+        for (l=0; l<N; l++) g[k]=g[k]+M(k,l)*p_next[l]; // colonization (M%*%p)
+      }
+      g=g*Einv; // principal map g = colonization*(inverse extinction)
+      p_next=g/(g+1.0); // iteration map: g/(g+1)
+    }
     if (sum(pow(result-p_next, 2))<1.0e-8) converge=1; // has result converged?
     result=p_next; // in either case, update result with current estimate of p
-  } // end of while
+  }
   return(result);
 }
