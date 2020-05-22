@@ -1,0 +1,13 @@
+#!/bin/bash
+#SBATCH -J SBN_001.sh
+#SBATCH -A liu-2017-00089-2
+#SBATCH -t 10:00:00
+#SBATCH --mem=16000
+#SBATCH -n 1
+#
+# Run single task in foreground
+module add R/3.6.0-nsc1-gcc-7.3.0
+cd /home/dysordys
+Rscript run_local.R ../../data/data_ryser/results/tl_dat.csv
+#
+# Script ends here

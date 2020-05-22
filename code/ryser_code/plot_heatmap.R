@@ -1,7 +1,7 @@
 
 require(tidyverse)
 
-dat <- read_csv("../../data/ryser_data/results/tl_data.csv")
+dat <- read_csv("../../data/ryser_data/results/tldat.csv")
 
 dat %>%
   ggplot +
@@ -25,12 +25,13 @@ getlambda <- function(lsc, xi) {
     as.matrix
   M <- exp(-M/xi)
   diag(M) <- 0
-  lambda <- max(Re(eigen(M, only.values=TRUE)$values))
+  rs <- rowSums(M)
+  lambda <- sum(rs*rs)/sum(rs)
   return(lambda)
 }
 
 dat2 <- expand_grid(N=seq(16, 70, by=2),
-            xi=10^(seq(-2, 0, l=11)),
+            xi=10^(seq(-2, 0.5, l=11)),
             lsc=Sys.glob("../../data/ryser_data/landscapes/*.csv")) %>%
   rowwise %>%
   mutate(lM=getlambda(lsc, xi)) %>%
@@ -43,5 +44,9 @@ dat2 %>%
   geom_raster(interpolate=TRUE) +
   scale_x_continuous(expand=c(0, 0), name=expression(paste(log[10](xi)))) +
   scale_y_continuous(expand=c(0, 0), name="number of patches") +
-  scale_fill_gradient(name="max trophic level") +
+  scale_fill_gradient2(name="max trophic level", midpoint=25,
+                       labels=c(expression(paste(10%*%log(pi^-1))),
+                                expression(paste(30%*%log(pi^-1))),
+                                expression(paste(50%*%log(pi^-1)))),
+                       breaks=c(10, 30, 50)) +
   theme_bw()

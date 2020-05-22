@@ -17,16 +17,16 @@ nreps <- 10000 ## number of iterations for Bayesian network
 tab <- expand_grid(
   web="../../data/ryser_data/webs/web_1_1.csv",
   landsc=Sys.glob("../../data/ryser_data/landscapes/*.csv"),
-  spinput=Sys.glob("../../data/ryser_data/spinput/*.csv"),
+  spinput=Sys.glob("../../data/ryser_data/spinput/*.csv")[1],
   spf=c("basal"),
   outputdir="../../data/ryser_data/results/",
   alpha=c(1, 5),
-  beta=c(5, 1),
-  xi=10^(seq(-2, 1, l=11)))
+  beta=c(1, 5),
+  xiscale=10^(seq(-2, 0.1, l=11))/0.055/5)
 
 heatmap <- tibble(xi=rep(0, nrow(tab)), N=0, alpha=0, beta=0, tl=0)
 
-for (r in 1:10) {
+for (r in 1:nrow(tab)) {
   web <- tab$web[r]
   landsc <- tab$landsc[r]
   spinput <- tab$spinput[r]
@@ -38,7 +38,7 @@ for (r in 1:10) {
   landscape <- as.matrix(read_csv(landsc, col_types=cols())) ## landscape file
   spdat0 <- generate_spdat(web, spinput, landsc) %>%
     add_column(delta=0, p=0.5) %>%
-    mutate(xi=tab$xi[r])
+    mutate(xi=xi*tab$xiscale[r])
   spdat <- sim_metacomm(A, spdat0, nreps, alpha, beta) %>%
     add_column(prem=0,
                web=web,
@@ -49,7 +49,7 @@ for (r in 1:10) {
                alpha=alpha,
                beta=beta,
                scenario="all")
-  heatmap$xi[r] <- tab$xi[r]
+  heatmap$xi[r] <- tab$xiscale[r]
   heatmap$N[r] <- nrow(landscape)
   heatmap$alpha[r] <- tab$alpha[r]
   heatmap$beta[r] <- tab$beta[r]
