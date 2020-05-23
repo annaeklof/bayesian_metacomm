@@ -13,7 +13,7 @@ if (length(clargs) > 0) { ## command-line arguments
   outfile <- ""
 }
 
-nreps <- 10000 ## number of iterations for Bayesian network
+nreps <- 1000 ## number of iterations for Bayesian network
 tab <- expand_grid(
   web="../../data/ryser_data/webs/web_1_1.csv",
   landsc=Sys.glob("../../data/ryser_data/landscapes/*.csv"),

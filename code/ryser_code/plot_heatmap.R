@@ -1,7 +1,7 @@
 
 require(tidyverse)
 
-dat <- read_csv("../../data/ryser_data/results/tldat.csv")
+dat <- read_csv("../../data/ryser_data/results/tl_dat.csv")
 
 dat %>%
   ggplot +
@@ -13,8 +13,7 @@ dat %>%
   facet_grid(beta~alpha, labeller=label_bquote(rows=beta==.(beta),
                                                cols=alpha==.(alpha))) +
   theme_bw()
-##ggsave("~/Desktop/heatmap.pdf", width=5, height=3.8)
-
+##ggsave("../../figures/Ryser_reproduced.pdf", width=5.5, height=3.8)
 
 
 
@@ -50,3 +49,5 @@ dat2 %>%
                                 expression(paste(50%*%log(pi^-1)))),
                        breaks=c(10, 30, 50)) +
   theme_bw()
+##ggsave("../../figures/Ryser_semianalytic.pdf", width=5.5, height=3.8)
+
