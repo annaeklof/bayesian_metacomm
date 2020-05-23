@@ -7,7 +7,7 @@
 #
 # Run single task in foreground
 module add R/3.6.0-nsc1-gcc-7.3.0
-cd /home/dysordys
-Rscript run_local.R ../../data/data_ryser/results/tl_dat.csv
+cd /home/x_gyoba/bayesian_metacomm_round2/code/ryser_code/
+Rscript run_local.R ../../data/ryser_data/results/tl_dat.csv
 #
 # Script ends here
