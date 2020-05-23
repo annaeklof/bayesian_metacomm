@@ -1,7 +1,7 @@
 
 require(tidyverse)
 
-dat <- read_csv("../../data/ryser_data/results/tl_dat.csv")
+dat <- read_csv("../../data/ryser_data/results/tl_dat_new.csv")
 
 dat %>%
   ggplot +
@@ -13,7 +13,7 @@ dat %>%
   facet_grid(beta~alpha, labeller=label_bquote(rows=beta==.(beta),
                                                cols=alpha==.(alpha))) +
   theme_bw()
-##ggsave("../../figures/Ryser_reproduced.pdf", width=5.5, height=3.8)
+ggsave("../../figures/Ryser_reproduced_pi_5e-2.pdf", width=5.5, height=3.8)
 
 
 
