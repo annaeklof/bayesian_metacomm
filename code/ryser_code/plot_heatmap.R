@@ -1,19 +1,20 @@
 
 require(tidyverse)
 
-dat <- read_csv("../../data/ryser_data/results/tl_dat_new.csv")
+dat <- read_csv("../../data/ryser_data/results/test.csv")
 
 dat %>%
+  mutate(ab=paste0("alpha==", alpha, "~~beta==", beta)) %>%
+  mutate(spinput=ifelse(spinput=="web_1_1.csv", "xi~const.", "xi~TLB")) %>%
   ggplot +
   aes(x=log10(xi), y=N, fill=tl) +
   geom_raster(interpolate=TRUE) +
   scale_x_continuous(expand=c(0, 0), name=expression(paste(log[10](xi)))) +
   scale_y_continuous(expand=c(0, 0), name="number of patches") +
   scale_fill_gradient2(name="max trophic level", midpoint=3.5) +
-  facet_grid(beta~alpha, labeller=label_bquote(rows=beta==.(beta),
-                                               cols=alpha==.(alpha))) +
+  facet_grid(ab~spinput, labeller="label_parsed") +
   theme_bw()
-ggsave("../../figures/Ryser_reproduced_pi_5e-2.pdf", width=5.5, height=3.8)
+##ggsave("../../figures/Ryser_reproduced_pi_5e-2.pdf", width=5.5, height=3.8)
 
 
 

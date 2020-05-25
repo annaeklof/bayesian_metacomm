@@ -68,9 +68,9 @@ More specifically, a species $C$ has, first of all, a baseline probability of ex
 The probability $P(\neg C|f)$ of species $C$ going extinct given that a fraction $f$ of its resources are lost is modeled as
 \begin{equation}
   \label{eq:BN_prob}
-  P(\neg C|f) = \pi_C + (1 - \pi_C) B(f) \ ,
+  P(\neg C|f) = \pi_C + (1 - \pi_C) w(f) \ ,
 \end{equation}
-where $B(f)$ is a monotonically increasing function, defined for $0 \le f \le 1$, such that $B(0)=0$ and $B(1)=1$. The former condition holds when all resources are present, in which case Eq.~\ref{eq:BN_prob} yields $P(\neg C) = \pi_C$, the baseline extinction probability. The latter condition means that when all resources are lost, $P(\neg C) = 1$ according to Eq.~\ref{eq:BN_prob}: no species can survive without any resources sustaining it.
+where the weighting function $w(f)$ is monotonically increasing and defined for $0 \le f \le 1$, such that $w(0)=0$ and $w(1)=1$. The former condition holds when all resources are present, in which case Eq.~\ref{eq:BN_prob} yields $P(\neg C) = \pi_C$, the baseline extinction probability. The latter condition means that when all resources are lost, $P(\neg C) = 1$ according to Eq.~\ref{eq:BN_prob}: no species can survive without any resources sustaining it.
 
 To obtain the marginal probability of a species going extinct, one uses the law of total probability. Assume species $C$ consumes two prey items, $A$ and $B$, which are both basal species. In that case, we can write
 \begin{equation}
@@ -85,13 +85,13 @@ where $P(\neg C|A \neg B)$ is the probability of $C$ being extinct given that $A
 \begin{equation}
   \label{eq:BN_marginal_example_2}
   \begin{split}
-    P(\neg C) &= [\pi_C + (1 - \pi_C) B(0)] (1 - \pi_A) (1 - \pi_B) +
-    [\pi_C + (1 - \pi_C) B(1/2)] \pi_A (1 - \pi_B) \\ &\quad +
-    [\pi_C + (1 - \pi_C) B(1/2)] (1 - \pi_A) \pi_B +
-    [\pi_C + (1 - \pi_C) B(1)] \pi_A \pi_B \ .
+    P(\neg C) &= [\pi_C + (1 - \pi_C) w(0)] (1 - \pi_A) (1 - \pi_B) +
+    [\pi_C + (1 - \pi_C) w(1/2)] \pi_A (1 - \pi_B) \\ &\quad +
+    [\pi_C + (1 - \pi_C) w(1/2)] (1 - \pi_A) \pi_B +
+    [\pi_C + (1 - \pi_C) w(1)] \pi_A \pi_B \ .
   \end{split}
 \end{equation}
-With the particular choice $B(f)=f$, the expression simplifies:
+With the particular choice $w(f)=f$, the expression simplifies:
 \begin{equation}
   \label{eq:BN_marginal_example_3}
   P(\neg C) = \pi_C (1 - \pi_A) (1 - \pi_B) +
@@ -129,14 +129,13 @@ This yields an extinction probability of $0$ when the rate $E_i^k$ is zero, and 
   E_i^k = -\log(1 - \delta_i^k) \ .
 \end{equation}
 
-The essence of our approach to trophic metacommunities is the way we model the extinction probabilities $\delta_i^k$. These are calculated from a Bayesian network representation of the food web. Given baseline extinction probabilities $\pi_i^k$ for species $i$ in patch $k$, we equate $\delta_i^k$ with the marginal probability of extinction in patch $k$, calculated from the Bayesian network. When applying Eq.~\ref{eq:BN_marginal_example} to obtain the extinction probability of a species $i$, we take into consideration that $i$'s prey might not be present in the patch. In particular, the probability of persistence of prey is multiplied by their patch occupancy:
+The essence of our approach to trophic metacommunities is the way we model the extinction probabilities $\delta_i^k$. These are calculated from a Bayesian network representation of the food web. Given baseline extinction probabilities $\pi_i^k$ for species $i$ in patch $k$, we equate $\delta_i^k$ with the marginal probability of extinction in patch $k$, calculated from the Bayesian network. When applying Eq.~\ref{eq:BN_marginal_example} to obtain the extinction probability of a species $i$, we take into consideration that $i$'s prey might not be present in the patch. In particular, the probability of persistence of prey is multiplied by their patch occupancy, resulting in the $(1-\delta_\text{prey}^k) \rightarrow (1-\delta_\text{prey}^k) p_\text{prey}^k$ replacement. Therefore,
 \begin{equation}
   \label{eq:bayesprob}
-  P(\text{prey}) = (1-\delta_\text{prey}^k) p_\text{prey}^k ,
+  \delta_{\text{prey}}^k = 1 - (1 - \delta_\text{prey}^k) p_\text{prey}^k \ .
 \end{equation}
-and $P(\neg \text{prey}) = 1 - P(\text{prey}) = 1 - (1 - \delta_\text{prey}^k) p_\text{prey}^k$.
 
-For basal species, we assume that the nutrients they use are always available. This leads to $p_j^k = 1$ in all patches for all nutrients $j$, so for basals, $P(\neg \text{basal}) = 1 - (1 - \pi_\text{basal}^k)p_j^k = \pi_\text{basal}^k$.
+For basal species, we assume that the nutrients they use are always available. This leads to $p_j^k = 1$ in all patches for all nutrients $j$, so for basals, $\delta_{\text{basal}}^k = 1 - (1 - \pi_\text{basal}^k)p_j^k = \pi_\text{basal}^k$.
 
 
 \section{Simple model properties} \label{sec:simpleprops}
@@ -146,13 +145,13 @@ For a single focal species, Eq.~\ref{eq:model} belongs in the class of spatially
   \label{eq:principalmap}
   g_i^k = -\frac{1}{\log(1 - \delta_i^k)} \sum_{l=1}^N M_i^{kl} p_i^l \ .
 \end{equation}
- This leading eigenvalue exceeding $1$ means the metapopulation persists at equilibrium, otherwise all $p_i^k$ are zero. Due to our Bayesian network approach, the extinction likelihood $\delta_i^k$ is a function of the patch occupancies of the focal species' prey, but not those of the focal species itself. That is, $\delta_i^k$ is independent of $p_i^k$. The Jacobian of the principal map evaluated at $p_i^k = 0$, which we will denote by $A_i^{kl}$, therefore simply reads
+Due to our Bayesian network approach, the extinction likelihood $\delta_i^k$ is a function of the patch occupancies of the focal species' prey, but not those of the focal species itself. That is, $\delta_i^k$ is independent of $p_i^k$. The Jacobian of the principal map evaluated at $p_i^k = 0$, which we will denote by $A_i^{kl}$, therefore simply reads
 \begin{equation}
   \label{eq:pmjac}
   A_i^{kl} = \left. \frac{\partial g_i^k}{\partial p_i^l} \right|_{p_i^k=0} =
   -\frac{M_i^{kl}}{\log(1 - \delta_i^k)} \ .
 \end{equation}
-The metapopulation capacity $\lambda_i$ of species $i$ is the leading eigenvalue of this matrix.
+The metapopulation capacity $\lambda_i$ of species $i$ is the leading eigenvalue of this matrix. If $\lambda_i$ exceeds $1$, the metapopulation persists at equilibrium, otherwise all $p_i^k$ are zero.
 
 To obtain the equilibrium patch occupancies, we set $\ud p_i^k / \ud t = 0$ in Eq.~\ref{eq:model}. The equilibrial patch occupancy distribution is then expressed as $C_i^k/(C_i^k + E_i^k) = g_i^k / (g_i^k + 1)$. Defining the map
 \begin{equation}
@@ -180,20 +179,6 @@ where $\lambda_i$ is the metapopulation capacity for species $i$ (the leading ei
 \end{equation}
 \citep{OvaskainenHanski2001}. However, Eq.~\ref{eq:papprox} works acceptably even for the simple average $\ol{p}_i = \sum_{k=1}^N p_i^k / N$.
 
-% The leading eigenvalue $\lambda_i$ of any matrix $B_i^{kl}$ can be approximated analytically as
-% \begin{equation}
-%   \label{eq:lambda_approx_general}
-%   \lambda_i \approx \frac{\sum_{k=1}^N r_i^k c_i^k}{\sum_{k=1}^N r_i^k}
-% \end{equation}
-% \citep{OvaskainenHanski2001}, where $r_i^k$ ($c_i^k$) is the $k$th row (column) sum of $B_i^{kl}$. A more specific approximation can be obtained for the landscape matrix $M_i^{kl}$ itself, assuming it has been generated using a dispersal kernel, is symmetric, and that patches are randomly and uniformly distributed over the landscape. In that case, we have
-% \begin{equation}
-%   \label{eq:lambda_approx}
-%   \lambda_i \approx \rho G_i \xi_i^D
-% \end{equation}
-% \citep{Grillietal2015}. Here $\rho$ is the density of patches in the landscape (i.e., for $N$ patches distributed in a square with side length $L$, $\rho = N / L^2$), $G_i \sim \mathcal{O}(1)$ is a positive numerical form factor which depends on the shape of the dispersal kernel and the dimensionality $D$ of the landscape (e.g., $D=1$ for dunes along a shoreline; $D=2$ for lakes distributed over an area), and $\xi_i$ is the dispersal distance (typical distance traversed by species $i$ in a unit of time).
-
-% It should be noted that the approximation in Eq.~\ref{eq:lambda_approx} is good but far from perfect. It can have quite an error margin compared with the true dominant eigenvalue, especially when the number of patches is small. Quantitative predictions based on this estimate should therefore be taken with a grain of salt. That said, the approximation is still always qualitatively correct, and it can be used to infer the analytical shape of relationships between various quantities, as subsequent examples will show.
-
 
 \section{Simple analytically tractable trophic networks} \label{sec:anal}
 
@@ -202,9 +187,7 @@ where $\lambda_i$ is the metapopulation capacity for species $i$ (the leading ei
 The simplest example of a trophic metacommunity consist of just two species: one consumer $C$ and one basal resource $R$. Below we analyze the trophic metacommunity formed by these species, step by step.
 
 \textit{\textbf{Step 1: Solve for the extinction probabilities using the Bayesian network approach.}}
-The baseline probabilities of extinction for the resource and the consumer are $\pi_R^k$ and $\pi_C^k$, respectively. Since $R$ is a basal species, we have $\delta_R^k = \pi_R^k$. The probability $P(R)$ of persistence in a patch with occupancy $p_R^k$ is written using Eq.~\ref{eq:bayesprob}: $P(R) = (1 - \pi_R^k) p_R^k$. From this, the probability of species $R$ going extinct is $P(\neg R) = 1 - P(R) = 1 - (1 - \pi_R^k) p_R^k$. 
-
-The marginal probability of extinction $\delta_C^k$ of the consumer is written in the style of Eq.~\ref{eq:BN_marginal_example}, except with only a single resource:
+The baseline probabilities of extinction for the resource and the consumer are $\pi_R^k$ and $\pi_C^k$, respectively. Since $R$ is a basal species, we have $\delta_R^k = \pi_R^k$. The consumer's probability of extinction in a patch with resource occupancy $p_R^k$ is written using Eq.~\ref{eq:bayesprob}: $\delta_R^k = 1- (1 - \pi_R^k) p_R^k$. We now obtain the consumer's marginal probability of extinction $\delta_C^k$ in the style of Eq.~\ref{eq:BN_marginal_example}, except with only a single resource:
 \begin{equation}
   \label{eq:BN_marginal_CR}
   \begin{split}
@@ -213,7 +196,7 @@ The marginal probability of extinction $\delta_C^k$ of the consumer is written i
     p_R^k ] \ .
   \end{split}
 \end{equation}
-Using Eq.~\ref{eq:BN_prob} to write the conditional probabilities, and noting that $B(0)=0$ and $B(1)=1$ regardless of the form of $B(f)$, we get $P(\neg C|R) = \pi_C^k$ and $P(\neg C|\neg R) = 1$:
+Using Eq.~\ref{eq:BN_prob} to write the conditional probabilities, and noting that $w(0)=0$ and $w(1)=1$ regardless of the form of $w(f)$, we get $P(\neg C|R) = \pi_C^k$ and $P(\neg C|\neg R) = 1$:
 \begin{equation}
   \label{eq:BN_marginal_CR_2}
   \delta_C^k = \pi_C^k (1 - \pi_R^k) p_R^k + 1 - (1 - \pi_R^k) p_R^k \ .
@@ -290,7 +273,7 @@ Since every species $i>1$ has exactly one prey, from Eq.~\ref{eq:BN_prob} we can
   \label{eq:BN_marginal_chain_2}
   \delta_{i+1}^k = \pi_{i+1}^k P(i) + P(\neg i) \ .
 \end{equation}
-By Eq.~\ref{eq:bayesprob}, $P(i) = (1-\delta_i^k)p_i^k$, so we have the recursion
+Since $P(i) = (1-\delta_i^k)p_i^k$, we have the recursion
 \begin{equation}
   \label{eq:BN_marginal_chain_3}
   \begin{split}
@@ -435,7 +418,7 @@ We can answer this by solving the differential equation. Separating variables an
   \int \ud \tau =
   - \int \frac{\ud \Lambda}{\log \left[ (1 - \pi) (1 - \Lambda) \right]} + K \ ,
 \end{equation}
-where $K$ is a constant of integration. The integral on the left is trivial; the one on right can be expressed through the logarithmic integral function $\text{li}(x)$, whose definition is
+where $K$ is a constant of integration. The integral on the left is simply $\tau$ plus a constant; the one on the right can be expressed through the logarithmic integral function $\text{li}(x)$, whose definition is
 \begin{equation}
   \label{eq:BN_lambda_chain_li}
   \text{li}(x) =  \int_0^x \frac{\ud \kappa}{\log(\kappa)} \ .
@@ -470,12 +453,12 @@ but since $\text{li}(0)=0$ by Eq.~\ref{eq:BN_lambda_chain_li}, we end up with
   \label{eq:BN_lambda_chain_18}
   \tau = - \frac{\text{li}(1-\pi)}{1-\pi} \ .
 \end{equation}
-This result can be made even simpler by approximating its right hand side as $-\log(\pi)$ (Figure~\ref{fig:TL_diffeq}):
+This result can be made even simpler by approximating its right hand side as $-\log(\pi)$ (Figure~\ref{fig:TL_diffeq}). We then have
 \begin{equation}
   \label{eq:BN_lambda_chain_19}
   \tau \approx - \log(\pi) \ .
 \end{equation}
-Finally, changing from the rescaled trophic level $\tau = T \Lambda_M = T / \lambda_M$ to the original $T$ yields
+Changing from the rescaled trophic level $\tau = T \Lambda_M = T / \lambda_M$ to the original $T$ yields the final result:
 \begin{equation}
   \label{eq:BN_lambda_chain_20}
   T = - \lambda_M \frac{\text{li}(1-\pi)}{1-\pi} \approx - \lambda_M \log(\pi) \ .
@@ -485,7 +468,7 @@ While this was derived assuming that $\lambda_M$ is large, it is highly accurate
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.6\textwidth]{TL_diffeq.pdf}
-  \caption{The scaled number of trophic levels $\tau = T/\lambda_M$ against the baseline extinction probability $\pi$, given by the exact $\tau = -\text{li}(1-\pi)/(1-\pi)$ (Eq.~\ref{eq:BN_lambda_chain_18}) and the approximate $\tau = -\lambda_M \log(\pi)$ (Eq.~\ref{eq:BN_lambda_chain_19}). For practical purposes, the approximate expression is just as good as the exact one, and it is much simpler.}
+  \caption{The scaled number of trophic levels $\tau = T/\lambda_M$ against the baseline extinction probability $\pi$, given by the exact $\tau = -\text{li}(1-\pi)/(1-\pi)$ (Eq.~\ref{eq:BN_lambda_chain_18}) and the approximate $\tau = -\log(\pi)$ (Eq.~\ref{eq:BN_lambda_chain_19}). For practical purposes, the approximate expression is just as good as the exact one, and it is much simpler.}
   \label{fig:TL_diffeq}
 \end{figure}
 
@@ -534,13 +517,13 @@ Using Eqs.~\ref{eq:BN_prob} and \ref{eq:bayesprob}:
   \label{eq:BN_marginal_CRR_2}
   \begin{split}
     \delta_C^k &= \pi_C^k(1-\delta_{R_1}^k)(1-\delta_{R_2}^k)p_{R_1}^k p_{R_2}^k +
-    \left[\pi_C^k + (1-\pi_C^k) B(1/2) \right] \left[ (1-\delta_{R_1}^k) p_{R_1}^k
+    \left[\pi_C^k + (1-\pi_C^k) w(1/2) \right] \left[ (1-\delta_{R_1}^k) p_{R_1}^k
       (1-(1-\delta_{R_2}^k) p_{R_2}^k) \right. \\ &\quad + \left.
       (1-\delta_{R_2}^k) p_{R_2}^k (1-(1-\delta_{R_1}^k) p_{R_1}) \right] +
     (1-(1-\delta_{R_1}^k) p_{R_1}^k) (1-(1-\delta_{R_2}^k) p_{R_2}^k) \ .
   \end{split}
 \end{equation}
-If we further specify $B(1/2)=1/2$, the above expression simplifies to
+If we further specify $w(1/2)=1/2$, the above expression simplifies to
 \begin{equation}
   \label{eq:BN_marginal_CRR_3}
   \delta_C^k = 1 - (1 - \pi_C^k) \left[ \frac{p_{R_1}^k (1 - \delta_{R_1}^k) +
@@ -555,7 +538,7 @@ where the overbar denotes the arithmetic average over the prey species $R_i$. In
 
 \subsection{One predator with multiple prey} \label{sec:CmanyR}
 
-Let there be $S$ prey species $R_i$ with marginals $\delta_i^k$, and one consumer $C$ with baseline $\pi_C^k$ eating all prey. We propose the following conjecture: assuming $B(f)=f$ in Eq.~\ref{eq:BN_prob}, the consumer's marginal extinction probability reads
+Let there be $S$ prey species $R_i$ with marginals $\delta_i^k$, and one consumer $C$ with baseline $\pi_C^k$ eating all prey. We propose the following conjecture: assuming $w(f)=f$ in Eq.~\ref{eq:BN_prob}, the consumer's marginal extinction probability reads
 \begin{equation}
   \label{eq:BN_marginal_CmanyR}
   \delta_C^k = 1 - (1 - \pi_C^k) \ol{p_R^k (1 - \delta_R^k)} \ ,
@@ -595,7 +578,7 @@ which is compactly written as
   \label{eq:BN_marginal_twolayer_3}
   \delta_C^k = \sum_{n=0}^S \binom{S}{n} P(\neg C|n) (1-P(R))^n P(R)^{S-n} .
 \end{equation}
-Since we use the linear response function $B(f) = f$, and $f = n/S$ is the fraction of resources absent, $P(\neg C|n)$ can be written as $\pi_C^k + (1-\pi_C^k) (n / S)$ (Eq.~\ref{eq:BN_prob}):
+Since we use the linear response function $w(f) = f$, and $f = n/S$ is the fraction of resources absent, $P(\neg C|n)$ can be written as $\pi_C^k + (1-\pi_C^k) (n / S)$ (Eq.~\ref{eq:BN_prob}):
 \begin{equation}
   \label{eq:BN_marginal_twolayer_4}
   \begin{split}
@@ -639,7 +622,7 @@ Here the the higher overbar averages over the prey (on level $2$) of the focal s
 
 \subsection{Simple omnivory module}
 
-Let there be a single basal resource $R$, a consumer $C$ eating the resource, and a top species $T$ eating both the consumer and the resource. We assume $B(f)=f$.
+Let there be a single basal resource $R$, a consumer $C$ eating the resource, and a top species $T$ eating both the consumer and the resource. We assume $w(f)=f$.
 
 \textit{\textbf{Step 1: Solve for the extinction probabilities using the Bayesian network approach.}}
 The basal and consumer species are the same as they were in Section~\ref{sec:CR}, so their probabilities are given by Eqs.~\ref{eq:BN_marginal_CR_R_detailed} and \ref{eq:BN_marginal_CR_C_detailed}. For the top species, we write
@@ -651,7 +634,7 @@ The basal and consumer species are the same as they were in Section~\ref{sec:CR}
     P(\neg T|\neg R \neg C) P(\neg R) P(\neg C) \ .
   \end{split}
 \end{equation}
-Using Eq.~\ref{eq:BN_prob} with $B(f)=f$:
+Using Eq.~\ref{eq:BN_prob} with $w(f)=f$:
 \begin{equation}
   \label{eq:BN_marginal_omniv_2}
   \begin{split}
