@@ -22,7 +22,7 @@ tab <- expand_grid(
   outputdir="../../data/ryser_data/results/",
   alpha=c(1, 5),
   beta=c(1, 5),
-  xiscale=10^(seq(-2.1, -1.2, l=21)))
+  xiscale=10^(seq(-3, -1.2, l=31)))
 
 fileconn <- file(outfile)
 writeLines(paste0("spinput,xi,N,alpha,beta,tl"), fileconn)

@@ -1,7 +1,7 @@
 
 require(tidyverse)
 
-dat <- read_csv("../../data/ryser_data/results/test.csv")
+dat <- read_csv("../../data/ryser_data/results/tldat.csv")
 
 dat %>%
   mutate(ab=paste0("alpha==", alpha, "~~beta==", beta)) %>%
@@ -12,7 +12,7 @@ dat %>%
   scale_x_continuous(expand=c(0, 0), name=expression(paste(log[10](xi)))) +
   scale_y_continuous(expand=c(0, 0), name="number of patches") +
   scale_fill_gradient2(name="max trophic level", midpoint=3.5) +
-  facet_grid(ab~spinput, labeller="label_parsed") +
+  facet_grid(spinput~ab, labeller="label_parsed") +
   theme_bw()
 ##ggsave("../../figures/Ryser_reproduced_pi_5e-2.pdf", width=5.5, height=3.8)
 

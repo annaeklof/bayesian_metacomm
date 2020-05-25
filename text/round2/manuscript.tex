@@ -81,7 +81,7 @@
 https://github.com/johannahae/bayesian_metacommunities
 \end{verbatim*}
 
-\noindent\textbf{Statement of authorship:} JH, GB, and AE conceived of the study; JH \& GB developed the modeling framework; JH wrote the manuscript and performed numerical studies; GB wrote the supplement and derived analytical results. All authors contributed to the final form of the manuscript.
+\noindent\textbf{Statement of authorship:} JH, GB, and AE conceived of the study; JH \& GB developed the modeling framework; JH \& GB wrote the manuscript and performed numerical studies; GB wrote the supplement and derived analytical results. All authors contributed to the final form of the manuscript.
 
 \noindent\textbf{Corresponding author:} Gy\"orgy Barab\'as\\
 \noindent Link\"oping University\\
@@ -135,7 +135,7 @@ We first constructed four model food webs via the allometric method of \citet{Sc
 
 We assume homogeneous landscapes where all patches have the same abiotic conditions and each patch can potentially harbour the full food web. This means that both the baseline extinction proabilities $\pi_i$ and dispersal distances $\xi_i$ are patch-independent. Their species-dependence may take one of two forms. First, they can be constant across all species, with $\pi_i = 0.2$ and $\xi_i = 0.055$. Second, they may be trophic level-based. We calculated the trophic level $T_i$ of each species $i$  as a prey-averaged trophic level (\citealp{WilliamsMartinez2004}; \SI, Section~\ref{SI:sec:tls}). Denoting their arithmetic average by $\overline{T}$, we set $\pi_i = 0.2 \, T_i / \overline{T}$ and $\xi_i = 0.055 \, T_i / \overline{T}$. The numerical factors adjust the arithmetic average $\overline{\pi}$ and $\overline{\xi}$ to be equal to $0.2$ and $0.055$ respectively, for a better comparison with the constant case. Additionally, to explore the role of habitat connectivity in general, we gradually increased $\xi_i$ from $0.01$ to $0.1$ (keeping it equal across species), and let $\pi_i$ be trophic level-based (\SI, Section~\ref{SI:sec:suppsim}).
 
-We also looked at how the functional form of a consumer's response to the loss of resources affects the response of a food web to habitat loss, by implementing four different forms of the response function. All are are described by a regularized beta function $B(f; \alpha, \beta)$ of the fraction $f$ of resource species lost, with different shape parameters $\alpha$ and $\beta$:
+We also looked at how the functional form of a consumer's response to the loss of resources affects the response of a food web to habitat loss, by implementing four different forms of the response function. All are are described by regularized beta functions of the fraction $f$ of resource species lost, with different shape parameters $\alpha$ and $\beta$:
 \begin{enumerate}
 \item $\alpha = \beta = 1$ (linear function; see inset in top right corner of Figure~\ref{fig:patchloss}A). Here a consumer's probability of extinction is simply proportional to the fraction of resources lost.
 \item $\alpha=5$, $\beta=1$ (Figure~\ref{fig:patchloss}B). This is a convex function, meaning that consumer extinction probabilities only start appreciably increasing after some fixed fraction of the resources have already been lost.
@@ -255,9 +255,9 @@ Modeling the probability $P(\neg C|f)$ of a species $C$ going extinct as a funct
 \begin{equation}
   \label{eq:BN_prob}
   \tag{B1}
-  P(\neg C|f) = \pi_C + (1 - \pi_C) B(f)
+  P(\neg C|f) = \pi_C + (1 - \pi_C) w(f)
 \end{equation}
-where $\pi_C$ is species $C$'s baseline extinction probability (the likelihood of extinction despite all its resources being present), and $B(f)$ is a monotonically increasing function of $f$ such that $B(0)=0$ and $B(1)=1$. For any basal species $A$, $P(\neg A) = \pi_A$ is simply its baseline extinction probability. For a non-basal species $C$, one obtains $P(\neg C)$ by using $P(A) = 1-P(\neg A)$ and the law of total probability. For instance, if $C$ has two prey items $A$ and $B$, we write
+where $\pi_C$ is species $C$'s baseline extinction probability (the likelihood of extinction despite all its resources being present), and the weighting function $w(f)$ is monotonically increasing in $f$ such that $w(0)=0$ and $w(1)=1$. For any basal species $A$, $P(\neg A) = \pi_A$ is simply its baseline extinction probability. For a non-basal species $C$, one obtains $P(\neg C)$ by using $P(A) = 1-P(\neg A)$ and the law of total probability. For instance, if $C$ has two prey items $A$ and $B$, we write
 \begin{equation}
   \label{eq:BN_marginal_example}
   \tag{B2}
