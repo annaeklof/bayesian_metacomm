@@ -1,28 +1,43 @@
 
+library(tidyverse)
 library(ggplot2)
 
 ggplot_fform <- function(alpha, beta)
 {
   fform <- data.frame(
-    x <- sort(runif(10000)),
-    y = pbeta(x, alpha, beta)
-  )
-  theme_bw() 
+    x = sort(runif(10000)),
+    y = pbeta(x, alpha, beta),
+    alpha = alpha, 
+    beta = beta, 
+    ff = case_when(alpha==1 & beta==1 ~ "linear",
+                      alpha==1 & beta==5 ~ "concave",
+                      alpha==5 & beta==1 ~ "convex",
+                      alpha==5 & beta==5 ~ "sigmoid"))
+ 
+  facetnames <- case_when(alpha==1 & beta==1 ~ expression("linear "* alpha *" = "* beta * " = 1"),
+                        alpha==1 & beta==5 ~ expression("concave "* alpha *" = 1, "* beta * " = 5"),
+                        alpha==5 & beta==1 ~ expression("convex "* alpha * " = 5, "* beta *" = 1"),
+                        alpha==5 & beta==5 ~ expression("sigmoid "* alpha *"= " *beta *" = 5"))
+  
+  levels(fform$ff) <- facetnames
   par(pty="s")
   ggplot(fform, aes(x, y)) +
+    theme_bw() + 
     geom_hline(yintercept=0, lty=2, lwd=0.8, color="black", alpha = 0.5) +
     geom_hline(yintercept=1, lty=2, lwd=0.8, color="black", alpha = 0.5) +
-    geom_line(lwd=1.1) +
+    geom_line(lwd=1) +
     xlab("Fraction of resources \n extinct") +
-    ylab("Prob. of extinction \n of resources") +
-    # coord_cartesian(0:1, 0:1) + 
+    ylab("Prob. of extinction \n of consumers") +
     scale_x_continuous(breaks=c(0, 0.5, 1),
                        labels = c("0","0.5","1")) +
     scale_y_continuous(breaks=c(0, 0.5, 1),
                        labels = c(expression(pi[i]),"0.5","1")) +
-    theme(axis.text = element_text(color="black", size = 16), 
-          axis.title = element_text(color="black", size=18))  
+    theme(axis.text = element_text(color="black", size = 18), 
+          axis.title = element_text(color="black", size=18), 
+          strip.text.x = element_text(size=16)) +
+    facet_grid(.~ff, labeller=label_parsed) 
 }
+
 
 plot_functional_form <- function(figuredir, alpha, beta){
       ggsave(
@@ -34,4 +49,7 @@ plot_functional_form <- function(figuredir, alpha, beta){
       )
 }
 
+# for(a in c(1,5))
+#    for(b in c(1,5))
+#      plot_functional_form("../figures/",a,b)
 

@@ -12,9 +12,12 @@
 plot_patchloss <- function(data, webs, paramss, scenarioss, spfs, a, b, basals, ptitle, labnames){
 
   data <- data %>% filter(params %in% paramss) %>% 
-    mutate(scenario=factor(scenario, levels=c("best-case scenario", "worst-case scenario", "random scenario")),
+    mutate(scenario=factor(scenario, levels=c("best-case scenario", "worst-case scenario", "random scenario")), 
         params=factor(params,levels=c(paramss[4],paramss[1], paramss[2], paramss[3])))
-          
+
+  ynames <- c("best-case", "worst-case", "random")
+  names(ynames) <- c("best-case scenario", "worst-case scenario", "random scenario")
+  
   ## Extract top species extinction:
   temp <- data %>% filter(web==webs, spf==spfs, scenario %in% scenarioss, params %in% paramss, alpha == a, beta == b) 
   topextinct <- temp %>% filter(species==topsp, lambda<1) %>%  ## NOTE: max(species) != topsp !!!
@@ -44,9 +47,12 @@ plot_patchloss <- function(data, webs, paramss, scenarioss, spfs, a, b, basals, 
     geom_line(show.legend=FALSE) +
     geom_ribbon(aes(ymin=meanlambda-sdlambda, ymax=meanlambda+sdlambda),colour=NA, alpha=0.3) +
     facet_grid(scenario~params, 
-        labeller=labeller(.rows = label_value, .cols = as_labeller(labnames, label_parsed))) +
-    guides(fill=guide_legend(title="Trophic levels", override.aes=list(size=5, alpha=1), reverse=TRUE)) +
+        labeller=labeller(.rows = as_labeller(ynames), .cols = as_labeller(labnames, label_parsed))) +
+    guides(fill=guide_legend(title="Trophic levels", override.aes=list(size=8, alpha=1), reverse=TRUE)) +
     ggtitle(ptitle) +
-    theme(text = element_text(size=15), axis.text.x = element_text(angle=75, hjust=1)) +
+    theme(text = element_text(size=20), 
+          axis.text.x = element_text(angle=75, hjust=1), axis.title = element_text(size=22), 
+          strip.text.y = element_text(size=22), strip.text.x = element_text(size=19),
+          legend.text = element_text(size=22), legend.title = element_text(size=22)) +
     ylab("Metapopulation capacity")
 }
