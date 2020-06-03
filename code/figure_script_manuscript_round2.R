@@ -35,9 +35,9 @@ ggplot(chain %>% mutate(TL=factor(TL))) +
    scale_x_continuous(name=expression(paste(pi)), expand=c(0,0)) +
    scale_y_continuous(name=expression(paste(lambda[M])), expand=c(0,0)) +
    scale_colour_brewer(palette="PuBu") +
-   scale_fill_brewer(palette="PuBu", name="Trophic levels") +
+   scale_fill_brewer(palette="PuBu", name="Trophic\nlevels") +
 theme(panel.grid=element_blank())
-## ggsave("../figures/TL_chain.pdf", width=4, height=2.7)
+# ggsave("../figures/TL_chain.pdf", width=4, height=3)
 
 #Figure 2
 getPalette  <- colorRampPalette(brewer.pal(11,"RdYlBu"))
@@ -143,7 +143,7 @@ for(infile in infiles){
       # g
       
       #Save it
-      # ggsave(filename = lambda, width=15, height=8, plot=p)
+      # ggsave(filename = lambda, width=14, height=8, plot=p)
     } 
   }
 }
@@ -200,5 +200,5 @@ for(pa in pas){ #loop over functional forms
     # g
     
     #Save it
-    # ggsave(filename = lambda, width=15, height=8, plot=p)
+    # ggsave(filename = lambda, width=14, height=8, plot=p)
 

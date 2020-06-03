@@ -66,7 +66,7 @@ plot_patchloss_groups <- function(data, webs, paramss, scenarioss, spfs, a, b, b
     geom_ribbon(aes(ymin=meanlambda-sdlambda, ymax=meanlambda+sdlambda),colour=NA, alpha=0.3) +
     facet_grid(facety~fform, 
               labeller=label_bquote(.(facety), italic(pi[i])~"and"~italic(xi[i])~"SGB")) +
-    guides(fill=guide_legend(title="Spatial groups", override.aes=list(size=5, alpha=1, fill=cpalette), reverse=FALSE)) +
+    guides(fill=guide_legend(title="Spatial\ngroups", override.aes=list(size=8, alpha=1, fill=cpalette), reverse=FALSE)) +
     theme(text = element_text(size=20), 
           axis.text.x = element_text(angle=75, hjust=1), axis.title = element_text(size=22), 
           strip.text.y = element_text(size=22), strip.text.x = element_text(size=19),

@@ -4,8 +4,9 @@ library(ggplot2)
 
 ggplot_fform <- function(alpha, beta)
 {
+  x <- sort(runif(10000))
   fform <- data.frame(
-    x = sort(runif(10000)),
+    x = x,
     y = pbeta(x, alpha, beta),
     alpha = alpha, 
     beta = beta, 
