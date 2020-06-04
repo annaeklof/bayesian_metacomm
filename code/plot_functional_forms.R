@@ -18,7 +18,7 @@ ggplot_fform <- function(alpha, beta)
   facetnames <- case_when(alpha==1 & beta==1 ~ expression("linear "* alpha *" = "* beta * " = 1"),
                         alpha==1 & beta==5 ~ expression("concave "* alpha *" = 1, "* beta * " = 5"),
                         alpha==5 & beta==1 ~ expression("convex "* alpha * " = 5, "* beta *" = 1"),
-                        alpha==5 & beta==5 ~ expression("sigmoid "* alpha *"= " *beta *" = 5"))
+                        alpha==5 & beta==5 ~ expression("sigmoidal "* alpha *"= " *beta *" = 5"))
   
   levels(fform$ff) <- facetnames
   par(pty="s")
@@ -51,6 +51,6 @@ plot_functional_form <- function(figuredir, alpha, beta){
 }
 
 # for(a in c(1,5))
-#    for(b in c(1,5))
-#      plot_functional_form("../figures/",a,b)
-
+#     for(b in c(1,5))
+#       plot_functional_form("../figures/",a,b)
+# 

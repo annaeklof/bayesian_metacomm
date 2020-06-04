@@ -8,6 +8,7 @@
 *.synctex.gz
 .git-credentials
 data/summaries_round1/
+data/summaries_round2/
 data/summaries/summaries_gridlike/
 data/results_round1/
 data/ryser_orig/
