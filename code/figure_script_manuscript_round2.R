@@ -7,8 +7,8 @@ require(RColorBrewer)
 
 #Load R functions
 source("plot_functional_forms.R") #Functional forms 
-source("plot_patchloss.R") #Figure 2
-source("plot_patchloss_groups.R") #Figure 3
+source("plot_patchloss.R") #Figure 3
+source("plot_patchloss_groups.R") #Figure 4
 
 figuredir <- "../figures/"
 if(file.exists(figuredir)){
@@ -152,7 +152,10 @@ for(infile in infiles){
 #Figure 4
 #If not yet done, generate .png plots for the different consumer responses to resource loss (functional forms) 
 
+#patch removal based on basal species (ACASEN	Acacia senegal, sole member of SG 12):
 infile <- "../data/summaries_round1/summary_serengeti.rds" #summary file
+#patch removal based on antoher basal species (BOSAUG Boscia augustifolia, SG 14):
+# infile <- "../data/summaries_round2/summary_serengeti_BOSAUG.rds" #summary file
 dat <- infile %>% read_rds %>% filter(spinput == "../data/species_input/serengeti_009.csv")
 
 pas <- unique(dat$alpha) 
@@ -184,6 +187,7 @@ for(pa in pas){ #loop over functional forms
     #Plot name  
     lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
                        paste(.,collapse="_") %>% unname, "_", pspfs, "_SGB.pdf")
+                       # paste(.,collapse="_") %>% unname, "_", pspfs, "_SGB_BOSAUG.pdf")
     
     #Generate the plot
     p <- plot_patchloss_groups(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
