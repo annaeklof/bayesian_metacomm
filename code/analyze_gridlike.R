@@ -32,7 +32,8 @@ gl <- gl %>% ## remove bloat from species input file names
     spinput=="7" ~ "pi[i]==0.2~~xi[i]~TLB",
     spinput=="8" ~ "pi[i]==0.2~~xi[i]==0.055",
     TRUE ~ spinput)
-  )
+    ) %>%
+  mutate(scenario=gsub(" scenario", "", scenario))
 
 gl %>%
   mutate(TL=factor(TL, levels=seq(7, 2, -1))) %>%
@@ -55,4 +56,4 @@ gl %>%
                      limits=c(0, 330)) +
   guides(fill=guide_legend(override.aes=list(alpha=1))) +
   theme_bw()
-##ggsave("../figures/gridlike.pdf", width=8, height=5.33)
+##ggsave("../figures/gridlike.pdf", width=7, height=4.66)
