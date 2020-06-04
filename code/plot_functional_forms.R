@@ -54,3 +54,12 @@ plot_functional_form <- function(figuredir, alpha, beta){
 #     for(b in c(1,5))
 #       plot_functional_form("../figures/",a,b)
 # 
+
+#Empty place holer plot for latex 
+# ggsave(
+#   paste0(figuredir, "fform_0_0.png"),
+#   ggplot() + theme_void(),
+#   width = 3.25,
+#   height = 3.25,
+#   dpi = 1200
+# )    
