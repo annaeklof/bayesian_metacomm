@@ -70,7 +70,7 @@ plot_patchloss_groups <- function(data, webs, paramss, scenarioss, spfs, a, b, b
     guides(fill=guide_legend(title="Spatial\ngroups", override.aes=list(size=8, alpha=1, fill=cpalette), reverse=FALSE)) +
     theme(text = element_text(size=20), 
           axis.text.x = element_text(angle=75, hjust=1), axis.title = element_text(size=22), 
-          strip.text.y = element_text(size=22), strip.text.x = element_text(size=19),
+          strip.text.y = element_text(size=19), strip.text.x = element_text(size=19),
           legend.text = element_text(size=22), legend.title = element_text(size=22)) +
     ylab("Metapopulation capacity")
 }

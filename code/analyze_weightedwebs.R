@@ -19,18 +19,21 @@ if(file.exists(figuredir)){
 #Generate .png plots for the different consumer responses to resource loss (functional forms) 
 infiles <- "../data/summaries_round2/summary_web50350*.rds" %>% Sys.glob() #summary files
 
-infile <- infiles[1]
-
-
-for(infile in infiles){
+for(infile in infiles[1:2]){
   dat_full <- infile %>% read_rds 
-  dat_full <- dat_full %>% filter(params == unique(dat_full$params)[c(3,6:8)]) ## selected pi_i and xi_i combinations
+  pparams <- unique(dat_full$params)[c(3,6:8)]
+  # spinput <- unique(dat_full$spinput)[c(3,6:8)] 
+  # nums <- str_split(spinput,pattern="_",simplify=TRUE)[,3] %>% numextract()
+  dat <- dat_full %>% filter(params == pparams) ## selected pi_i and xi_i combinations
   
-  for(w in c(TRUE,FALSE)){
-    dat <- dat_full %>% filter(weighted == w)
-  
-    pas <- unique(dat$alpha)
-    pbs <- unique(dat$beta)
+  for(WEIGHTED in c(TRUE,FALSE)){
+    dat <- dat_full %>% filter(weighted == WEIGHTED) 
+    dat$web <- ifelse(WEIGHTED==TRUE, paste(dat$web, "Weighted"),  paste(dat$web, "Not weighted"))
+    
+    # pas <- unique(dat$alpha)
+    # pbs <- unique(dat$beta)
+    pas <- 1
+    pbs <- 1
   
     for(pa in pas){ #loop over functional forms
       for(pb in pbs){
@@ -39,6 +42,8 @@ for(infile in infiles){
       if(pa==5 && pb==1) ptitles="B"
       if(pa==1 && pb==5) ptitles="C"
       if(pa==5 && pb==5) ptitles="D"
+      
+      ptitles <- ifelse(WEIGHTED==TRUE,paste(ptitles,dat$web), paste(ptitles, dat$web))
       
       # plot_functional_form(figuredir, pa, pb)
       
@@ -61,11 +66,11 @@ for(infile in infiles){
       #Create named vectors for facet labels with greek letters
       var_names <- pparams
       names(var_names) <- pparams
-
+        
       #Plot name
       lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-                         paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
-      
+                   paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
+    
       #Generate the plot
       p <- plot_patchloss(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
                           a = pa, b = pb, basals = pbasals, ptitle = ptitles, labnames = var_names)
@@ -75,7 +80,7 @@ for(infile in infiles){
       # g
       
       #Save it
-      # ggsave(filename = lambda, width=14, height=8, plot=p)
+      ggsave(filename = lambda, width=14, height=8, plot=p)
     } 
     }
   }

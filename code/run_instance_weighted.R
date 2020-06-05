@@ -30,7 +30,7 @@ rem <- 10 ## number of patches removed per patch loss iteration
 nreps <- 1000 ## number of iterations for Bayesian network
 scenarios <- c("random", "best", "worst") ## set of scenarios
 
-## 1: simulate metacommunity in the full landscape (pre patch loss)  
+## 1: simulate metacommunity in the full landscape (pre patch loss) 
 A <- create_adj_matrix(read_csv(web, col_types=cols())) ## create adjacency matrix from links
 speciesnames <- colnames(A)
 ending <- web %>% str_split(pattern="webs/web",simplify = TRUE)

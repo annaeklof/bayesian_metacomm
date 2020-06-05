@@ -61,9 +61,8 @@ generate_summary <- function(infiles){
         numextract(str_split(basename(dat$spinput),"_", simplify = TRUE)[, 2]) == 5 ~ "pi[i]*' TLB,  '*xi[i]*' = 0.1'",
         numextract(str_split(basename(dat$spinput),"_", simplify = TRUE)[, 2]) == 6 ~ "pi[i]*' and '*xi[i]*' TLB'",
         numextract(str_split(basename(dat$spinput),"_", simplify = TRUE)[, 2]) == 7 ~ "pi[i]*' = 0.2,  '*xi[i]*' TLB'",
-        numextract(str_split(basename(dat$spinput),"_", simplify = TRUE)[, 2]) == 8 ~ "pi[i]*' = 0.2,  '*xi[i]*' = 0.055'",
-        TRUE ~ as.character(numextract(str_split(basename(dat$spinput),"_", simplify = TRUE)[, 2]))
-      ),
+        numextract(str_split(basename(dat$spinput),"_", simplify = TRUE)[, 2]) == 8 ~ "pi[i]*' = 0.2,  '*xi[i]*' = 0.055'"
+        ),
       scenario = case_when(
         dat$scenario == "best" ~ "best-case scenario",
         dat$scenario == "worst" ~ "worst-case scenario",

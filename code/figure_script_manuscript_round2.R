@@ -108,7 +108,7 @@ for(infile in infiles){
       if(pa==1 && pb==5) ptitles="C"
       if(pa==5 && pb==5) ptitles="D"
       
-      plot_functional_form(figuredir, pa, pb)
+      # plot_functional_form(figuredir, pa, pb)
       
       #Add prem=0 to scenarios
       temp <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "best-case scenario")
@@ -137,10 +137,6 @@ for(infile in infiles){
       #Generate the plot
       p <- plot_patchloss(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
                           a = pa, b = pb, basals = pbasals, ptitle=ptitles, labnames = var_names)
-      
-      #Add functional form inset
-      # g <- ggdraw(p) + draw_image(fform_png, x = 0.835, y = 1.01, hjust = 0, vjust = 1, width = 0.2, height = 0.2)
-      # g
       
       #Save it
       # ggsave(filename = lambda, width=14, height=8, plot=p)
@@ -193,16 +189,6 @@ for(pa in pas){ #loop over functional forms
     p <- plot_patchloss_groups(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
                              a = pa, b = pb, basals = pbasals)
     
-    #Combine functional forms 
-    # fforms <-  ggdraw() + draw_image(paste0(figuredir, "fform_5_1.png"), x = -0.36, y = 1.01, hjust = 0, vjust = 1, width = 1, height = 1) +
-               # draw_image(paste0(figuredir, "fform_5_5.png"), x = -0.17, y = 1.01, hjust = 0, vjust = 1, width = 1, height = 1) + 
-               # draw_image(paste0(figuredir, "fform_1_1.png"), x = 0.03, y = 1.01, hjust = 0, vjust = 1, width = 1, height = 1) +
-               # draw_image(paste0(figuredir, "fform_1_5.png"), x = 0.22, y = 1.01, hjust = 0, vjust = 1, width = 1, height = 1)
-    
-    #Add them as insets
-    # g <- plot_grid(fforms, p, nrow=2, rel_heights = c(0.8,3))
-    # g
-    
     #Save it
-    # ggsave(filename = lambda, width=14, height=8, plot=p)
+    ggsave(filename = lambda, width=14, height=8, plot=p)
 

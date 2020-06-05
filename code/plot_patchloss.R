@@ -19,7 +19,8 @@ plot_patchloss <- function(data, webs, paramss, scenarioss, spfs, a, b, basals, 
   names(ynames) <- c("best-case scenario", "worst-case scenario", "random scenario")
   
   ## Extract top species extinction:
-  temp <- data %>% filter(web==webs, spf==spfs, scenario %in% scenarioss, params %in% paramss, alpha == a, beta == b) 
+  temp <- data %>% filter(web==webs, spf==spfs, scenario %in% scenarioss, 
+                          params %in% paramss, alpha == a, beta == b) 
   topextinct <- temp %>% filter(species==topsp, lambda<1) %>%  ## NOTE: max(species) != topsp !!!
     group_by(web, params, scenario) %>% 
     summarise(minprem=min(prem)) %>% 
@@ -52,7 +53,7 @@ plot_patchloss <- function(data, webs, paramss, scenarioss, spfs, a, b, basals, 
     ggtitle(ptitle) +
     theme(text = element_text(size=20), 
           axis.text.x = element_text(angle=75, hjust=1), axis.title = element_text(size=22), 
-          strip.text.y = element_text(size=22), strip.text.x = element_text(size=19),
+          strip.text.y = element_text(size=19), strip.text.x = element_text(size=19),
           legend.text = element_text(size=22), legend.title = element_text(size=22)) +
     ylab("Metapopulation capacity")
 }
