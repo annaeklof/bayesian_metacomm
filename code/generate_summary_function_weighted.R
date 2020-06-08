@@ -20,7 +20,7 @@ numextract <- function(string){
 ## Summarize over all patches for each simulation run and modify the generated summary. 
 ## Input: - infiles: simulation output files (w/ path & extension)
 ## Output: -out: summarized output
-generate_summary <- function(infiles){
+generate_summary_weighted <- function(infiles){
     i <- 1
     for (infile in infiles) {
       print(infile)

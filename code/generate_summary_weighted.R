@@ -16,14 +16,13 @@ numextract <- function(string){
   as.numeric(str_extract(temp, "\\-*\\d+\\.*\\d*"))
 }
 
-
-
-for(i in 1:5){
+for(i in 2:5){
 	infiles <- Sys.glob(paste0("/data/idiv_brose/johanna/bayesian_metacomm_round2/data/results/web50350",i,"_*.rds"))
 	# infiles <- Sys.glob(paste0("../data/results/web50350",i,"_*.rds"))
 	outfile <- paste0("/data/idiv_brose/johanna/bayesian_metacomm_round2/data/summaries/summary_web50350",i,".rds")
+	# outfile <- paste0("../data/summaries_round2/temp_web50350",i,".rds")
 
-	out <- generate_summary(infiles=infiles)
+	out <- generate_summary_weighted(infiles=infiles)
 	saveRDS(out, outfile)
 }
   
