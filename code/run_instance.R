@@ -16,9 +16,9 @@ if (length(clargs) > 0) { ## command-line arguments
   alpha <- as.numeric(clargs[6]) ## 1st parameter of beta distr (Bayesian network)
   beta <- as.numeric(clargs[7]) ## 2nd parameter of beta distr (Bayesian network)
 } else { ## sample input parameters, if no command line arguments are given
-  web <- "../data/webs/web50350.csv"
-  landsc <- "../data/landscapes/gridlike_2.csv"
-  spinput <- "../data/species_input/web50350_008.csv"
+  web <- "../data/webs/test.csv"
+  landsc <- "../data/landscapes/landscape_001.csv"
+  spinput <- "../data/species_input/test.csv"
   spf <- "basal"
   outputdir <- "../data/results/"
   alpha <- 1
@@ -124,6 +124,7 @@ if(!flag){
         crashed <- TRUE
         print(paste("metacommunity crashed:", spf, focal_sp, scen, N0)) ## print to log file
       }
+      cat(paste(scen, j, "\n"))
     }
   }
 }

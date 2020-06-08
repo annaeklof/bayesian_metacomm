@@ -30,31 +30,6 @@ create_adj_matrix <- function(edgelist) {
     return(A[o,o])
 }
 
-## Monte Carlo evaluation of Bayesian network for a single species
-## Input:
-## - sp: name (as character string) of focal species
-## - spdat: species information table
-## - A: adjacency matrix
-## - nreps: number of iterations for the Monte Carlo sim of the Bayesian network
-## - alpha: first parameter of the Beta distribution
-## - beta: second parameter of the Beta distribution
-## Output:
-## - a vector of length N (number of patches), each containing the marginal
-##   extinction probability in patch k of species sp
-bayesian_ext <- function(sp, spdat, A, nreps, alpha, beta) {
-    N <- length(unique(spdat$patch)) ## no of patches
-    marginal <- rep(0, N) ## marginal ext prob of sp in all patches
-    for (k in 1:N) { ## for each patch:
-        be <- spdat$pi[spdat$species==sp][k] ## baseline ext prob of sp in patch k
-        deltas <- spdat %>% ## marginal ext probs of all species in kth patch
-            filter(patch==unique(spdat$patch)[k]) %>% 
-            mutate(d=1-(1-delta)*p) %>% 
-            pull(d)
-        marginal[k] <- getMarginal(A[sp,], deltas, be, alpha, beta, nreps)
-    }
-    return(marginal/nreps)
-}
-
 ## Create disperal matrix M. 
 ## Input: - coords: patch coordinatexs x and y, 
 ## - kernel: type of dispersal kernel (species-specific), 
@@ -75,48 +50,6 @@ get_matrix <- function(coords, kernel, xi) {
     if (kernel=="Rectangular") M <- 1*(distances<xi)
     diag(M) <- 0 # remove the diagonal from the matrix
     return(unname(M))
-}
-
-## Calculate patch values (relative patch values or betweenness centrality). 
-## Input: 
-## - spdat: species and landscape data
-## - focal_sp: focal species for which patch values are calculated
-## Output: 
-## - pvec: vector with patch values for species i.   
-calc_patchvalues <- function(spdat, focal_sp){
-    M <- get_matrix(coords=cbind(spdat$x[spdat$species==focal_sp], 
-                                 spdat$y[spdat$species==focal_sp]), 
-                    kernel=spdat$kernel[spdat$species==focal_sp][1],
-                    xi=spdat$xi[spdat$species==focal_sp][1]) ## dispersal matrix
-    ## Jacobian of the principal map evaluated at 0:
-    Eik_inverse <- ifelse(spdat$delta[spdat$species==focal_sp]<=0, 1000,
-                          -1/log(1-spdat$delta[spdat$species==focal_sp]))
-    Amat <- M*Eik_inverse
-    ## approximate relative patch values w/ leading eigenvector of the Jacobian 
-    lev <- eigen(Amat)$vectors[,which.max(abs(eigen(Amat)$values))]
-    pvec <- (lev*lev)/(as.numeric(lev%*%lev)) ## get relative patch values
-    return(pvec) ## return vector with relative patch values
-}
-
-## Calculate the metapopulation capacity, the threshold condition above which
-## a metapopulation persists. Defined as the leading eigenvalue of the Jacobian
-## of the principal map, evaluated at 0. 
-## Input:
-## - spdat: species and landscape data. 
-## - sp: species i. 
-## Output: 
-## - lambda: metapopulation capacity of species i. 
-calc_metapopcapacity <- function(spdat, sp){
-    M <- get_matrix(coords=cbind(spdat$x[spdat$species==sp],
-                                 spdat$y[spdat$species==sp]), 
-                    kernel=spdat$kernel[spdat$species==sp][1],
-                    xi=spdat$xi[spdat$species==sp][1]) ## sp's dispersal matrix 
-    ## Jacobian of the principal map evaluated at 0:
-    Eik_inverse <- ifelse(spdat$delta[spdat$species==sp]<=0, 1000,
-                          -1/log(1-spdat$delta[spdat$species==sp]))
-    Amat <- M*Eik_inverse
-    lambda <- max(abs(eigen(Amat)$values)) ## metapopulation capacity
-    return(lambda) ## return the metapopulation capacity
 }
 
 ## Generate data file with species and landscape information. 
@@ -161,6 +94,31 @@ generate_spdat <- function(webfile, datfile, landscapefile){
     return(spdat)
 }
 
+## Calculate spectral properties of principal map's Jacobian at 0, for given sp.
+## Input:
+## - spdat: species and landscape data
+## - focal_sp: focal species for which patch values are calculated
+## Output:
+## - a list with elements:
+##   * pvec: vector with patch values for species i.   
+calc_spectral <- function(spdat, focal_sp){
+    M <- get_matrix(coords=cbind(spdat$x[spdat$species==focal_sp], 
+                                 spdat$y[spdat$species==focal_sp]), 
+                    kernel=spdat$kernel[spdat$species==focal_sp][1],
+                    xi=spdat$xi[spdat$species==focal_sp][1]) ## dispersal matrix
+    ## Jacobian of the principal map evaluated at 0:
+    Eik <- -log(1-spdat$delta[spdat$species==focal_sp])
+    Amat <- M/Eik
+    ## approximate relative patch values w/ leading eigenvector of the Jacobian 
+    esys <- eigen(Amat) ## eigensystem of Amat
+    lew <- max(abs(esys$values)) ## dominant eigenvalue
+    ind <- which.max(abs(esys$values)) ## index of dominant eigenvalue
+    rev <- Re(esys$vectors[,ind]) ## dominant right eigenvector
+    lev <- Re(solve(esys$vectors)[ind,]) ## dominant left eigenvector
+    smat <- lev%o%rev ## sensitivity matrix; its diagonal are the patch values
+    return(list(lambda=lew, smat=smat)) ## return dominant ew and sens. matrix
+}
+
 ## Obtain metacommunity equilibrium state.
 ## Input:
 ## - A: adjacency matrix
@@ -172,27 +130,36 @@ generate_spdat <- function(webfile, datfile, landscapefile){
 ## - a species information table (spdat) updated with the correct equilibrium
 ##   marginal extinction probabilities delta_i^k and patch occupancies p_i^k
 sim_metacomm <- function(A, spdat, nreps, alpha, beta) {
-    for (sp in rownames(A)) {
+    N <- length(unique(spdat$patch)) ## no of patches
+    marginal <- rep(0, N) ## marginal ext prob of sp in all patches
+    for (sp in rownames(A)) { ## calculate deltas of each sp from Bayesian NW:
+        if (sum(A[sp,])==0) { ## basal species
+            marginal <- spdat$pi[spdat$species==sp]
+        } else { ## consumer species
+            for (k in 1:N) { ## for each patch:
+                be <- spdat$pi[spdat$species==sp][k] ## baseline ext in patch k
+                deltas <- spdat %>% ## marginal ext of all species in patch k
+                    filter(patch==unique(spdat$patch)[k]) %>% 
+                    mutate(d=1-(1-delta)*p) %>% 
+                    pull(d)
+                marginal[k] <- getMarginal(A[sp,], deltas, be, alpha, beta, nreps)
+            }
+            marginal <- marginal/nreps
+        }
+        spdat$delta[spdat$species==sp] <- marginal ## assign ext prob to sp
         M <- get_matrix(coords=cbind(spdat$x[spdat$species==sp], 
                                      spdat$y[spdat$species==sp]), 
                         kernel=spdat$kernel[spdat$species==sp][1],
-                        xi=spdat$xi[spdat$species==sp][1]) ## dispersal matrix  
-        if (sum(A[sp,])==0) { ## basal species
-            spdat$delta[spdat$species==sp] <- spdat$pi[spdat$species == sp]
-        } else { ## consumer species
-            spdat$delta[spdat$species==sp] <- bayesian_ext(sp, spdat, A,
-                                                           nreps, alpha, beta)
-        }
-        converge <- FALSE ## test for convergence: iterate 10 times, compare with
-        ## solve for equilibrium patch occupancies numerically
+                        xi=spdat$xi[spdat$species==sp][1]) ## disp matrix of sp
+        ## solve for equilibrium patch occupancies of sp numerically
         spdat$p[spdat$species==sp] <- itersol(spdat$p[spdat$species==sp], M,
                                               spdat$delta[spdat$species==sp])
-        ## calculate sp's metapopultion capacity
-        spdat$lambda[spdat$species==sp] <- calc_metapopcapacity(spdat, sp)
-        ## calculate relative patch values
-        spdat$pvalues[spdat$species==sp] <- calc_patchvalues(spdat, sp)
+        ## calculate sp's metapopultion capacity & patch values
+        spectr <- calc_spectral(spdat, sp)
+        spdat$lambda[spdat$species==sp] <- spectr$lambda
+        spdat$pvalues[spdat$species==sp] <- diag(spectr$smat)
     }
-    return(spdat)    
+    return(spdat)
 }
 
 ## Calculate food web properties. 

@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include <math.h>
 using namespace Rcpp;
 
 
@@ -49,19 +50,17 @@ NumericVector itersol(NumericVector p0, NumericMatrix M, NumericVector d) {
   int N=p0.size(); // number of patches
   int converge=0; // variable to check whether numerical iteration has converged
   int iter, k, l;
-  NumericVector p_next(N), result=p0, Einv(N), g(N);
-  Einv=-1/log(1-d); // the inverse extinction rates
+  NumericVector p_next=p0, result=p0, C(N), E(N), itermap(N);
+  for (k=0; k<N; k++) E[k]=log(1.0/(1.0-d[k])); // extinction rates
   while (!converge) { // if solution hasn't converged yet:
-    p_next=result; // initialize next occupancy values to the current ones
-    for (iter=0; iter<10; iter++) { // for ten iterations:
-      for (k=0; k<N; k++) { // calculate principal map g: colonization/extinction
-        g[k]=0.0; // initialize ith value of principal map
-        for (l=0; l<N; l++) g[k]=g[k]+M(k,l)*p_next[l]; // colonization (M%*%p)
+    for (iter=0; iter<5; iter++) { // for ten iterations:
+      for (k=0; k<N; k++) { // calculate colonization rate:
+        C[k]=0.0; // initialize ith value of colonization
+        for (l=0; l<N; l++) C[k]=C[k]+M(k,l)*p_next[l]; // colonization (M%*%p)
+        p_next[k]=C[k]/(C[k]+E[k]); // iteration map
       }
-      g=g*Einv; // principal map g = colonization*(inverse extinction)
-      p_next=g/(g+1.0); // iteration map: g/(g+1)
     }
-    if (sum(pow(result-p_next, 2))<1.0e-8) converge=1; // has result converged?
+    if (sum(pow(result-p_next, 2))<1.0e-6) converge=1; // has result converged?
     result=p_next; // in either case, update result with current estimate of p
   }
   return(result);
