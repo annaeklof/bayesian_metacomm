@@ -18,22 +18,23 @@ if(file.exists(figuredir)){
 
 #Generate .png plots for the different consumer responses to resource loss (functional forms) 
 infiles <- "../data/summaries_round2/summary_web50350*.rds" %>% Sys.glob() #summary files
+infile <- "../data/summaries_round2/summary_web503501.rds" #summary files
 
-for(infile in infiles[1:2]){
+for(infile in infiles){
   dat_full <- infile %>% read_rds 
-  pparams <- unique(dat_full$params)[c(3,6:8)]
-  # spinput <- unique(dat_full$spinput)[c(3,6:8)] 
+  # pparams <- unique(dat_full$params)
+  # spinput <- unique(dat_full$spinput) 
   # nums <- str_split(spinput,pattern="_",simplify=TRUE)[,3] %>% numextract()
-  dat <- dat_full %>% filter(params == pparams) ## selected pi_i and xi_i combinations
+  # dat <- dat_full %>% filter(params == pparams) ## selected pi_i and xi_i combinations
   
   for(WEIGHTED in c(TRUE,FALSE)){
     dat <- dat_full %>% filter(weighted == WEIGHTED) 
     dat$web <- ifelse(WEIGHTED==TRUE, paste(dat$web, "Weighted"),  paste(dat$web, "Not weighted"))
     
-    # pas <- unique(dat$alpha)
-    # pbs <- unique(dat$beta)
-    pas <- 1
-    pbs <- 1
+    pas <- unique(dat$alpha)
+    pbs <- unique(dat$beta)
+    # pas <- 1
+    # pbs <- 1
   
     for(pa in pas){ #loop over functional forms
       for(pb in pbs){
@@ -85,4 +86,89 @@ for(infile in infiles[1:2]){
     }
   }
 }
+
+
+#Analyze webs
+require(igraph)
+require(tidyverse)
+require(NetIndices)
+require(xtable)
+source("functions.R")
+
+#web information: 
+webfiles <- Sys.glob("../data/webs/web50350*.csv")[1:5] ## list of web files
+
+i <- 1
+for(webfile in webfiles){
+  webname <- str_split(basename(webfile), (".csv"), simplify=TRUE)[1] %>% 
+    str_split(.," ",simplify = TRUE) %>% paste(.,collapse="_")
+  Amat <- read_csv(webfile, col_types=cols()) %>% create_adj_matrix ## create adjacency matrix from links
+  g <- graph_from_adjacency_matrix(Amat, mode = "directed") ## generate graph
+  if(!is_dag(g)) print("Web is not acyclic.") 
+  if(is_dag(g)){
+    S = (length(Amat[1,]))
+    Sb =  length(which(rowSums(Amat) == 0)) 
+    Sc =  length(which(rowSums(Amat) != 0)) 
+    if(Sb+Sc!=S) print("Species numbers do not add up.")
+    tib <- tibble(web = webname, 
+                  S = S,
+                  Sb = Sb,  
+                  Sc = Sc,
+                  connectance = calc_NetInd(Amat)$connectance,  
+                  generality = calc_NetInd(Amat)$generality, 
+                  sd.generality = calc_NetInd(Amat)$sd.generality, 
+                  vulnerability  = calc_NetInd(Amat)$vulnerability,
+                  sd.vulnerability = calc_NetInd(Amat)$sd.vulnerability, 
+                  modularity = calc_NetInd(Amat)$modularity,  
+                  TL.max = calc_NetInd(Amat)$TL.max, 
+                  TL.mean = calc_NetInd(Amat)$TL.mean, 
+                  TL.sd = calc_NetInd(Amat)$TL.sd, 
+                  OI.max = calc_NetInd(Amat)$OI.max, 
+                  OI.mean = calc_NetInd(Amat)$OI.mean, 
+                  OI.sd = calc_NetInd(Amat)$OI.sd
+    )
+    
+    if (i == 1) out <- tib else out <- rbind(out, tib) 
+    i <- i+1
+  }
+}  
+
+out %>% write_csv("../data/notweighted_webinfo.csv") ## write web info to file 
+
+#species distribution across trophic levels: 
+dats <- Sys.glob( "../data/summaries_round2/summary_web50350*.rds")
+
+for(m in 2:5){
+  dat <- dats[m] %>% readRDS
+
+  for(i in unique(dat$ITL))
+    tmp <- dat %>% group_by(ITL) %>% summarize(no.of.species = species %>% unique %>% length)
+  if(m==1) 
+    tib <- tmp
+  else 
+    tib <- right_join(tib, tmp, by="ITL")
+}
+
+oldnames <- colnames(tib)[-1]
+newnames <- paste0("web50350",1:5)
+tib <- tib %>% rename_at(vars(oldnames), ~ newnames)
+
+write_csv(tib, "../data/no.of.species.TL.weightedwebs.csv") ## save
+# xtable(tib)
+
+
+## analyze input parameters xi and pi: 
+range_pi <- list()
+range_xi <- list()
+
+for(webs in unique(dat$web))
+{
+  range_pi[[webs]] <- dat %>%
+    filter(web==webs) %>% pull(pi) %>% unique %>% range %>% round(.,4)
+  range_xi[[webs]] <- dat %>%
+    filter(web==webs) %>% pull(xi) %>% unique %>% range %>% round(.,4)
+}
+
+t_pi <- range_pi %>% as_tibble %>% write_csv("../data/range_pi.csv") ## make into tibble and save
+t_xi <- range_xi %>% as_tibble %>% write_csv("../data/range_xi.csv") ## make into tibble and save
 
