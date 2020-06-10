@@ -114,8 +114,8 @@ calc_spectral <- function(spdat, focal_sp){
     lew <- max(abs(esys$values)) ## dominant eigenvalue
     ind <- which.max(abs(esys$values)) ## index of dominant eigenvalue
     rev <- Re(esys$vectors[,ind]) ## dominant right eigenvector
-    lev <- Re(solve(esys$vectors)[ind,]) ## dominant left eigenvector
-    smat <- lev%o%rev ## sensitivity matrix; its diagonal are the patch values
+    lev <- Re(eigen(t(Amat))$vectors[,ind]) ## dominant left eigenvector
+    smat <- lev%o%rev/as.numeric(lev%*%rev) ## sensitivity matrix (diagonal = patch values)
     return(list(lambda=lew, smat=smat)) ## return dominant ew and sens. matrix
 }
 
