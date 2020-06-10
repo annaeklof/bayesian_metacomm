@@ -126,8 +126,8 @@ if(!flag){
         crashed <- TRUE
         print(paste("metacommunity crashed:", spf, focal_sp, scen, N)) ## print to log file
       }
-      print(paste(L0, scen))
-      image(t(apply(LINKMAT,2,rev)))
+      # print(paste(L0, scen))
+      # image(t(apply(LINKMAT,2,rev)))
     }
   }
 }
