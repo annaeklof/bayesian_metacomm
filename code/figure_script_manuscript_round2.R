@@ -1,11 +1,13 @@
 
 #Load libraries 
 require(tidyverse)
+require(igraph)
 require(cowplot)
 require(magick)
 require(RColorBrewer)
 
 #Load R functions
+source("functions.R")
 source("plot_functional_forms.R") #Functional forms 
 source("plot_patchloss.R") #Figure 3
 source("plot_patchloss_groups.R") #Figure 4
@@ -18,85 +20,87 @@ if(file.exists(figuredir)){
 } 
 
 #Figure 1
-chain <- expand.grid(lambdaM=seq(0, 5, l=301), pi0=seq(0, 1, l=301)) %>%
-  as_tibble %>%
-  filter(pi0!=0) %>%
-  mutate(lambda=lambdaM/log(1/(1-pi0)), TL=0)
-for (i in 1:nrow(chain)) {
-  if (chain$lambda[i]<1) next
-  while ((chain$lambda[i]>1)&(chain$TL[i]<8)) {
-    chain$lambda[i] <- chain$lambdaM[i]/(chain$lambdaM[i]/chain$lambda[i]-log(
-      (1-chain$pi0[i])*(1-1/chain$lambda[i])))
-    chain$TL[i] <- chain$TL[i] + 1
-  }
-}
-ggplot(chain %>% mutate(TL=factor(TL))) +
-   geom_raster(aes(x=pi0, y=lambdaM, fill=TL), interpolate=TRUE) +
-   scale_x_continuous(name=expression(paste(pi)), expand=c(0,0)) +
-   scale_y_continuous(name=expression(paste(lambda[M])), expand=c(0,0)) +
-   scale_colour_brewer(palette="PuBu") +
-   scale_fill_brewer(palette="PuBu", name="Trophic\nlevels") +
-theme(panel.grid=element_blank())
-# ggsave("../figures/TL_chain.pdf", width=4, height=3)
-
-#Figure 2
-getPalette  <- colorRampPalette(brewer.pal(11,"RdYlBu"))
-
-#Input file
-solfile <- "../data/results/web100300_003_landscape_001_basal_1_1.rds" #result file
-sol <- solfile %>% read_rds #read in resultfile
-sol <- bind_rows(sol[1,], sol) #add fake point with p=0 to scale alpha such that white equals zero
-sol$p[1] <- 0
-sol <- sol %>% filter(species %in% c(min(species), max(species))) #filter a basal species and a top species
-nsp <- sol %>% pull(species) %>% unique %>% length #number of species to plot
-my_palette <- getPalette(nsp)
-
-#Modify data
-sol_plot <- sol %>%
-   rename(`patches removed`=prem) %>% #rename variables
-   mutate(species=case_when(species==min(species) ~ "a basal species",
-                            TRUE ~ "a top predator")) %>%
-   mutate(scenario=case_when(
-     scenario=="best" ~ "A) best-case scenario",
-     scenario=="worst" ~ "B) worst-case scenario",
-     scenario=="random" ~ "C) random scenario",
-     TRUE ~ "all"))
-
-#Generate patch occupancy plots for habitat loss scenarios
-plist <- list() #initialize list for plots
-for(i in c("A) best-case scenario", "B) worst-case scenario", "C) random scenario")){
-  plist[[i]] <- sol_plot %>%
-    filter(scenario %in% c("all", i), `patches removed`%in% c(0,100,200,290)) %>%
-    mutate(p=ifelse(p<1e-10,0,p)) %>%
-    mutate(p=factor(p)) %>%
-    ggplot +
-    aes(x=x, y=y, alpha=factor(p), colour=species, fill=species) +
-    geom_point(shape=21) +
-    geom_point(alpha=0.3, shape=1, colour="black") +
-    facet_grid(factor(species, levels=c("a basal species", "a top predator"))~`patches removed`,
-               labeller=labeller(.rows = label_value, .cols = label_both)) +
-    scale_fill_manual(values=my_palette, guide=FALSE) +
-    scale_colour_manual(values=my_palette, guide=FALSE) +
-    #use discrete here because we converted p into a factor
-    scale_alpha_discrete(range=c(0, 1), guide=FALSE) +
-    scale_x_continuous(name="", label=abbreviate, limits=c(0, 1)) +
-    scale_y_continuous(name="", label=abbreviate, limits=c(0, 1)) +
-    labs(title = i) +
-    theme(plot.title = element_text(size=15),
-          text = element_text(size=15))
-}
-
-plist[[1]] #A) best-case scenario
-plist[[2]] #B) worst-case scenario
-plist[[3]] #C) random scenario
-
+# chain <- expand.grid(lambdaM=seq(0, 5, l=301), pi0=seq(0, 1, l=301)) %>%
+#   as_tibble %>%
+#   filter(pi0!=0) %>%
+#   mutate(lambda=lambdaM/log(1/(1-pi0)), TL=0)
+# for (i in 1:nrow(chain)) {
+#   if (chain$lambda[i]<1) next
+#   while ((chain$lambda[i]>1)&(chain$TL[i]<8)) {
+#     chain$lambda[i] <- chain$lambdaM[i]/(chain$lambdaM[i]/chain$lambda[i]-log(
+#       (1-chain$pi0[i])*(1-1/chain$lambda[i])))
+#     chain$TL[i] <- chain$TL[i] + 1
+#   }
+# }
+# ggplot(chain %>% mutate(TL=factor(TL))) +
+#    geom_raster(aes(x=pi0, y=lambdaM, fill=TL), interpolate=TRUE) +
+#    scale_x_continuous(name=expression(paste(pi)), expand=c(0,0)) +
+#    scale_y_continuous(name=expression(paste(lambda[M])), expand=c(0,0)) +
+#    scale_colour_brewer(palette="PuBu") +
+#    scale_fill_brewer(palette="PuBu", name="Trophic\nlevels") +
+# theme(panel.grid=element_blank())
+# # ggsave("../figures/TL_chain.pdf", width=4, height=3)
+# 
+# #Figure 2
+# getPalette  <- colorRampPalette(brewer.pal(11,"RdYlBu"))
+# 
+# #Input file
+# solfile <- "../data/results/web100300_003_landscape_001_basal_1_1.rds" #result file
+# sol <- solfile %>% read_rds #read in resultfile
+# sol <- bind_rows(sol[1,], sol) #add fake point with p=0 to scale alpha such that white equals zero
+# sol$p[1] <- 0
+# sol <- sol %>% filter(species %in% c(min(species), max(species))) #filter a basal species and a top species
+# nsp <- sol %>% pull(species) %>% unique %>% length #number of species to plot
+# my_palette <- getPalette(nsp)
+# 
+# #Modify data
+# sol_plot <- sol %>%
+#    rename(`patches removed`=prem) %>% #rename variables
+#    mutate(species=case_when(species==min(species) ~ "a basal species",
+#                             TRUE ~ "a top predator")) %>%
+#    mutate(scenario=case_when(
+#      scenario=="best" ~ "A) best-case scenario",
+#      scenario=="worst" ~ "B) worst-case scenario",
+#      scenario=="random" ~ "C) random scenario",
+#      TRUE ~ "all"))
+# 
+# #Generate patch occupancy plots for habitat loss scenarios
+# plist <- list() #initialize list for plots
+# for(i in c("A) best-case scenario", "B) worst-case scenario", "C) random scenario")){
+#   plist[[i]] <- sol_plot %>%
+#     filter(scenario %in% c("all", i), `patches removed`%in% c(0,100,200,290)) %>%
+#     mutate(p=ifelse(p<1e-10,0,p)) %>%
+#     mutate(p=factor(p)) %>%
+#     ggplot +
+#     aes(x=x, y=y, alpha=factor(p), colour=species, fill=species) +
+#     geom_point(shape=21) +
+#     geom_point(alpha=0.3, shape=1, colour="black") +
+#     facet_grid(factor(species, levels=c("a basal species", "a top predator"))~`patches removed`,
+#                labeller=labeller(.rows = label_value, .cols = label_both)) +
+#     scale_fill_manual(values=my_palette, guide=FALSE) +
+#     scale_colour_manual(values=my_palette, guide=FALSE) +
+#     #use discrete here because we converted p into a factor
+#     scale_alpha_discrete(range=c(0, 1), guide=FALSE) +
+#     scale_x_continuous(name="", label=abbreviate, limits=c(0, 1)) +
+#     scale_y_continuous(name="", label=abbreviate, limits=c(0, 1)) +
+#     labs(title = i) +
+#     theme(plot.title = element_text(size=15),
+#           text = element_text(size=15))
+# }
+# 
+# plist[[1]] #A) best-case scenario
+# plist[[2]] #B) worst-case scenario
+# plist[[3]] #C) random scenario
+# 
 
 #Figure 3
 #Generate .png plots for the different consumer responses to resource loss (functional forms) 
-infiles <- "../data/summaries_round1/summary_largewebs_*.rds" %>% Sys.glob() #summary files
+infiles <- "../data/summaries_round2/summary_sym_basal.rds" %>% Sys.glob() #summary files
+infile <- "../data/summaries_round2/summary_sym_basal.rds" %>% Sys.glob() #summary files
 
 for(infile in infiles){
-  dat <- infile %>% read_rds %>% filter(web == "Model food web with 300 consumer and 100 basal species") 
+  dat <- infile %>% read_rds %>% filter(web == "Model food web with 300 consumer and 100 basal species")
+
   pas <- unique(dat$alpha)
   pbs <- unique(dat$beta)
   
@@ -120,11 +124,13 @@ for(infile in infiles){
       #Define input for plotting functions
       pweb <- unique(dat_plot$web) #web
       pscenarios <-  unique(dat_plot$scenario) #scenarios
-      pspfs <- "basal" ## which focal species for patch loss
+      pspfs <- unique(dat_plot$spf) ## which focal species for patch loss
+      print(pspfs)
       pbasals <- FALSE ## if TRUE basal species are plotted if FALSE only consumer species
       
       #Metapopulation capacity ~ patches removed
-      pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
+      # pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
+      pparams <- unique(dat_plot$params)[1:2] ## selected pi_i and xi_i combinations
 
       #Create named vectors for facet labels with greek letters
       var_names <- pparams
@@ -132,18 +138,17 @@ for(infile in infiles){
 
       #Plot name
       lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-                         paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
+                         paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,"_sym.pdf")
       
       #Generate the plot
       p <- plot_patchloss(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
                           a = pa, b = pb, basals = pbasals, ptitle=ptitles, labnames = var_names)
       
       #Save it
-      # ggsave(filename = lambda, width=14, height=8, plot=p)
+      ggsave(filename = lambda, width=8, height=8, plot=p)
     } 
   }
 }
-
 
 #Figure 4
 #If not yet done, generate .png plots for the different consumer responses to resource loss (functional forms) 
@@ -152,6 +157,10 @@ for(infile in infiles){
 infile <- "../data/summaries_round1/summary_serengeti.rds" #summary file
 #patch removal based on antoher basal species (BOSAUG Boscia augustifolia, SG 14):
 # infile <- "../data/summaries_round2/summary_serengeti_BOSAUG.rds" #summary file
+
+infile <- "../data/summaries_round2/summary_serengeti.rds" %>% Sys.glob() #summary files
+# groups <- read_csv("../data/serengeti/serengeti_groups.csv")
+# dat <- infile %>% read_rds %>% left_join(groups) %>% saveRDS("../data/summaries_round2/summary_serengeti.rds")
 dat <- infile %>% read_rds %>% filter(spinput == "../data/species_input/serengeti_009.csv")
 
 pas <- unique(dat$alpha) 
@@ -174,7 +183,7 @@ for(pa in pas){ #loop over functional forms
     ## Define input
     pweb <- unique(dat_plot$web)
     pscenarios <- c("best-case scenario", "worst-case scenario", "random scenario")
-    pspfs <- "basal"
+    pspfs <- "top"#unique(dat_plot$spf)
     pbasals <- TRUE
     
     #Metapopulation capacity ~ patches removed
@@ -182,7 +191,7 @@ for(pa in pas){ #loop over functional forms
 
     #Plot name  
     lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-                       paste(.,collapse="_") %>% unname, "_", pspfs, "_SGB.pdf")
+                       paste(.,collapse="_") %>% unname, "_", pspfs, "_SGB_sym.pdf")
                        # paste(.,collapse="_") %>% unname, "_", pspfs, "_SGB_BOSAUG.pdf")
     
     #Generate the plot
@@ -190,5 +199,6 @@ for(pa in pas){ #loop over functional forms
                              a = pa, b = pb, basals = pbasals)
     
     #Save it
-    ggsave(filename = lambda, width=14, height=8, plot=p)
+    ggsave(filename = lambda, width=6, height=8, plot=p)
+    # ggsave(filename = lambda, width=14, height=8, plot=p)
 
