@@ -35,6 +35,9 @@ A <- create_adj_matrix(read_csv(web, col_types=cols())) ## create adjacency matr
 landscape <- as.matrix(read_csv(landsc, col_types=cols())) ## read landscape file
 N <- length(landscape[,1]) ## number of patches in the landscape
 LINKMAT <- matrix(1, N, N) ## matrix of spatial links (1=present, 0=removed)
+outfile <- paste0(outputdir, str_replace(basename(spinput), ".csv", ""), "_",
+                  str_replace(basename(landsc), ".csv", ""), "_", spf, "_",
+                  alpha, "_", beta, ".rds")
 
 ## combine species and landscape information
 spdat0 <- generate_spdat(web, spinput, landsc) %>%
@@ -52,6 +55,7 @@ spdat0 <- sim_metacomm(A, spdat0, nreps, alpha, beta, LINKMAT) %>%
              scenario="all")
 
 spdat <- spdat0
+saveRDS(spdat, outfile)
 
 flag <- FALSE
 ## if one of the following conditions is TRUE we stop here else we continue and simulate the habitat loss scenarios: 
@@ -119,23 +123,19 @@ if(!flag){
       }
       spdat1 <- sim_metacomm(A,spdat1,nreps,alpha,beta,LINKMAT) %>% mutate(lrem=j)
       spdat <- rbind(spdat, spdat1)
+      saveRDS(spdat, outfile)
       L0 <- sum(LINKMAT[upper.tri(LINKMAT)]) ## no. of links left (in upper tri)
       if (L0<=rem0) rem0 <- 10
       if((all((spdat1 %>% filter(FT!="basal") %>% pull(lambda) %>% unique)<1)) || ## stop if all consumers have crashed
-          (max(spdat1$p)<=(1e-10)) || (L0<12)) { ## stop if persistence too low or less than 12 links
+          (max(spdat1$p)<=(1e-10)) || (L0<=100)) { ## stop if persistence too low or no more than 100 links
         crashed <- TRUE
         print(paste("metacommunity crashed:", spf, focal_sp, scen, N)) ## print to log file
       }
-      # print(paste(L0, scen))
+      write(paste(L0, scen), stdout())
       # image(t(apply(LINKMAT,2,rev)))
     }
   }
 }
-
-outfile <- paste0(outputdir, str_replace(basename(spinput), ".csv", ""), "_",
-                  str_replace(basename(landsc), ".csv", ""), "_", spf, "_",
-                  alpha, "_", beta, ".rds")
-saveRDS(spdat, outfile)
 
 # spdat %>%
 #   mutate(TL=factor(round(TL))) %>%
