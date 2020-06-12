@@ -30,10 +30,10 @@ generate_summary <- function(infiles){
     #Modify summary
     out <- dat %>% mutate(
       topsp = case_when(
-        web == ("../data/webs/serengeti.csv") ~ read_csv("../data/webs/serengeti.csv") %>% 
+        web != ("../data/webs/serengeti.csv") ~ read_csv("../data/webs/web100300.csv") %>% 
         create_adj_matrix %>% rownames %>% tail(n = 1),
-        numextract(web) %>% str_split("",simplify = TRUE) %>% length == 6 ~ read_csv("../data/webs/web100300.csv") %>% 
-        create_adj_matrix %>% rownames %>% tail(n = 1)),
+      web == ("../data/webs/serengeti.csv") ~ read_csv("../data/webs/serengeti.csv") %>% 
+        create_adj_matrix %>% rownames %>% tail(n = 1)), 
       web = case_when(
         numextract(web) == "100300" ~ "Model food web with 300 consumer and 100 basal species",
         numextract(web) == "50350" ~ "Model food web with 350 consumer and 50 basal species",
@@ -63,6 +63,5 @@ generate_summary <- function(infiles){
         TRUE ~ "pre-patch loss"
       )
     )
-    
     return(out)
   }

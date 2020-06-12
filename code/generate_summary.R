@@ -17,12 +17,10 @@ numextract <- function(string){
 }
 
 
+infiles <- Sys.glob("../data/results/web*_basal_*.rds")
+outfile <- paste0("../data/summaries/summary_sym_basal.rds")
 
-for(i in 1:5){
-	infiles <- Sys.glob(paste0("/data/idiv_brose/johanna/bayesian_metacomm_round2/data/results/web50350",i,"_*.rds"))
-	outfile <- paste0("/data/idiv_brose/johanna/bayesian_metacomm_round2/data/summaries/summary_web50350",i,".rds")
+out <- generate_summary(infiles=infiles)
+saveRDS(out, outfile)
 
-	out <- generate_summary(infiles=infiles)
-	saveRDS(out, outfile)
-}
   

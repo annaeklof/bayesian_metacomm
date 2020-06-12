@@ -13,7 +13,8 @@ plot_patchloss <- function(data, webs, paramss, scenarioss, spfs, a, b, basals, 
 
   data <- data %>% filter(params %in% paramss) %>% 
     mutate(scenario=factor(scenario, levels=c("best-case scenario", "worst-case scenario", "random scenario")), 
-        params=factor(params,levels=c(paramss[4],paramss[1], paramss[2], paramss[3])))
+        # params=factor(params,levels=c(paramss[4],paramss[1], paramss[2], paramss[3])))
+        params=factor(params,levels=c(paramss[1],paramss[2])))
 
   ynames <- c("best-case", "worst-case", "random")
   names(ynames) <- c("best-case scenario", "worst-case scenario", "random scenario")
