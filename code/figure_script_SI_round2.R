@@ -49,256 +49,140 @@ if(file.exists(figuredir)){
 #   scale_colour_manual(values=dpalette, name=expression(paste(lambda[M[C]])))
 # ## ggsave("../figures/C_persist.pdf", width=3, height=2.4)
 
-#Figure S2,..., Figure S8 
+#Figures S5, S7, S9, S11
 #Generate .png plots for the different consumer responses to resource loss (functional forms) 
-plot_functional_forms(figuredir) 
-
 infiles <- "../data/summaries_round1/summary_largewebs_*.rds" %>% Sys.glob() #summary files
+infile <- "../data/summaries_round1/summary_serengeti.rds" %>% Sys.glob() #summary files
 
 for(infile in infiles){
-  dat0 <- infile %>% read_rds
-  pa <- unique(dat$alpha)
-  pb <- unique(dat$beta)
-  webnames <- unique(dat$web)
+  dat0 <- infile %>% read_rds 
+  webs <- dat0$web %>% unique
   
-  for(webname in webnames){
-    
-    dat <- dat0 %>% filter(web == webname)
+  for(pweb in webs){
+    dat <- dat0 %>% filter(web == pweb)
+  
+  pas <- unique(dat$alpha)
+  pbs <- unique(dat$beta)
+  
+  for(pa in pas){ #loop over functional forms
+    for(pb in pbs){
       
-    if(pa==5 && pb==1) ptitles="A"
-    if(pa==5 && pb==5) ptitles="B"
-    if(pa==1 && pb==1) ptitles="C"
-    if(pa==1 && pb==5) ptitles="D"
-        
-    fform_png <-  paste0(figuredir,"fform_",pa,"_",pb,".png")
-        
-    #Add prem=0 to scenarios
-    temp <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "best-case scenario")
-    temp2 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "worst-case scenario")
-    temp3 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "random scenario")
-    dat_plot <- dat %>% bind_rows(temp) %>% bind_rows(temp2) %>% bind_rows(temp3) %>% 
-    filter(scenario != "pre-patch loss")
+      if(pa==1 && pb==1) ptitles="A"
+      if(pa==5 && pb==1) ptitles="B"
+      if(pa==1 && pb==5) ptitles="C"
+      if(pa==5 && pb==5) ptitles="D"
       
-    #Define input for plotting functions
-    pweb <- unique(dat_plot$web) #web
-    pscenarios <-  unique(dat_plot$scenario) #scenarios
-    pspfs <- "basal" #which focal species for patch loss (basal/top)
-    pbasals <- FALSE #if TRUE basal species are plotted if FALSE only consumer species
-        
-    #Metapopulation capacity ~ patches removed 
-    pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
-    
-    #Create named vectors for facet labels with greek letters
-    var_names <- pparams
-    names(var_names) <- pparams
-        
-    #Plot name
-      lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-                       paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
-        
-    #Generate the plot
-    p <- plot_patchloss(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
-                      a = pa, b = pb, basals = pbasals, ptitle=ptitles, labnames = var_names)
-        
-    #Add functional form inset
-    g <- ggdraw(p) + draw_image(fform_png, x = 0.835, y = 1.01, hjust = 0, vjust = 1, width = 0.2, height = 0.2)
-    g
-        
-    #Save it
-    # ggsave(filename = lambda, width=12, height=8, plot=g)
+      #Add prem=0 to scenarios
+      temp <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "best-case scenario")
+      temp2 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "worst-case scenario")
+      temp3 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "random scenario")
+      dat_plot <- dat %>% bind_rows(temp) %>% bind_rows(temp2) %>% bind_rows(temp3) %>% 
+        filter(scenario != "pre-patch loss")
+      
+      #Define input for plotting functions
+      # pweb <- unique(dat_plot$web) #web
+      pscenarios <-  unique(dat_plot$scenario) #scenarios
+      pspfs <- "basal" #unique(dat_plot$spf) ## which focal species for patch loss
+      print(pspfs)
+      pbasals <- ifelse(pweb=="Serengeti food web with 32 consumer and 129 basal species", TRUE, FALSE) ## if TRUE basal species are plotted if FALSE only consumer species
 
-    #Average landscape persistence ~ dispersal distance 
-    pparams <- unique(dat$params)[c(1:5)] #pi TLB
+      #Metapopulation capacity ~ patches removed
+      pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
+      # pparams <- unique(dat_plot$params)[1:2] ## selected pi_i and xi_i combinations
+      
+      #Create named vectors for facet labels with greek letters
+      var_names <- pparams
+      names(var_names) <- pparams
+      
+      #Plot name
+      lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>%
+                         paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
+
+      #Generate the plot
+      p <- plot_patchloss(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
+                          a = pa, b = pb, basals = pbasals, ptitle=ptitles, labnames = var_names)
+
+      #Save it
+      ggsave(filename = lambda, width=14, height=8, plot=p)
   
-    #Plot name
-    sump <- paste0(figuredir, "sump_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-                    paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".png")
-        
-    #Generate the plot
-    p <- plot_persistence(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
-                        a = pa, b = pb, basals = pbasals, ptitle=ptitles) 
-        
-    #Add functional form inset
-    g <- ggdraw(p) + draw_image(fform_png, x = 0.835, y = 1.01, hjust = 0, vjust = 1, width = 0.2, height = 0.2)
-    g
-        
-    #Save it
-    # ggsave(filename = sump, width=12, height=8, plot=g, device="png")
-  } 
-}
+      #Average landscape persistence ~ dispersal distance 
+      pparams <- unique(dat$params)[c(1:5)] #pi TLB
+      
+      #Plot name
+      sump <- paste0(figuredir, "sump_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
+                         paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".png")
+      
+      p2 <- plot_persistence(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
+                          a = pa, b = pb, basals = pbasals, ptitle=ptitles)
 
-
-#Figure S9 & Figure S10
-#Generate .png plots for the different consumer responses to resource loss (functional forms) 
-plot_functional_forms(figuredir) 
-
-infile <- "../data/summaries/summary_serengeti.rds" #summary files
-
-dat <- infile %>% read_rds  
-pas <- unique(dat$alpha)
-pbs <- unique(dat$beta)
-    
-for(pa in pas){ #loop over functional forms
-  for(pb in pbs){
-    if(pa==5 && pb==1) ptitles="A"
-    if(pa==5 && pb==5) ptitles="B"
-    if(pa==1 && pb==1) ptitles="C"
-    if(pa==1 && pb==5) ptitles="D"
-    
-    fform_png <-  paste0(figuredir,"fform_",pa,"_",pb,".png")
-    
-    #Add prem=0 to scenarios
-    temp <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "best-case scenario")
-    temp2 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "worst-case scenario")
-    temp3 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "random scenario")
-    dat_plot <- dat %>% bind_rows(temp) %>% bind_rows(temp2) %>% bind_rows(temp3) %>% 
-      filter(scenario != "pre-patch loss")
-    
-    #Define input for plotting functions
-    pweb <- unique(dat_plot$web) #web
-    pscenarios <-  unique(dat_plot$scenario) #scenarios
-    pspfs <- "basal" #which focal species for patch loss (basal/top)
-    pbasals <- TRUE #if TRUE basal species are plotted if FALSE only consumer species
-    
-    #Metapopulation capacity ~ patches removed
-    pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
-    
-    #Create named vectors for facet labels with greek letters
-    var_names <- pparams
-    names(var_names) <- pparams
-    
-    #Plot name
-    lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-                       paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
-    
-    #Generate the plot
-    p <- plot_patchloss(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
-                        a = pa, b = pb, basals = pbasals, ptitle=ptitles, labnames = var_names)
-    
-    #Add functional form inset
-    g <- ggdraw(p) + draw_image(fform_png, x = 0.835, y = 1.01, hjust = 0, vjust = 1, width = 0.2, height = 0.2)
-    # g
-    
-    #Save it
-    ggsave(filename = lambda, width=12, height=8, plot=g)
-    
-    #Average landscape persistence ~ dispersal distance 
-    pparams <- unique(dat$params)[c(1:5)] #pi TLB
-    
-    #Plot name
-    sump <- paste0(figuredir, "sump_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-                     paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".png")
-    
-    #Generate the plot
-    p <- plot_persistence(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
-                          a = pa, b = pb, basals = pbasals, ptitle=ptitles) 
-    
-    #Add functional form inset
-    g <- ggdraw(p) + draw_image(fform_png, x = 0.835, y = 1.01, hjust = 0, vjust = 1, width = 0.2, height = 0.2)
-    # g
-    
-    #Save it
-    ggsave(filename = sump, width=12, height=8, plot=g, device="png")
-  } 
-}
-
-#Figure S11 Model food webs
-#Generate .png plots for the different consumer responses to resource loss (functional forms) 
-plot_functional_forms(figuredir) 
-
-infile <- c("../data/summaries/summary_largewebs_1_1.rds") #summary files
-
-dat <- infile %>% read_rds
-pa <- unique(dat$alpha)
-pb <- unique(dat$beta)
-webnames <- dat$web %>% unique
-
-for(webname in webnames){
-  ptitles=webname
-  fform_png <-  paste0(figuredir,"fform_",pa,"_",pb,".png")
-    
-  #Add prem=0 to scenarios
-  temp <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "best-case scenario")
-  temp2 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "worst-case scenario")
-  temp3 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "random scenario")
-  dat_plot <- dat %>% bind_rows(temp) %>% bind_rows(temp2) %>% bind_rows(temp3) %>% 
-  filter(scenario != "pre-patch loss")
-    
-  #Define input for plotting functions
-  pweb <- unique(dat_plot$web) #web
-  pscenarios <-  unique(dat_plot$scenario) #scenarios
-  pspfs <- "top" #which focal species for patch loss (basal/top)
-  pbasals <- FALSE #if TRUE basal species are plotted if FALSE only consumer species
-  
-  #Metapopulation capacity ~ patches removed
-  pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
-  
-  #Create named vectors for facet labels with greek letters
-  var_names <- pparams
-  names(var_names) <- pparams
-
-  #Plot name
-  lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-                 paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
-    
-  #Generate the plot
-  p <- plot_patchloss(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
-                    a = pa, b = pb, basals = pbasals, ptitle=ptitles, labnames = var_names)
-    
-  #Add functional form inset
-  g <- ggdraw(p) + draw_image(fform_png, x = 0.835, y = 1.01, hjust = 0, vjust = 1, width = 0.2, height = 0.2)
-  g
-    
-  #Save it
-  # ggsave(filename = lambda, width=12, height=8, plot=g) 
+      #Save it
+      ggsave(filename = sump, width=14, height=8, plot=p2)
+    } 
+  }
+ }
 } 
 
+#Figures S13
+#Generate .pdf plots for the different model food webs with the top species as focal species for patch los  
+infile <- "../data/summaries_round1/summary_largewebs_1_1.rds" #summary files
+# infile <- "../data/summaries_round1/summary_serengeti.rds" #summary files
 
-#Figure S11 Serengeti food web
-#Generate .png plots for the different consumer responses to resource loss (functional forms) 
-plot_functional_forms(figuredir) 
+  dat0 <- infile %>% read_rds 
+  webs <- dat0$web %>% unique
+  
+  for(pweb in webs){
+    dat <- dat0 %>% filter(web == pweb)
+    
+      pa <- 1 
+      pb <- 1 
+        
+        if(pweb=="Model food web with 350 consumer and 50 basal species") ptitles=paste("A", pweb) 
+        if(pweb=="Model food web with 300 consumer and 100 basal species") ptitles=paste("B", pweb) 
+        if(pweb=="Model food web with 250 consumer and 150 basal species") ptitles=paste("C", pweb) 
+        if(pweb=="Model food web with 200 consumer and 200 basal species") ptitles=paste("D", pweb) 
+        if(pweb=="Serengeti food web with 32 consumer and 129 basal species") ptitles=paste("E", pweb) 
 
-infile <- "../data/summaries/summary_serengeti.rds" #summary files
+        #Add prem=0 to scenarios
+        temp <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "best-case scenario")
+        temp2 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "worst-case scenario")
+        temp3 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "random scenario")
+        dat_plot <- dat %>% bind_rows(temp) %>% bind_rows(temp2) %>% bind_rows(temp3) %>% 
+          filter(scenario != "pre-patch loss")
+        
+        #Define input for plotting functions
+        # pweb <- unique(dat_plot$web) #web
+        pscenarios <-  unique(dat_plot$scenario) #scenarios
+        pspfs <- "top" #unique(dat_plot$spf) ## which focal species for patch loss
+        pbasals <- ifelse(pweb=="Serengeti food web with 32 consumer and 129 basal species", TRUE, FALSE) ## if TRUE basal species are plotted if FALSE only consumer species
+        
+        #Metapopulation capacity ~ patches removed
+        pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
 
-pa <- 1
-pb <- 1
-dat <- infile %>% read_rds %>% filter(alpha == pa, beta == pb) 
+        #Create named vectors for facet labels with greek letters
+        var_names <- pparams
+        names(var_names) <- pparams
+        
+        #Plot name
+        lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>%
+                           paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
 
-ptitles <- dat %>% pull(web) %>% unique
-fform_png <-  paste0(figuredir,"fform_",pa,"_",pb,".png")
-    
-#Add prem=0 to scenarios
-temp <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "best-case scenario")
-temp2 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "worst-case scenario")
-temp3 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "random scenario")
-dat_plot <- dat %>% bind_rows(temp) %>% bind_rows(temp2) %>% bind_rows(temp3) %>% 
-    filter(scenario != "pre-patch loss")
+        #Generate the plot
+        p <- plot_patchloss(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
+                            a = pa, b = pb, basals = pbasals, ptitle=ptitles, labnames = var_names)
 
-#Define input for plotting functions
-pweb <- unique(dat_plot$web) #web
-pscenarios <-  unique(dat_plot$scenario) #scenarios
-pspfs <- "top" #which focal species for patch loss (basal/top)
-pbasals <- TRUE #if TRUE basal species are plotted if FALSE only consumer species
-    
-#Metapopulation capacity ~ patches removed
-pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
-    
-#Create named vectors for facet labels with greek letters
-var_names <- pparams
-names(var_names) <- pparams
-    
-#Plot name
-lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-               paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
-    
-#Generate the plot
-p <- plot_patchloss(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
-                  a = pa, b = pb, basals = pbasals, ptitle=ptitles, labnames = var_names)
-    
-#Add functional form inset
-g <- ggdraw(p) + draw_image(fform_png, x = 0.835, y = 1.01, hjust = 0, vjust = 1, width = 0.2, height = 0.2)
-g
-    
-#Save it
-# ggsave(filename = lambda, width=12, height=8, plot=g)
-    
+        #Save it
+        ggsave(filename = lambda, width=14, height=8, plot=p)
+
+        #Average landscape persistence ~ dispersal distance 
+        pparams <- unique(dat$params)[c(1:5)] #pi TLB
+        
+        #Plot name
+        # sump <- paste0(figuredir, "sump_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
+        #                  paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".png")
+        # 
+        # p2 <- plot_persistence(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
+        #                       a = pa, b = pb, basals = pbasals, ptitle=ptitles)
+        
+        #Save it
+        # ggsave(filename = sump, width=14, height=8, plot=p2)
+      } 

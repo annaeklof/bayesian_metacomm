@@ -129,8 +129,8 @@ for(infile in infiles){
       pbasals <- FALSE ## if TRUE basal species are plotted if FALSE only consumer species
       
       #Metapopulation capacity ~ patches removed
-      # pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
-      pparams <- unique(dat_plot$params)[1:2] ## selected pi_i and xi_i combinations
+      pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
+      # pparams <- unique(dat_plot$params)[1:2] ## selected pi_i and xi_i combinations
 
       #Create named vectors for facet labels with greek letters
       var_names <- pparams
@@ -138,7 +138,7 @@ for(infile in infiles){
 
       #Plot name
       lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-                         paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,"_sym.pdf")
+                         paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
       
       #Generate the plot
       p <- plot_patchloss(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,

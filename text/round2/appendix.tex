@@ -22,6 +22,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage{mathptmx}
 
+\usepackage[export]{adjustbox}% http://ctan.org/pkg/adjustbox
+
 \definecolor{mygray}{gray}{0.85}
 \newcommand{\code}[1]{\colorbox{mygray}{\texttt{#1}}}
 \newcommand{\ud}{\text{d}}
@@ -781,135 +783,162 @@ $\mathbf{I}$ being the identity matrix. For the purposes of creating figures, we
 Patch removal proceeds as described in the main text.
 
 \begin{figure}[!hp]
-\centering \includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_300_consumer_and_100_basal_species_basal_5_1.png} \includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_300_consumer_and_100_basal_species_basal_5_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_300_consumer_and_100_basal_species_basal_1_1.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_300_consumer_and_100_basal_species_basal_5_1.png}
+    \includegraphics[width=0.19\textwidth,valign=t]{fform_5_1.png}
  \caption{Average species persistence against dispersal distance, in a model food web with 300 consumer and 100 basal species. Average persistence of species $i$ is measured by $\sum_{k=1}^N p_i^k/N$, with the understanding that $N$ is the number of patches over the unperturbed landscape and $p_i^k = 0$ on removed patches. A-D are for different functional forms of a consumer's response to the loss of resources (top right insets). Species are grouped into trophic levels (color legends). Rows indicate patch-removal scenario (best-case, worst-case, and random); columns the number of patches removed from the full landscape. Baseline extinction probabilities $\pi_i$ increase with trophic level (trophic level-based, TLB) and dispersal distances $\xi_i$ range between between $0.01$ and $0.1$, having the same value across all species in any one parameterization.}
  \label{S_fig:patchloss_300_100_distance_1}
 \end{figure}
 
 \begin{figure}\ContinuedFloat
-\centering \includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_300_consumer_and_100_basal_species_basal_1_1.png} \includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_300_consumer_and_100_basal_species_basal_1_5.png}
- \caption{Figure continued.}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_300_consumer_and_100_basal_species_basal_1_5.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_300_consumer_and_100_basal_species_basal_5_5.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
+  \caption{Figure continued.}
   \label{S_fig:patchloss_300_100_distance_2}
 \end{figure}
 
-\begin{figure}[!ht]
-\centering \includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_basal_5_1.pdf}  \includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_basal_5_5.pdf}
+\begin{figure}[!ht]   		   	 \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_basal_1_1.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_basal_5_1.pdf}
+    \includegraphics[width=0.19\textwidth,valign=t]{fform_5_1.png}
  \caption{Effect of habitat loss on species persistence in a model food web with 350 consumer and 50 basal species. A-D are for different functional forms of a consumer's response to the loss of resources (top right insets). Species are grouped into trophic levels (color legends); lines show the mean and the bands around them the one standard deviation range of the metapopulation capacities of species in the corresponding trophic level. Rows indicate patch-removal scenario (best-case, worst-case, and random); columns the parameterization method: baseline extinction probabilities $\pi_i$ and dispersal distances $\xi_i$ can either take on one value across all species, or increase with trophic level (trophic level-based, TLB). Horizontal dashed lines highlight a metapopulation capacity of $1$, the threshold for long-term species persistence. Vertical dashed lines show when the metapopulation capacity of the top species in the food web drops below this threshold.}
  \label{S_fig:patchloss_350_50_1}
 \end{figure}
 
 \begin{figure}\ContinuedFloat
-\centering \includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_basal_1_1.pdf} \includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_basal_1_5.pdf}
+ \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_300_consumer_and_100_basal_species_basal_1_5.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_300_consumer_and_100_basal_species_basal_5_5.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
  \caption{Figure continued.}
  \label{S_fig:patchloss_350_50_2}
 \end{figure}
 
 \begin{figure}
-\centering
-\includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_350_consumer_and_50_basal_species_basal_5_1.png} \includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_350_consumer_and_50_basal_species_basal_5_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_350_consumer_and_50_basal_species_basal_1_1.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_350_consumer_and_50_basal_species_basal_5_1.png}
+    \includegraphics[width=0.19\textwidth,valign=t]{fform_5_1.png}
  \caption{As Figure \ref{S_fig:patchloss_300_100_distance_1}, but with 350 consumer and 50 basal species.}
 \end{figure}
 
 \begin{figure}[!ht]\ContinuedFloat
-\centering
-\includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_350_consumer_and_50_basal_species_basal_1_1.png}
-\includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_350_consumer_and_50_basal_species_basal_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_350_consumer_and_50_basal_species_basal_1_5.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_350_consumer_and_50_basal_species_basal_5_5.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
  \caption{Figure continued.}
  \label{S_fig:patchloss_350_50_distance_2}
 \end{figure}
 
-
 \begin{figure}[!ht]
-\centering \includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_250_consumer_and_150_basal_species_basal_5_1.pdf}  \includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_250_consumer_and_150_basal_species_basal_5_5.pdf}
+\includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_250_consumer_and_150_basal_species_basal_1_1.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_250_consumer_and_150_basal_species_basal_5_1.pdf}
+    \includegraphics[width=0.19\textwidth,valign=t]{fform_5_1.png}
  \caption{As Figure \ref{S_fig:patchloss_350_50_1}, but with 250 consumer and 150 basal species.} 
 \end{figure}
 
 \begin{figure}\ContinuedFloat
-\centering
-\includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_250_consumer_and_150_basal_species_basal_1_1.pdf}
-\includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_250_consumer_and_150_basal_species_basal_1_5.pdf}
+ \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_250_consumer_and_150_basal_species_basal_1_5.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_250_consumer_and_150_basal_species_basal_5_5.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
  \caption{Figure continued.}
  \label{S_fig:patchloss_250_150_2}
 \end{figure}
 
 \begin{figure}
-\centering
-\includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_250_consumer_and_150_basal_species_basal_5_1.png}
-\includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_250_consumer_and_150_basal_species_basal_5_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_250_consumer_and_150_basal_species_basal_1_1.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_250_consumer_and_150_basal_species_basal_5_1.png}
+    \includegraphics[width=0.19\textwidth,valign=t]{fform_5_1.png}
  \caption{As Figure \ref{S_fig:patchloss_300_100_distance_1}, but with 250 consumer and 150 basal species.} 
  \label{S_fig:patchloss_250_150_distance_1}
 \end{figure}
 
 \begin{figure}\ContinuedFloat
-\centering
-\includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_250_consumer_and_150_basal_species_basal_1_1.png}
-\includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_250_consumer_and_150_basal_species_basal_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_250_consumer_and_150_basal_species_basal_1_5.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_250_consumer_and_150_basal_species_basal_5_5.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
  \caption{Figure continued.}
  \label{S_fig:patchloss_250_150_distance_2}
 \end{figure}
 
 \begin{figure}[!ht]
-\centering
-\includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_200_consumer_and_200_basal_species_basal_5_1.pdf}
-\includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_200_consumer_and_200_basal_species_basal_5_5.pdf}
+\includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_200_consumer_and_200_basal_species_basal_1_1.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_200_consumer_and_200_basal_species_basal_5_1.pdf}
+    \includegraphics[width=0.19\textwidth,valign=t]{fform_5_1.png}
  \caption{As Figure \ref{S_fig:patchloss_350_50_1}, but with 200 consumer and 200 basal species.}
  \label{S_fig:patchloss_200_200_1}
 \end{figure}
 
 \begin{figure}\ContinuedFloat
-\centering
-\includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_200_consumer_and_200_basal_species_basal_1_1.pdf}
-\includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_200_consumer_and_200_basal_species_basal_1_5.pdf}
+ \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_200_consumer_and_200_basal_species_basal_1_5.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_200_consumer_and_200_basal_species_basal_5_5.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
  \caption{Figure continued.}
  \label{S_fig:patchloss_200_200_2}
 \end{figure}
 
 %Habitat connectivity
 \begin{figure}
-\centering
-\includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_200_consumer_and_200_basal_species_basal_5_1.png}
-\includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_200_consumer_and_200_basal_species_basal_5_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_200_consumer_and_200_basal_species_basal_1_1.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_200_consumer_and_200_basal_species_basal_5_1.png}
+    \includegraphics[width=0.19\textwidth,valign=t]{fform_5_1.png}
  \caption{As Figure \ref{S_fig:patchloss_300_100_distance_1}, but with 200 consumer and 200 basal species.}
    \label{S_fig:patchloss_200_200_distance_1}
 \end{figure}
 
 \begin{figure}\ContinuedFloat
-\centering
-\includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_200_consumer_and_200_basal_species_basal_1_1.png}
-\includegraphics[width=0.94\textwidth]{sump_Model_food_web_with_200_consumer_and_200_basal_species_basal_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_200_consumer_and_200_basal_species_basal_1_5.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_200_consumer_and_200_basal_species_basal_5_5.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
 \caption{Figure continued.}   
 \label{S_fig:patchloss_200_200_distance_2}
 \end{figure}
 
 
 \begin{figure}[!ht]
-\centering
-\includegraphics[width=0.94\textwidth]{lambda_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_5_1.pdf}
-\includegraphics[width=0.94\textwidth]{lambda_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_5_5.pdf}
+\includegraphics[width=0.8\textwidth,valign=t]{lambda_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_1_1.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_5_1.pdf}
+    \includegraphics[width=0.19\textwidth,valign=t]{fform_5_1.png}
 \caption{As Figure \ref{S_fig:patchloss_350_50_1}, but for the Serengeti food web.} 
 \label{S_fig:patchloss_Serengeti_TLB_1}
 \end{figure}
 
 \begin{figure}\ContinuedFloat
-\centering
-\includegraphics[width=0.94\textwidth]{lambda_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_1_1.pdf}
-\includegraphics[width=0.94\textwidth]{lambda_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_5_1.pdf}
-\caption{Figure continued.}
+ \includegraphics[width=0.8\textwidth,valign=t]{lambda_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_1_5.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_5_5.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
+  \caption{Figure continued.}
 \label{S_fig:patchloss_Serengeti_TLB_2}
 \end{figure}
 
 \begin{figure}
-\centering
-\includegraphics[width=0.94\textwidth]{sump_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_5_1.png}
-\includegraphics[width=0.94\textwidth]{sump_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_5_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_1_1.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_5_1.png}
+    \includegraphics[width=0.19\textwidth,valign=t]{fform_5_1.png}
 \caption{As Figure \ref{S_fig:patchloss_300_100_distance_1}, but for the Serengeti food web.}
 \label{S_fig:patchloss_Serengeti_TLB_distance_1}
 \end{figure}
 
 \begin{figure}\ContinuedFloat
-\centering
-\includegraphics[width=0.94\textwidth]{sump_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_1_1.png}
-\includegraphics[width=0.94\textwidth]{sump_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_1_5.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{sump_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_5_5.png}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
 \caption{Figure continued.}
 \label{S_fig:patchloss_Serengeti_TLB_distance_2}
 \end{figure}
@@ -922,22 +951,23 @@ For the linear functional form of a consumer's response to the loss of resources
 
 %Top species as focal species for patch loss 
 \begin{figure}[!ht]
-\centering \includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_top_1_1.pdf}  \includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_300_consumer_and_100_basal_species_top_1_1.pdf} 
- \caption{As Figure~\ref{S_fig:patchloss_350_50_1}, but patch removal is based on the patch value rankings of top species, and only the linear consumer response to resource loss is implemented (top right insets). The larger $3 \times 4$ panels are for food webs with different numbers of consumer and basal species.}
+\centering  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_top_1_1.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_300_consumer_and_100_basal_species_top_1_1.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+ \caption{As Figure~\ref{S_fig:patchloss_350_50_1}, but patch removal is based on the patch value rankings of top species, and only the linear consumer response to resource loss is implemented (top right insets). Here A-D are for model food webs with different numbers of consumer and basal species and E is for the Serengeti food web.}
  \label{S_fig:patchloss_top_1}
 \end{figure}
 
-\begin{figure}\ContinuedFloat
-\centering \includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_250_consumer_and_150_basal_species_top_1_1.pdf}  \includegraphics[width=0.94\textwidth]{lambda_Model_food_web_with_200_consumer_and_200_basal_species_top_1_1.pdf} 
+\begin{figure}\ContinuedFloat 
+ \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_250_consumer_and_150_basal_species_top_1_1.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_200_consumer_and_200_basal_species_top_1_1.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Serengeti_food_web_with_32_consumer_and_129_basal_species_top_1_1.pdf}
+    \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
  \caption{Figure continued.}
  \label{S_fig:patchloss_top_2}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.94\textwidth]{lambda_Serengeti_food_web_with_32_consumer_and_129_basal_species_top_1_1.pdf}
-\caption{As Figure~\ref{S_fig:patchloss_top_1}, but for the Serengeti food web.}
-\label{S_fig:patchloss_top_Serengeti}
 \end{figure}
 
 

@@ -13,12 +13,12 @@ plot_persistence <- function(data, webs, paramss, scenarioss, spfs, a, b, basals
   data <- data %>% 
     mutate(scenario=factor(scenario, levels=c("best-case scenario", "worst-case scenario", "random scenario")))
   
-  ## Define theme and colour palette:
+  ## Define theme and colour palette
   theme_set(theme_bw()) ## set black and white theme
-  colourCount <- data$TL05 %>% unique %>% length
+  colourCount <- data$ITL %>% unique %>% length
   getPalette  <- colorRampPalette(brewer.pal((11),"RdYlBu"))
   cpalette <- rev(getPalette(colourCount+1))
-  cpalette <- cpalette[-6]
+  cpalette <- cpalette[-4]
   
   if(basals == FALSE) data <- data %>% filter(FT != "basal") 
   
@@ -26,7 +26,8 @@ plot_persistence <- function(data, webs, paramss, scenarioss, spfs, a, b, basals
                   prem %in% c(0, 100, 200, 290)) %>%
     rename(`patches removed`=prem) %>%
     ggplot() +
-    aes(x=as.factor(xi), y=(sump/300), colour=as.factor(TL05), fill=as.factor(TL05)) +
+    aes(x=as.factor(xi), y=(sump/300), colour=as.factor(ITL), fill=as.factor(ITL)) +
+    # aes(x=as.factor(xi), y=(sump/300), colour=as.factor(TL05), fill=as.factor(TL05)) +
     geom_point(alpha=1, size=5, shape=1) +
     expand_limits(y = c(0,1)) + 
     facet_grid(scenario~`patches removed`, 
