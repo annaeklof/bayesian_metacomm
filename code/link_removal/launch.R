@@ -3,7 +3,7 @@ require(tidyverse)
 
 landscs <- Sys.glob("../../data/landscapes/landscape*.csv")[1]
 spinputs <- Sys.glob("../../data/species_input/linkremoval/web*.csv")
-spfs <- "basal" ## spfs <- c("basal", "top")
+spfs <- "basal"
 outputdir <- "../../data/linkrem_results/"
 alpha <- c(1, 5)
 beta <- c(1, 5)
@@ -20,10 +20,10 @@ for (r in 1:nrow(tab)) {
   writeLines(c(
     paste("#!/bin/bash"),
     paste("#SBATCH -J", jobname),
-    paste("#SBATCH -A liu-2018-29"),
+    paste("#SBATCH -A snic2020-5-273"),
     paste("#SBATCH -t 36:00:00"),
-    paste("#SBATCH --mem=64000"),
-    paste("#SBATCH -n 4"),
+    paste("#SBATCH --mem=32000"),
+    paste("#SBATCH -n 1"),
     paste("#"),
     paste("# Run single task in foreground"),
     paste("module add R/3.6.0-nsc1-gcc-7.3.0"),

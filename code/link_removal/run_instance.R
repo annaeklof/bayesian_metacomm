@@ -25,12 +25,12 @@ if (length(clargs) > 0) { ## command-line arguments
   beta <- 1
 }
 
-seed <- 548261 ## seed for random numbers 
-rem <- 150 ## number of links removed per link removal iteration
+seed <- 548261 ## seed for random numbers
+rem <- 1500 ## number of links removed per link removal iteration
 nreps <- 1000 ## number of iterations for Bayesian network
 scenarios <- c("best", "worst", "random") ## set of scenarios
 
-## 1: simulate metacommunity in the full landscape (pre patch loss)  
+## 1: simulate metacommunity in the full landscape (pre patch loss)
 A <- create_adj_matrix(read_csv(web, col_types=cols())) ## create adjacency matrix from links
 landscape <- as.matrix(read_csv(landsc, col_types=cols())) ## read landscape file
 N <- length(landscape[,1]) ## number of patches in the landscape
@@ -58,16 +58,16 @@ spdat <- spdat0
 saveRDS(spdat, outfile)
 
 flag <- FALSE
-## if one of the following conditions is TRUE we stop here else we continue and simulate the habitat loss scenarios: 
-if ((all(spdat0 %>% filter(FT!="basal") %>% pull(lambda) %>% unique < 1)) || ## stop if no consumer can persist 
-    (max(spdat0$p)<(1e-10)) || ## stop if persistence too low 
-    ((spf!="basal") & (spdat0 %>% filter(species==rownames(A)[nrow(A)]) %>% pull(lambda) %>% unique<1))){ ## stop if top species is spf and extinct 
+## if one of the following conditions is TRUE we stop here else we continue and simulate the habitat loss scenarios:
+if ((all(spdat0 %>% filter(FT!="basal") %>% pull(lambda) %>% unique < 1)) || ## stop if no consumer can persist
+    (max(spdat0$p)<(1e-10)) || ## stop if persistence too low
+    ((spf!="basal") & (spdat0 %>% filter(species==rownames(A)[nrow(A)]) %>% pull(lambda) %>% unique<1))){ ## stop if top species is spf and extinct
     flag <- TRUE
 }
 
 focal_sp <- ifelse(spf=="basal", rownames(A)[1], rownames(A)[nrow(A)]) ## spf name
 
-## print to log file: 
+## print to log file:
 print(web)
 print(landsc)
 ## baseline extinction probability pi: uniform or increases with trophic level (TLB)
@@ -75,8 +75,8 @@ print(paste("pi =", ifelse(length(unique(read_csv(spinput, col_types = cols())$p
 ## dispersal distance xi: uniform or increases with trophic level (TLB)
 print(paste("xi =", ifelse(length(unique(read_csv(spinput, col_types = cols())$xi))==1, unique(read_csv(spinput, col_types = cols())$xi), "TLB")))
 print(paste("spf patch loss:", spf, focal_sp)) 
-## if one of these is TRUE we stop at the full landscape and do not simulate link loss: 
-print(paste("all consumers extinct:", all(spdat0 %>% filter(FT!="basal") %>% pull(lambda) %>% unique < 1))) 
+## if one of these is TRUE we stop at the full landscape and do not simulate link loss:
+print(paste("all consumers extinct:", all(spdat0 %>% filter(FT!="basal") %>% pull(lambda) %>% unique < 1)))
 print(paste("top species extinct:", spdat0 %>% filter(species==rownames(A)[nrow(A)]) %>% pull(lambda) %>% unique<1)) ## only relevant if spf=="top"
 print(paste("persistence too low:", max(spdat0$p)<(1e-10)))
 print(paste("stopped after full landscape:", flag))
@@ -125,14 +125,14 @@ if(!flag){
       spdat <- rbind(spdat, spdat1)
       saveRDS(spdat, outfile)
       L0 <- sum(LINKMAT[upper.tri(LINKMAT)]) ## no. of links left (in upper tri)
-      if (L0<=rem0) rem0 <- 10
+      if (L0<=rem0) rem0 <- 150
+      write(paste(L0, scen), stdout())
+      # image(t(apply(LINKMAT,2,rev)))
       if((all((spdat1 %>% filter(FT!="basal") %>% pull(lambda) %>% unique)<1)) || ## stop if all consumers have crashed
-          (max(spdat1$p)<=(1e-10)) || (L0<=100)) { ## stop if persistence too low or no more than 100 links
+          (max(spdat1$p)<=(1e-10)) || (L0<=100)) { ## stop if persistence too low or too few links
         crashed <- TRUE
         print(paste("metacommunity crashed:", spf, focal_sp, scen, N)) ## print to log file
       }
-      write(paste(L0, scen), stdout())
-      # image(t(apply(LINKMAT,2,rev)))
     }
   }
 }
