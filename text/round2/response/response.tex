@@ -12,7 +12,7 @@
 \usepackage{txfonts}
 \usepackage{xr}
 
-\newcommand{\SI}{SM}
+\newcommand{\SI}{SI}
 \newcommand{\ud}{\text{d}}
 \newcommand{\mat}[1]{\bm{#1}}
 \newcommand{\cov}{\text{cov}}
@@ -35,7 +35,7 @@
 \bibpunct{(}{)}{,}{a}{}{,}
 \clubpenalty = 10000
 \widowpenalty = 10000
-\graphicspath{{./}}
+\graphicspath{{../../../figures/}}
 \externaldocument[SI:]{../appendix}
 \externaldocument[main:]{../manuscript}
 
@@ -90,7 +90,7 @@ My primary concern is that the Bayesian network model makes several strong assum
 
 \us
 
-As said above, the primary results of the paper that extinction rates will generally increase with trophic level and with removing highly connected habitats are in line with the broader literature on spatial patterns of extinction. To that extent, the model's predictions are in line with observed empirical facts. Beyond that, we know for a fact that some of the assumptions (such as no top-down effects) are absolutely wrong. Nevertheless, as mentioned above, another way to assure the usefulness of a model is to show that it makes robust predictions. To this end, we have re-done some of our analyses relaxing the assumption that each prey item contributes a fixed fraction to predators' diets (see below).
+This is a very important point, and in response, we have obtained several new results to emphasize 1) the robustness of the results; and 2) that predicted extintion patterns resemble those obtained via other methods. These were done to move beyond the broad but simple agreement of our results with existing literature mentioned by the Reviewer, to see if the model can be used more quantitatively. To this end, we have relaxed the assumption that each prey item contributes a fixed fraction to predators' diets, and show that results are robust to abandoning this assumption. We have also reproduced the predictions for the number of trophic levels as a function of landscape size and number of patches from a different study \citep{Ryser2019} which took both bottom-up and top-down effect into account. The patterns produced by the two methods are qualitatively identical. See below for details.
 
 \them
 
@@ -98,7 +98,9 @@ One of the core assumptions of the author's model is that extinction risk depend
 
 \us
 
-First, argue that the example of the referee is not as strange as it looks. Second, implement simulations where extinction is not a function of the fraction of prey lost, but of their identity (i.e., assign weights to each prey, measuring how much the predator likes them). We assign weights to match \ldots empirical pattern (look for them).
+The scenario envisioned by the Reviewer above might not be as strange as it looks. It means that we are tacitly assuming some sort of tradeoff between predator efficiency and generality. In the example above: if the specialist consumer preys on two resources available in the patch, and the generalist on three (but the third is locally absent), then, since the generalist is less efficient overall, it is at a disadvantage compared to the specialist.
+
+While such explanations are plausible, there is of course no telling how commonly they would apply without a detailed study of the natural history of the organisms involved. Fortunately, the extinction risk depending only on the fraction of prey lost is not so much a core assumption, but rather a methodological choice. It can easily be relaxed. We have now done so, re-doing the patch removal analysis with a weighted trophic network, where the contribution of each prey item to the persistence of its consumers depends on species identity. The relative importance of resource $j$ to consumer $i$, $\theta_{ji}$, is the proportion of biomass flowing from $j$ to $i$ per unit time relative to the other resources. We obtained the entries $\theta_{ji}$ of the flow matrix as the corresponding entry of the Jacobian matrix of the allometric trophic network model \citep{Schneider2016, Ryser2019}, evaluated at equilibrium. Repeating the patch removal analysis using these weighted feeding networks resulted in the same outcome as the original, purely fraction-dependent ones.
 
 \them
 
@@ -106,7 +108,23 @@ A second core assumption of this model is that extinction risks only depend on b
 
 \us
 
-Reproduce Figure~S2 in Ryser et al with Bayesian approach?
+This is an excellent suggestion. Figure~S2 in \citet{Ryser2019} shows the maximum number of trophic levels that were able to persist, given the average patch distance and the number of patches. We have re-created this figure using our Bayesian network approach (Figure~\ref{fig:Ryser_repr}). The results are qualitatively unchanged, with a strong dependence of the maximum attainable trophic level on the spatial scale, and a weaker one on the number of patches.
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth]{Ryser_reproduced.pdf}
+  \caption{The maximum number of trophic levels (colors) persisting on a landscape with different numbers of patches (ordinate) and average distance between them (abscissa). The web we used, which had 50 basal and 350 consumer species, was the same as the one in the main text. In the top row, each species has an identical dispersal parameter $\xi$ (equal to the spatial scale indicated along the abscissa), while in the bottom row, they were trophic level-based (increasing linearly with trophic level such that their average was equal to the spatial scale parameter). Columns show various parameterizations of the consumer response to prey loss (linear, convex, concave, and sigmoid). The results are qualitatively identical to Figure~S2 in \citet{Ryser2019}: there is a strong dependence of the maximum attainable trophic level on the spatial scale, and a weaker one on the number of patches.}
+  \label{fig:Ryser_repr}
+\end{figure}
+
+Moreover, this case study can also be used to highlight another advantage of our method: due to its analytical tractability, it is possible to get a deeper understanding of its results. Approximating trophic networks as trophic chains, assuming a common baseline extinction probability $\pi_i = \pi$, and using the patch-averaging method described in our Supporting Information (\SI), Section~\ref{SI:sec:chain}, we have $T \approx \lambda_M \log(\pi^{-1})$, where $T$ is the maximum number of trophic levels and $\lambda_M$ is the dominant eigenvalue of the dispersal matrix (Eq.~\ref{main:eq:Tapprox} in our main text). Obtaining these eigenvalues for each of the landscapes used in Figure~\ref{fig:Ryser_repr}, we can depict this approximation (Figure~\ref{fig:Ryser_semianal}). This figure looks very much like Figure~S2 in \citet{Ryser2019}, and it is based on the fully tractable approximation $T \approx \lambda_M \log(\pi^{-1})$. This lends further credence to the idea that the pattern observed here and in \citet{Ryser2019} is not contingent on model details, but is a robust logical consequence of combining trophic interactions and metacommunity structure.
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.65\textwidth]{Ryser_semianalytic.pdf}
+  \caption{}
+  \label{fig:Ryser_semianal}
+\end{figure}
 
 \them
 

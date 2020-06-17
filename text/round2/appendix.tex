@@ -120,7 +120,7 @@ For our trophic metacommunity approach, we model colonization using a species-de
   \label{eq:colonization}
   C_i^k = \sum_{l=1}^N M_i^{kl} p_i^l
 \end{equation}
-\citep{OvaskainenHanski2001}, where $M_i^{kl}$, the $(k,l)$th entry of species $i$'s landscape matrix, is the rate of dispersal of species $i$ from patch $l$ to $k$. In turn, the extinction rates are modeled based on the probability of extinction $\delta_i^k$ of species $i$ in patch $k$ per unit time. To convert this probability into the rate $E_i^k$, we treat extinction as a Poisson process. This is justified on the grounds that metapopulation approaches assume a time scale separation between migration and local population dynamics, with the former being much slower than the latter \citep{Hanski1994}. This allows one to treat populations in local patches as being in population dynamical quasi-equilibrium. In this quasi-equilibrium state, there is some constant probability of going extinct, leading to the Poisson process. Since a species is extinct the first time an extinction event happens, the first term of the Poisson distribution suffices:
+\citep{OvaskainenHanski2001}, where $M_i^{kl}$, the $(k,l)$th entry of species $i$'s landscape matrix, is the rate of dispersal of species $i$ from patch $l$ to $k$. In turn, the extinction rates are modeled based on the probability of extinction $\delta_i^k$ of species $i$ in patch $k$ per unit time. To convert this probability into the rate $E_i^k$, we treat extinction as a Poisson process. This is justified on the grounds that metapopulation approaches assume a time scale separation between migration and local population dynamics, with the former being much slower than the latter \citep{Hanski1994}. This allows one to treat populations in local patches as being in population dynamical quasi-equilibrium. In this quasi-equilibrium state, there is some constant probability of going extinct per unit of time in each patch, leading to the Poisson process. Since a species is extinct the first time an extinction event happens, the first term of the Poisson distribution suffices:
 \begin{equation}
   \label{eq:probrate}
   \delta_i^k = 1 - \exp(-E_i^k) \ .
@@ -131,11 +131,12 @@ This yields an extinction probability of $0$ when the rate $E_i^k$ is zero, and 
   E_i^k = -\log(1 - \delta_i^k) \ .
 \end{equation}
 
-The essence of our approach to trophic metacommunities is the way we model the extinction probabilities $\delta_i^k$. These are calculated from a Bayesian network representation of the food web. Given baseline extinction probabilities $\pi_i^k$ for species $i$ in patch $k$, we equate $\delta_i^k$ with the marginal probability of extinction in patch $k$, calculated from the Bayesian network. When applying Eq.~\ref{eq:BN_marginal_example} to obtain the extinction probability of a species $i$, we take into consideration that $i$'s prey might not be present in the patch. In particular, the probability of persistence of prey is multiplied by their patch occupancy, resulting in the $(1-\delta_\text{prey}^k) \rightarrow (1-\delta_\text{prey}^k) p_\text{prey}^k$ replacement. Therefore,
+The essence of our approach to trophic metacommunities is the way we model the extinction probabilities $\delta_i^k$. These are calculated from a Bayesian network representation of the food web. Given baseline extinction probabilities $\pi_i^k$ for species $i$ in patch $k$, we equate $\delta_i^k$ with the marginal probability of extinction in patch $k$, calculated from the Bayesian network. Since $\delta_i^k$ is the probability of extinction per unit time (during which no colonization events happen due to the time scale separation between local dynamics and dispersal mentioned above), the probability of a species being present in a given patch $k$ is the product of two probabilities: the local probability $P^k(i) = 1 - P^k(\neg i)$ of persistence from the Bayesian network, multiplied by the probability that species $i$ is present in patch $k$ in the first place. This latter probability is by definition the patch occupancy $p_i^k$, and so, when applying Eq.~\ref{eq:BN_marginal_example} to obtain the extinction probability of a species $i$, we perform the
 \begin{equation}
   \label{eq:bayesprob}
-  \delta_{\text{prey}}^k = 1 - (1 - \delta_\text{prey}^k) p_\text{prey}^k \ .
+  1-P^k(\neg \text{prey}) \rightarrow (1-P^k(\neg \text{prey})) p_\text{prey}^k
 \end{equation}
+replacement (see Section~\ref{sec:anal} for example applications).
 
 For basal species, we assume that the nutrients they use are always available. This leads to $p_j^k = 1$ in all patches for all nutrients $j$, so for basals, $\delta_{\text{basal}}^k = 1 - (1 - \pi_\text{basal}^k)p_j^k = \pi_\text{basal}^k$.
 
@@ -182,23 +183,23 @@ where $\lambda_i$ is the metapopulation capacity for species $i$ (the leading ei
 \citep{OvaskainenHanski2001}. However, Eq.~\ref{eq:papprox} works acceptably even for the simple average $\ol{p}_i = \sum_{k=1}^N p_i^k / N$.
 
 
-\section{Simple analytically tractable trophic networks} \label{sec:anal}
+\section{Analytically tractable trophic networks} \label{sec:anal}
 
 \subsection{One consumer, one resource} \label{sec:CR}
 
 The simplest example of a trophic metacommunity consist of just two species: one consumer $C$ and one basal resource $R$. Below we analyze the trophic metacommunity formed by these species, step by step.
 
 \textit{\textbf{Step 1: Solve for the extinction probabilities using the Bayesian network approach.}}
-The baseline probabilities of extinction for the resource and the consumer are $\pi_R^k$ and $\pi_C^k$, respectively. Since $R$ is a basal species, we have $\delta_R^k = \pi_R^k$. The consumer's probability of extinction in a patch with resource occupancy $p_R^k$ is written using Eq.~\ref{eq:bayesprob}: $\delta_R^k = 1- (1 - \pi_R^k) p_R^k$. We now obtain the consumer's marginal probability of extinction $\delta_C^k$ in the style of Eq.~\ref{eq:BN_marginal_example}, except with only a single resource:
+The baseline probabilities of extinction for the resource and the consumer are $\pi_R^k$ and $\pi_C^k$, respectively. Since $R$ is a basal species, we have $P^k(\neg R) = \pi_R^k$. The resource's probability of extinction in a patch with resource occupancy $p_R^k$ is written using Eq.~\ref{eq:bayesprob}: $\delta_R^k = 1- (1 - P^k(\neg R)) p_R^k = 1 - (1 - \pi_R^k) p_R^k$. We now obtain the consumer's marginal probability of extinction $\delta_C^k$ in the style of Eq.~\ref{eq:BN_marginal_example}, except with only a single resource and applying Eq.~\ref{eq:bayesprob}:
 \begin{equation}
   \label{eq:BN_marginal_CR}
   \begin{split}
-    \delta_C^k &= P(\neg C|R) P(R) + P(\neg C|\neg R) P(\neg R)
-    \\ &= P(\neg C|R) (1 - \pi_R^k) p_R^k + P(\neg C|\neg R) [ 1 - (1 - \pi_R^k)
-    p_R^k ] \ .
+    \delta_C^k &= P^k(\neg C|R) P^k(R) + P^k(\neg C|\neg R) P^k(\neg R)
+    \\ &= P^k(\neg C|R) (1 - \pi_R^k) p_R^k + P^k(\neg C|\neg R)
+    [ 1 - (1 - \pi_R^k) p_R^k ] \ .
   \end{split}
 \end{equation}
-Using Eq.~\ref{eq:BN_prob} to write the conditional probabilities, and noting that $w(0)=0$ and $w(1)=1$ regardless of the form of $w(f)$, we get $P(\neg C|R) = \pi_C^k$ and $P(\neg C|\neg R) = 1$:
+Using Eq.~\ref{eq:BN_prob} to write the conditional probabilities, and noting that $w(0)=0$ and $w(1)=1$ regardless of the form of $w(f)$, we get $P^k(\neg C|R) = \pi_C^k$ and $P^k(\neg C|\neg R) = 1$:
 \begin{equation}
   \label{eq:BN_marginal_CR_2}
   \delta_C^k = \pi_C^k (1 - \pi_R^k) p_R^k + 1 - (1 - \pi_R^k) p_R^k \ .
@@ -268,14 +269,15 @@ The above can be generalized to trophic chains of arbitrary length. Let there be
 The probability of species $i+1$ being extinct can be written as
 \begin{equation}
   \label{eq:BN_marginal_chain}
-  \delta_{i+1}^k = P(\neg (i+1)|i) P(i) + P(\neg (i+1)|\neg i) P(\neg i) \ .
+  \delta_{i+1}^k = P^k(\neg (i+1)|i) P^k(i) +
+  P^k(\neg (i+1)|\neg i) P^k(\neg i) \ .
 \end{equation}
-Since every species $i>1$ has exactly one prey, from Eq.~\ref{eq:BN_prob} we can write $P(\neg (i+1)|i) = \pi_{i+1}^k$ and $P(\neg (i+1)|\neg i) = 1$:
+Since every species $i>1$ has exactly one prey, from Eq.~\ref{eq:BN_prob} we can write $P^k(\neg (i+1)|i) = \pi_{i+1}^k$ and $P^k(\neg (i+1)|\neg i) = 1$:
 \begin{equation}
   \label{eq:BN_marginal_chain_2}
-  \delta_{i+1}^k = \pi_{i+1}^k P(i) + P(\neg i) \ .
+  \delta_{i+1}^k = \pi_{i+1}^k P^k(i) + P^k(\neg i) \ .
 \end{equation}
-Since $P(i) = (1-\delta_i^k)p_i^k$, we have the recursion
+Using Eq.~\ref{eq:bayesprob}, we have
 \begin{equation}
   \label{eq:BN_marginal_chain_3}
   \begin{split}
@@ -283,7 +285,7 @@ Since $P(i) = (1-\delta_i^k)p_i^k$, we have the recursion
     p_{i-1}^k \\ &= 1 - (1-\pi_{i+1}^k) p_i^k (1 - \delta_i^k) \ ,
   \end{split}
 \end{equation}
-with the initial condition $\delta_1^k = \pi_1^k$. The recursion can be solved explicitly:
+which is a recursion equation for the $\delta_i^k$ with initial condition $\delta_1^k = \pi_1^k$. The recursion can be solved explicitly:
 \begin{equation}
   \label{eq:BN_marginal_chain_4}
   \delta_i^k = 1 - (1 - \pi_i^k) \prod_{n=1}^{i-1} (1 - \pi_n^k) p_n^k \ .
@@ -293,7 +295,7 @@ That this is indeed the solution is shown by writing Eq.~\ref{eq:BN_marginal_cha
   \label{eq:BN_marginal_chain_5}
   \begin{split}
     \delta_{i+1}^k &= 1 - (1 - \pi_{i+1}^k) \prod_{n=1}^{i} (1 - \pi_n^k) p_n^k
-    \\ &= 1 - (1 - \pi_{i+1}^k) p_i^k \underbrace{(1 - \pi_i^k) \prod_{n=1}^{i-1}
+    \\ &= 1 - (1-\pi_{i+1}^k) p_i^k \underbrace{(1-\pi_i^k) \prod_{n=1}^{i-1}
       (1 - \pi_n^k) p_n^k}_{1 - \delta_i^k
       \text{ (Eq.~\ref{eq:BN_marginal_chain_4})}} \\ &=
     1 - (1-\pi_{i+1}^k) p_i^k (1 - \delta_i^k) \ ,
@@ -470,7 +472,7 @@ While this was derived assuming that $\lambda_M$ is large, it is highly accurate
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.6\textwidth]{TL_diffeq.pdf}
-  \caption{The scaled number of trophic levels $\tau = T/\lambda_M$ against the baseline extinction probability $\pi$, given by the exact $\tau = -\text{li}(1-\pi)/(1-\pi)$ (Eq.~\ref{eq:BN_lambda_chain_18}) and the approximate $\tau = -\log(\pi)$ (Eq.~\ref{eq:BN_lambda_chain_19}). For practical purposes, the approximate expression is just as good as the exact one, and it is much simpler.}
+  \caption{The scaled number of trophic levels $\tau = T/\lambda_M$ against the baseline extinction probability $\pi$, given by the exact $\tau = -\text{li}(1-\pi)/(1-\pi)$ (Eq.~\ref{eq:BN_lambda_chain_18}) and the approximate $\tau = -\log(\pi)$ (Eq.~\ref{eq:BN_lambda_chain_19}). For practical purposes, the approximate expression is just as good as the exact one.}
   \label{fig:TL_diffeq}
 \end{figure}
 
@@ -509,20 +511,22 @@ Let there be two (not necessarily basal) prey species $R_i$ ($i=1,2$) with margi
 \begin{equation}
   \label{eq:BN_marginal_CRR}
   \begin{split}
-    \delta_C^k &= P(\neg C|R_1 R_2) P(R_1) P(R_2) + P(\neg C|\neg R_1 R_2) P(\neg
-    R_1) P(R_2) \\ &\quad + P(\neg C|R_1 \neg R_2) P(R_1) P(\neg R_2) +
-    P(\neg C|\neg R_1 \neg R_2) P(\neg R_1) P(\neg R_2) \ .
+    \delta_C^k &= P^k(\neg C|R_1 R_2) P^k(R_1) P^k(R_2) +
+    P^k(\neg C|\neg R_1 R_2) P^k(\neg R_1) P^k(R_2)
+    \\ &\quad + P^k(\neg C|R_1 \neg R_2) P^k(R_1) P^k(\neg R_2) +
+    P^k(\neg C|\neg R_1 \neg R_2) P^k(\neg R_1) P^k(\neg R_2) \ .
   \end{split}
 \end{equation}
 Using Eqs.~\ref{eq:BN_prob} and \ref{eq:bayesprob}:
 \begin{equation}
   \label{eq:BN_marginal_CRR_2}
   \begin{split}
-    \delta_C^k &= \pi_C^k(1-\delta_{R_1}^k)(1-\delta_{R_2}^k)p_{R_1}^k p_{R_2}^k +
-    \left[\pi_C^k + (1-\pi_C^k) w(1/2) \right] \left[ (1-\delta_{R_1}^k) p_{R_1}^k
-      (1-(1-\delta_{R_2}^k) p_{R_2}^k) \right. \\ &\quad + \left.
-      (1-\delta_{R_2}^k) p_{R_2}^k (1-(1-\delta_{R_1}^k) p_{R_1}) \right] +
-    (1-(1-\delta_{R_1}^k) p_{R_1}^k) (1-(1-\delta_{R_2}^k) p_{R_2}^k) \ .
+    \delta_C^k &= \pi_C^k(1-\delta_{R_1}^k)(1-\delta_{R_2}^k)p_{R_1}^k p_{R_2}^k
+    \\ &\quad + \left[\pi_C^k + (1-\pi_C^k) w(1/2) \right]
+    \left[ (1-\delta_{R_1}^k) p_{R_1}^k (1-(1-\delta_{R_2}^k) p_{R_2}^k) +
+      (1-\delta_{R_2}^k) p_{R_2}^k (1-(1-\delta_{R_1}^k) p_{R_1}) \right]
+    \\ &\quad + (1-(1-\delta_{R_1}^k) p_{R_1}^k) (1-(1-\delta_{R_2}^k)
+    p_{R_2}^k) \ .
   \end{split}
 \end{equation}
 If we further specify $w(1/2)=1/2$, the above expression simplifies to
@@ -540,64 +544,67 @@ where the overbar denotes the arithmetic average over the prey species $R_i$. In
 
 \subsection{One predator with multiple prey} \label{sec:CmanyR}
 
-Let there be $S$ prey species $R_i$ with marginals $\delta_i^k$, and one consumer $C$ with baseline $\pi_C^k$ eating all prey. We propose the following conjecture: assuming $w(f)=f$ in Eq.~\ref{eq:BN_prob}, the consumer's marginal extinction probability reads
+Let there be $S$ prey species $R_i$ with marginal extinction probabilities $\delta_i^k$, and one consumer $C$ with baseline $\pi_C^k$ eating all prey. We propose the following conjecture: assuming $w(f)=f$ in Eq.~\ref{eq:BN_prob}, the consumer's marginal extinction probability reads
 \begin{equation}
   \label{eq:BN_marginal_CmanyR}
   \delta_C^k = 1 - (1 - \pi_C^k) \ol{p_R^k (1 - \delta_R^k)} \ ,
 \end{equation}
 where the average is taken over all prey species $R_i$. Eq.~\ref{eq:BN_marginal_CmanyR} is a direct generalization of Eq.~\ref{eq:BN_marginal_CRR_4} from two to an abritrary number of prey items.
 
-We prove this conjecture for the case of identical prey ($\delta_i^k \equiv \delta^k$, $p_{R_i}^k \equiv p_R^k$). Denoting $p_{R_i}^k (1 - \delta_i^k)$ by $P(R_i)$, we have, using Eq.~\ref{eq:BN_marginal_example}:
+We prove this conjecture for the case of identical prey ($\delta_i^k \equiv \delta^k$, $p_{R_i}^k \equiv p_R^k$).
+% Denoting $p_{R_i}^k (1 - \delta_i^k)$ by $P^k(R_i)$, we have,
+Using Eq.~\ref{eq:BN_marginal_example}:
 \begin{align}
   \label{eq:BN_marginal_twolayer}
-    \delta_C^k &= P(\neg C|R_1 R_2 \ldots R_S) \underbrace{P(R_1)
-      P(R_2) \cdots P(R_S)}_{p(R)^S \; \text{ [since $P(R_i) \equiv P(R)$]}}
-    \nonumber \\ &+ S P(\neg C|\neg R_1 R_2 \ldots R_S)
-    \underbrace{P(\neg R_1) P(R_2) \cdots P(R_S)}_{(1-P(R)) P(R)^{S-1}}
-    \\ &+ \binom{S}{2} P(\neg C|\neg R_1 \neg R_2 \ldots R_S)
-    \underbrace{P(\neg R_1) P(\neg R_2) \cdots P(R_S)}_{(1-P(R))^2 P(R)^{S-2}}
+  \delta_C^k &= P^k(\neg C|R_1 R_2 \ldots R_S) \underbrace{P^k(R_1)
+               P^k(R_2) \cdots P^k(R_S)}_{[P^k(R)]^S \;
+               \text{ [since $P^k(R_i) \equiv P^k(R)$]}}
+    \nonumber \\ &+ S P^k(\neg C|\neg R_1 R_2 \ldots R_S)
+    \underbrace{P^k(\neg R_1) P^k(R_2) \cdots P^k(R_S)}_{(1-P^k(R)) P^k(R)^{S-1}}
+    \\ &+ \binom{S}{2} P^k(\neg C|\neg R_1 \neg R_2 \ldots R_S)
+    \underbrace{P^k(\neg R_1) P^k(\neg R_2) \cdots P^k(R_S)}_{(1-P^k(R))^2 P^k(R)^{S-2}}
     \nonumber \\ &+ \cdots
-    \nonumber \\ &+ S P(\neg C|R_1 \neg R_2 \ldots \neg R_S)
-    \underbrace{P(R_1) P(\neg R_2) \cdots P(\neg R_S)}_{(1-P(R))^{S-1} P(R)}
-    \nonumber \\ &+ P(\neg C|\neg R_1 \neg R_2 \ldots \neg R_S)
-    \underbrace{P(\neg R_1) P(\neg R_2) \cdots P(\neg R_S)}_{(1-P(R))^{S}} \ .
+    \nonumber \\ &+ S P^k(\neg C|R_1 \neg R_2 \ldots \neg R_S)
+    \underbrace{P^k(R_1) P^k(\neg R_2) \cdots P^k(\neg R_S)}_{(1-P^k(R))^{S-1} P^k(R)}
+    \nonumber \\ &+ P^k(\neg C|\neg R_1 \neg R_2 \ldots \neg R_S)
+    \underbrace{P^k(\neg R_1) P^k(\neg R_2) \cdots P^k(\neg R_S)}_{(1-P^k(R))^{S}} \ .
                    \nonumber
 \end{align}
-We used the fact that $P(\neg C|\neg R_1 R_2 R_3 \ldots) = P(\neg C|R_1 \neg R_2 R_3 \ldots)$ and so on, since the prey are equivalent. Using the notation $P(\neg C|k)$ for the probability of $C$ being extinct given that $k$ of its resources are absent, we can rewrite the above as
+We used the fact that $P^k(\neg C|\neg R_1 R_2 R_3 \ldots) = P^k(\neg C|R_1 \neg R_2 R_3 \ldots)$ and so on, since the prey are equivalent. Using the notation $P^k(\neg C|k)$ for the probability of $C$ being extinct given that $k$ of its resources are absent, we can rewrite the above as
 \begin{equation}
   \label{eq:BN_marginal_twolayer_2}
   \begin{split}
-    \delta_C^k &= P(\neg C|0) (1-P(R))^{0} P(R)^{S}
-    \\ &+ S P(\neg C|1) (b_R^k)^{1} P(R)^{S-1}
-    \\ &+ \binom{S}{2} P(\neg C|2) (1-P(R))^{2} P(R)^{S-2}
+    \delta_C^k &= P^k(\neg C|0) (1-P^k(R))^{0} P^k(R)^{S}
+    \\ &+ S P^k(\neg C|1) (b_R^k)^{1} P^k(R)^{S-1}
+    \\ &+ \binom{S}{2} P^k(\neg C|2) (1-P^k(R))^{2} P^k(R)^{S-2}
     \\ &+ \cdots
-    \\ &+ S P(\neg C|S-1) (1-P(R))^{S-1} P(R)^{1}
-    \\ &+ P(\neg C|S) (1-P(R))^{S} P(R)^{0} ,
+    \\ &+ S P^k(\neg C|S-1) (1-P^k(R))^{S-1} P^k(R)^{1}
+    \\ &+ P^k(\neg C|S) (1-P^k(R))^{S} P^k(R)^{0} ,
   \end{split}
 \end{equation}
 which is compactly written as
 \begin{equation}
   \label{eq:BN_marginal_twolayer_3}
-  \delta_C^k = \sum_{n=0}^S \binom{S}{n} P(\neg C|n) (1-P(R))^n P(R)^{S-n} .
+  \delta_C^k = \sum_{n=0}^S \binom{S}{n} P^k(\neg C|n) (1-P^k(R))^n P^k(R)^{S-n} .
 \end{equation}
-Since we use the linear response function $w(f) = f$, and $f = n/S$ is the fraction of resources absent, $P(\neg C|n)$ can be written as $\pi_C^k + (1-\pi_C^k) (n / S)$ (Eq.~\ref{eq:BN_prob}):
+Since we use the linear response function $w(f) = f$, and $f = n/S$ is the fraction of resources absent, $P^k(\neg C|n)$ can be written as $\pi_C^k + (1-\pi_C^k) (n / S)$ (Eq.~\ref{eq:BN_prob}):
 \begin{equation}
   \label{eq:BN_marginal_twolayer_4}
   \begin{split}
-    \delta_C^k = P(\neg C) &= \sum_{n=0}^S \binom{S}{n} \left[ \pi_C^k +
-      (1-\pi_C^k) \frac{n}{S} \right] (1-P(R))^n P(R)^{S-n}
-    \\ &= \pi_C^k \underbrace{\sum_{n=0}^S \binom{S}{n} (1-P(R))^n
-      P(R)^{S-n}}_{1} + \frac{1-\pi_C^k}{S} \underbrace{\sum_{n=0}^S
-      n \binom{S}{n} (1-P(R))^n P(R)^{S-n}}_{S (1-P(R))} .
+    \delta_C^k = P^k(\neg C) &= \sum_{n=0}^S \binom{S}{n} \left[ \pi_C^k +
+      (1-\pi_C^k) \frac{n}{S} \right] (1-P^k(R))^n P^k(R)^{S-n}
+    \\ &= \pi_C^k \underbrace{\sum_{n=0}^S \binom{S}{n} (1-P^k(R))^n
+      P^k(R)^{S-n}}_{1} + \frac{1-\pi_C^k}{S} \underbrace{\sum_{n=0}^S
+      n \binom{S}{n} (1-P^k(R))^n P^k(R)^{S-n}}_{S (1-P^k(R))} .
   \end{split}
 \end{equation}
-The first sum is over the binomial distribution and therefore equal to 1; the second sum is over $n$ times the binomial distribution and is therefore equal to its mean, $S \pi_R^k$. We therefore end up with $\delta_C^k = \pi_C^k + (1 - \pi_C^k) (1 - P(R))$. Substituting $P(R) = p_{R}^k (1 - \delta_R^k)$ and rearranging, we recover Eq.~\ref{eq:BN_marginal_CmanyR}.
+The first sum is over the binomial distribution and therefore equal to 1; the second sum is over $n$ times the binomial distribution and is therefore equal to its mean, $S \pi_R^k$. We therefore end up with $\delta_C^k = \pi_C^k + (1 - \pi_C^k) (1 - P^k(R))$. Substituting $P^k(R) = p_{R}^k (1 - \delta_R^k)$ (Eq.~\ref{eq:bayesprob}) and rearranging, we recover Eq.~\ref{eq:BN_marginal_CmanyR}.
 
 Though a strict proof is missing, the formula held true even for non-equivalent prey species, without exception. We therefore proceed by assuming that Eq.~\ref{eq:BN_marginal_CmanyR} holds for this general case as well, even though we emphasize that this is not yet strictly proven.
 
 \subsection{Two strict trophic levels} \label{sec:2level}
 
-Consider $S$ prey species $R_1,\ldots, R_S$, and $L$ consumers $C_1,\ldots,C_S$. For the prey, $\delta_{R_i}^k = \pi_{R_i}^k$. Let $\mathcal{P}(A,B,\ldots)$ denote the set of prey jointly consumed by species $A$, $B$, \ldots. To determine the marginal extinction probabilities of the consumers, we can apply the argument of Section~\ref{sec:CmanyR} to each consumer species individually:
+Consider $S$ basal prey species $R_1,\ldots, R_S$, and $L$ consumers $C_1,\ldots,C_S$. For the prey, $\delta_{R_i}^k = \pi_{R_i}^k$. Let $\mathcal{P}(A,B,\ldots)$ denote the set of prey jointly consumed by species $A$, $B$, \ldots. To determine the marginal extinction probabilities of the consumers, we can apply the argument of Section~\ref{sec:CmanyR} to each consumer species individually:
 \begin{equation}
   \label{eq:BN_marginal_twolevel_C}
   \delta_{C_i}^k = 1 - (1 - \pi_{C_i}^k) \ol{p_{\mathcal{P}(C_i)}^k
@@ -620,7 +627,7 @@ and for the third,
     (1-\pi_{\mathcal{P}(i)}^k)\ol{p_{\mathcal{P}(\mathcal{P}(i))}^k
       (1-\pi_{\mathcal{P}(\mathcal{P}(i))}^k)}} \ .
 \end{equation}
-Here the the higher overbar averages over the prey (on level $2$) of the focal species $i$, while the lower overbar averages over the prey (on level $1$) of those consumers (on level $2$) that are eaten by $i$. The notation $\mathcal{P}(\mathcal{P}(i))$ reads ``the prey items of the set of species which are prey items of $i$''.
+Here the the higher overbar averages over the prey (on level $2$) of the focal species $i$, while the lower overbar averages over the prey (on level $1$) of those consumers (on level $2$) that are eaten by $i$. The notation $\mathcal{P}(\mathcal{P}(i))$ reads ``the prey items of the set of species which are prey items of species $i$''.
 
 \subsection{Simple omnivory module}
 
@@ -631,21 +638,21 @@ The basal and consumer species are the same as they were in Section~\ref{sec:CR}
 \begin{equation}
   \label{eq:BN_marginal_omniv}
   \begin{split}
-    \delta_T^k &= P(\neg T|R C) P(R) P(C) + P(\neg T|\neg R C) P(\neg
-    R) P(C) \\ &\quad + P(\neg T|R \neg C) P(R) P(\neg C) +
-    P(\neg T|\neg R \neg C) P(\neg R) P(\neg C) \ .
+    \delta_T^k &= P^k(\neg T|R C) P^k(R) P^k(C) + P^k(\neg T|\neg R C)
+    P^k(\neg R) P^k(C) \\ &\quad + P^k(\neg T|R \neg C) P^k(R) P^k(\neg C) +
+    P^k(\neg T|\neg R \neg C) P^k(\neg R) P^k(\neg C) \ .
   \end{split}
 \end{equation}
 Using Eq.~\ref{eq:BN_prob} with $w(f)=f$:
 \begin{equation}
   \label{eq:BN_marginal_omniv_2}
   \begin{split}
-    \delta_T^k &= \pi_T^k P(R) P(C) + \left( \frac{1 + \pi_T^k}{2} \right)
-    \left[ P(R) (1-P(C) + P(C) (1-P(R))) \right] \\ &\quad + (1-P(C)) (1-P(R))
-    \\ &= 1 - \frac{1}{2} (1 - \pi_T^k) \left[ P(R) + P(C) \right] \ .
+    \delta_T^k &= \pi_T^k P^k(R) P^k(C) + \left( \frac{1 + \pi_T^k}{2} \right)
+    \left[ P^k(R) (1-P^k(C) + P^k(C) (1-P^k(R))) \right] + (1-P^k(C)) (1-P^k(R))
+    \\ &= 1 - \frac{1}{2} (1 - \pi_T^k) \left[ P^k(R) + P^k(C) \right] \ .
   \end{split}
 \end{equation}
-Applying Eq.~\ref{eq:bayesprob} with Eqs.~\ref{eq:BN_marginal_CR_R_detailed} and \ref{eq:BN_marginal_CR_C_detailed} for the resource and consumer:
+Applying Eq.~\ref{eq:bayesprob} and Eqs.~\ref{eq:BN_marginal_CR_R_detailed}-\ref{eq:BN_marginal_CR_C_detailed} for the resource and consumer:
 \begin{equation}
   \label{eq:BN_marginal_omniv_3}
   \delta_T^k = 1 - \frac{1}{2} (1 - \pi_T^k) \left[ (1-\pi_R^k) p_R^k +
@@ -721,9 +728,6 @@ where $\lambda_{M_i}$ is the leading eigenvalue of the $i$th landscape matrix $M
 \end{align}
 
 
-\newpage
-
-
 \section{Food webs under habitat loss}
 
 \subsection{Generating model food webs} \label{sec:allo}
@@ -749,31 +753,31 @@ The prey-averaged trophic level $T_i$ of species $i$ is defined as
   \mathbf{T} = \left( \mathbf{I} - \mathbf{B}^{\mathrm{T}} \right)^{-1}
   \mathbf{e} \ ,
 \end{equation}
-$\mathbf{I}$ being the identity matrix. For the purposes of creating figures, we then grouped species based on the nearest half-integer value to their trophic level $T_i$ (Table~\ref{table:trophic_levels}).
+$\mathbf{I}$ being the identity matrix. For the purposes of creating figures, we then grouped species based on the nearest half-integer value to their trophic level $T_i$.% (Table~\ref{table:trophic_levels}).
 
-\begin{table}[!ht]
-\centering
-\caption{Number of species per trophic level (coarse-grained, to closest half-integer). }
-\begin{tabular}{cccccc}
-  \hline
- Trophic level & 350:50 & 300:100 & 250:150 & 200:200 & Serengeti  \\ 
-  \hline
-  1   &  50 &  100 & 150 &  200 &  129 \\ 
-  2   &  27 &  32 &  27 &   30  &  23  \\ 
-  2.5 &  30 &  40  &  84 &  78  &  --  \\
-  3   &  48 &  82  &  34 &  17  &  9   \\ 
-  3.5 &  53 &  35  &  14 &  16  &  --  \\ 
-  4   &  31 &  9   &  25 &  14  &  --  \\ 
-  4.5 &  38 &  31  &  15 &  19  &  --  \\ 
-  5   &  20 &  24  &  23 &  13  &  --  \\ 
-  5.5 &  35 &  19  &  25 &  13  &  --  \\ 
-  6   &  32 &  27  &   3 &  --  &  --  \\ 
-  6.5 &  22 &   1  &  -- &  --  &  --  \\ 
-  7   &  14 &   --  &  -- &  -- &  --  \\ 
-   \hline
-\end{tabular}
-\label{table:trophic_levels}
-\end{table}
+% \Begin{table}[!ht]
+% \centering
+% \caption{Number of species per trophic level (coarse-grained, to closest half-integer). }
+% \begin{tabular}{cccccc}
+%   \hline
+%  Trophic level & 350:50 & 300:100 & 250:150 & 200:200 & Serengeti  \\ 
+%   \hline
+%   1   &  50 &  100 & 150 &  200 &  129 \\ 
+%   2   &  27 &  32 &  27 &   30  &  23  \\ 
+%   2.5 &  30 &  40  &  84 &  78  &  --  \\
+%   3   &  48 &  82  &  34 &  17  &  9   \\ 
+%   3.5 &  53 &  35  &  14 &  16  &  --  \\ 
+%   4   &  31 &  9   &  25 &  14  &  --  \\ 
+%   4.5 &  38 &  31  &  15 &  19  &  --  \\ 
+%   5   &  20 &  24  &  23 &  13  &  --  \\ 
+%   5.5 &  35 &  19  &  25 &  13  &  --  \\ 
+%   6   &  32 &  27  &   3 &  --  &  --  \\ 
+%   6.5 &  22 &   1  &  -- &  --  &  --  \\ 
+%   7   &  14 &   --  &  -- &  -- &  --  \\ 
+%    \hline
+% \end{tabular}
+% \label{table:trophic_levels}
+% \end{table}
 
 
 \section{Supplementary model results} \label{sec:suppsim}
