@@ -65,25 +65,27 @@
 
 A Bayesian network is a graphical model for the probabilistic relationships among a set of variables \citep{Jensen1996, Eklofetal2013MEE}. In the context of food webs, the probability of each species going extinct is a function of the probabilities of its resources going extinct.
 
-More specifically, a species $C$ has, first of all, a baseline probability of extinction $\pi_C$; the species goes extinct with this likelihood even if it has full access to its resources. Such a baseline extinction probability may be related, for instance, to the fact that individual habitat patches are small in size, supporting only a few individuals and therefore prone to extinction via demographic stochasticity. Second, if the species has access to only a fraction of its resources, its extinction probability increases, reaching $1$ when all resources are absent. 
+More specifically, a species $C$ has, first of all, a baseline probability of extinction $\pi_C$; the species goes extinct with this likelihood even if it has full access to its resources. Such a baseline extinction probability may be related, for instance, to the fact that individual habitat patches are small in size, supporting only a few individuals and therefore prone to extinction via demographic stochasticity. Second, if the species has access to only a subset of its resources, its extinction probability increases, reaching $1$ when all resources are absent.
 
-The probability $P(\neg C|f)$ of species $C$ going extinct given that a fraction $f$ of its resources are lost is modeled as
-\begin{equation}
-  \label{eq:BN_prob}
-  P(\neg C|f) = \pi_C + (1 - \pi_C) w(f) \ ,
-\end{equation}
-where the weighting function $w(f)$ is monotonically increasing and defined for $0 \le f \le 1$, such that $w(0)=0$ and $w(1)=1$. The former condition holds when all resources are present, in which case Eq.~\ref{eq:BN_prob} yields $P(\neg C) = \pi_C$, the baseline extinction probability. The latter condition means that when all resources are lost, $P(\neg C) = 1$ according to Eq.~\ref{eq:BN_prob}: no species can survive without any resources sustaining it.
-
-To obtain the marginal probability of a species going extinct, one uses the law of total probability. Assume species $C$ consumes two prey items, $A$ and $B$, which are both basal species. In that case, we can write
+Let species $C$ have two prey items, $A$ and $B$ (the results below are straightforwardly generalizable to an arbitrary number of prey), and assume that the conditional probabilities of species $C$ being absent given the presence or absence of its prey items are known: $P(\neg C|A B)$ is the probability that $C$ is extinct given that both its prey are present; $P(\neg C|\neg A B)$ is the probability that $C$ is ectinct given that prey $A$ is absent but prey $B$ is present; and so on. To obtain the marginal probability $P(\neg C)$ of $C$ going extinct, we use the law of total probability:
 \begin{equation}
   \label{eq:BN_marginal_example}
   \begin{split}
     P(\neg C) &= P(\neg C|A B)P(A)P(B) + P(\neg C|\neg A B)P(\neg A)P(B)
     \\ &\quad + P(\neg C|A \neg B)P(A)P(\neg B) + P(\neg C|\neg A \neg B)
-    P(\neg A)P(\neg B) \ ,
+    P(\neg A)P(\neg B) \ .
   \end{split}
 \end{equation}
-where $P(\neg C|A \neg B)$ is the probability of $C$ being extinct given that $A$ is extant and $B$ is extinct, and so on. Using $P(\neg A) = 1 - P(A) = \pi_A$ and the same for species $B$ (this holds since they are both basal), plus Eq.~\ref{eq:BN_prob}, this can be written as
+In principle, the conditional probabilities may be as complicated as demanded by the natural history of the modeled ecological scenario. For instance, it is perfectly possible to have $P(\neg C|A B) > P(\neg C| \neg A B)$, even though one would think that having two available prey items should make the extinction of the consumer $C$ less likely than having just one. Nevertheless, if species $A$ and $B$ are mutualists (for example, $A$ emits an alarm call when a predator is present, alerting members of both $A$ and $B$), then the absence of $A$ may in fact make predation easier for $C$.
+
+Here, however, we operate with the simple assumption that the conditional probabilities of species $C$ going extinct depend only on the fraction $f$ of its resources lost (we relax this assumption in Section~\ref{sec:weighted}). We model this conditional probability as
+\begin{equation}
+  \label{eq:BN_prob}
+  P(\neg C|f) = \pi_C + (1 - \pi_C) w(f) \ ,
+\end{equation}
+where the weighting function $w(f)$ is monotonically increasing and defined for $0 \le f \le 1$, such that $w(0)=0$ and $w(1)=1$. The former condition holds when all resources are present, in which case Eq.~\ref{eq:BN_prob} yields $P(\neg C|0) = \pi_C$, the baseline extinction probability. The latter condition means that when all resources are lost, $P(\neg C|1) = 1$: no species can survive without any resources sustaining it.
+
+To see how this is applied, let us assume both $A$ and $B$ are basal species. We then have $P(\neg A) = 1 - P(A) = \pi_A$, and the same for species $B$. Using Eq.~\ref{eq:BN_prob} in Eq.~\ref{eq:BN_marginal_example}:
 \begin{equation}
   \label{eq:BN_marginal_example_2}
   \begin{split}
@@ -93,15 +95,14 @@ where $P(\neg C|A \neg B)$ is the probability of $C$ being extinct given that $A
     [\pi_C + (1 - \pi_C) w(1)] \pi_A \pi_B \ .
   \end{split}
 \end{equation}
-With the particular choice $w(f)=f$, the expression simplifies:
+To make further progress, one must specify the form of $w(f)$. For instance, if $w(f)=f$, then
 \begin{equation}
   \label{eq:BN_marginal_example_3}
   P(\neg C) = \pi_C (1 - \pi_A) (1 - \pi_B) +
   \left( \frac{1 + \pi_C}{2} \right) \pi_A (1 - \pi_B) +
   \left( \frac{1 + \pi_C}{2} \right) (1 - \pi_A) \pi_B + \pi_A \pi_B \ .
 \end{equation}
-
-For example, if $\pi_A = \pi_B = \pi_C = 0.1$, then Eq.~\ref{eq:BN_marginal_example_3} gives $P(\neg C) = 0.19$. The marginal probability of extinction can be calculated analogously for any species with any number of resources. However, when the resource species are not basal, one should use the (already calculated) marginal persistence and extinction probabilities of the prey in Eq.~\ref{eq:BN_marginal_example}. Thus, determining the extinction probabilities of all species is a bottom-up calculation process: we start with basal species, then move on to species only consuming those basal species, and so on, to the very top of the food web.
+For example, if $\pi_A = \pi_B = \pi_C = 0.1$, then Eq.~\ref{eq:BN_marginal_example_3} gives $P(\neg C) = 0.19$ (and $P(C) = 1-P(\neg C) = 0.81$). The marginal probability of extinction can be calculated analogously for any species with any number of resource items. However, when the resource species are not basal, one should use the (already calculated) marginal persistence and extinction probabilities of the prey in Eq.~\ref{eq:BN_marginal_example}. Thus, determining the extinction probabilities of all species is a bottom-up calculation process: we start with basal species, then move on to species only consuming those basal species, and so on, to the very top of the food web.
 
 This also means that the Bayesian network approach has two important limitations. First, the food webs must be acyclic, as otherwise this bottom-up approach would not work. Second, top-down effects cannot be implemented, since the loss of the top predator from the system has no effect on the persistence probabilities of species at lower trophic levels.
 
@@ -973,6 +974,18 @@ For the linear functional form of a consumer's response to the loss of resources
  \caption{Figure continued.}
  \label{S_fig:patchloss_top_2}
 \end{figure}
+
+
+\section{Assigning different weights to prey species in contributing to their predators' extinction risk} \label{sec:weighted}
+
+
+\section{The maximum number of trophic levels as a function of landscape size and connectivity} \label{sec:ryser}
+
+
+\section{The effect of removing the links between patches} \label{sec:linkrem}
+
+
+\section{Transitioning from a regular grid of habitat patches to random landscapes} \label{sec:gridlike}
 
 
 \clearpage
