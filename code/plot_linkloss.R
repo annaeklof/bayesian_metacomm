@@ -51,7 +51,7 @@ plot_linkloss <- function(data, webs, paramss, scenarioss, spfs, a, b, basals, p
     facet_grid(scenario~params, 
         labeller=labeller(.rows = as_labeller(ynames), .cols = as_labeller(labnames, label_parsed))) +
     scale_x_continuous(labels=abbreviate) +
-    guides(fill=guide_legend(title="Trophic\nlevels", override.aes=list(size=8, alpha=1), reverse=TRUE)) +
+    guides(fill=guide_legend(title="Trophic\nlevel", override.aes=list(size=8, alpha=1), reverse=TRUE)) +
     ggtitle(ptitle) +
     theme(text = element_text(size=20), 
           axis.text.x = element_text(angle=75, hjust=1), axis.title = element_text(size=22), 

@@ -11,7 +11,7 @@ source("functions.R")
 source("plot_functional_forms.R")
 source("plot_linkloss.R")
 
-figuredir <- "../figures/"
+figuredir <- "../SI/"
 infile <- "../data/summaries/summary_linkrem_basal.rds"
 dat <- infile %>% read_rds %>% filter(web == "Model food web with 300 consumer and 100 basal species")
 pas <- unique(dat$alpha)
@@ -58,5 +58,5 @@ for(pa in pas) for(pb in pbs){ { #loop over functional forms
                       a = pa, b = pb, basals = pbasals, ptitle=ptitles, labnames = var_names)
   
   #Save it
-  ggsave(filename = lambda, width=12, height=8, plot=p)
+  ggsave(filename=lambda, width=12, height=8, plot=p)
 }}

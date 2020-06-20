@@ -975,14 +975,54 @@ For the linear functional form of a consumer's response to the loss of resources
  \label{S_fig:patchloss_top_2}
 \end{figure}
 
+\clearpage
+
 
 \section{Assigning different weights to prey species in contributing to their predators' extinction risk} \label{sec:weighted}
+
+So far, we have made the conditional extinction probability of consumers a function of the fraction of their prey items lost, regardless of the identity of those prey (Eq.~\ref{eq:BN_prob}). Here we relax this assumption by also accounting for the relative contribution of each prey to the predator's diet. Let $J_{ji}$ be the contribution of resource $i$ to the diet of consumer species $j$. We then define the weighted fraction $f'$ of $j$'s resources lost via
+\begin{equation}
+  \label{eq:fprime}
+  f' = \frac{\sum_{\text{$j$ $\in$ absent}} J_{ji}}{
+    \sum_{\text{$j$ $\in$ all prey}} J_{ji}} \ ,
+\end{equation}
+with the sum in the numerator going over prey that are absent, and the one in the denominator over all prey items of the consumer. So $f'$ is the fraction of resources lost weighted for their importance. With this definition, Eq.~\ref{eq:BN_prob} still holds, but we replace $f$ with $f'$:
+\begin{equation}
+  \label{eq:BN_prob_weighted}
+  P(\neg C|f') = \pi_C + (1 - \pi_C) w(f') \ .
+\end{equation}
+We determine the $J_{ij}$ from a matrix of biomass flows at equilibrium, which we obtain as the Jacobian matrix evaluated at equilibrium (the community matrix) of the Allometric Trophic Network model (Section~\ref{sec:allo}, \citealp{Schneider2016}), which we have also used to generate our (non-weighted) trophic networks earlier.
+
+Repeating the patch removal analysis for such a weighted version of our model food web with $50$ basal and $350$ consumer species and $\alpha = \beta = 1$, we get the results in Figure~\ref{fig:patchloss_web1_11}. This shows that the results are robust to relaxing the assumption that species contribute equally to consumers' diets.
+
+\begin{figure}[!ht] \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_(1)_Weighted_basal_1_1.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \caption{As Figure~\ref{S_fig:patchloss_350_50_1}A, but with a weighted food web. Results are qualitatively unchanged compared with the non-weighted case.}
+  \label{fig:patchloss_web1_11}
+\end{figure}
 
 
 \section{The maximum number of trophic levels as a function of landscape size and connectivity} \label{sec:ryser}
 
 
 \section{The effect of removing the links between patches} \label{sec:linkrem}
+
+\begin{figure}[!ht]
+  \centering  \includegraphics[width=0.8\textwidth,valign=t]{linkrem_Model_food_web_with_300_consumer_and_100_basal_species_basal_1_1_sym.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{linkrem_Model_food_web_with_300_consumer_and_100_basal_species_basal_5_1_sym.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_1.png}
+  \caption{As Figure~2 in the main text, except removing links between pairs of patches, instead of the patches themselves. The abscissa shows the fraction of links removed, out of all possible ones---with $N$ habitat patches, this number is $N(N-1)/2$. Results are very similar to those of patch removal, with one important qualitative difference: the worst-case scenario, instead of being as bad as the worst-case one, is now truly in between the two extremal scenarios.}
+  \label{S_fig:linkrem}
+\end{figure}
+
+\begin{figure}\ContinuedFloat \includegraphics[width=0.8\textwidth,valign=t]{linkrem_Model_food_web_with_300_consumer_and_100_basal_species_basal_1_5_sym.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_5.png}
+  \includegraphics[width=0.8\textwidth,valign=t]{linkrem_Model_food_web_with_300_consumer_and_100_basal_species_basal_5_5_sym.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
+  \caption{Figure continued.}
+  \label{S_fig:linkrem_2}
+\end{figure}
 
 
 \section{Transitioning from a regular grid of habitat patches to random landscapes} \label{sec:gridlike}
