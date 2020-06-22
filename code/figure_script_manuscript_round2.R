@@ -95,10 +95,9 @@ if(file.exists(figuredir)){
 
 #Figure 3
 #Generate .png plots for the different consumer responses to resource loss (functional forms) 
-infiles <- "../data/summaries_round2/summary_sym_basal.rds" %>% Sys.glob() #summary files
-infile <- "../data/summaries_round2/summary_sym_basal.rds" %>% Sys.glob() #summary files
+infiles <- "../data/summaries_round2/summary_largewebs_*.rds" %>% Sys.glob() #summary files
 
-for(infile in infiles){
+for(infile in infiles[2:4]){
   dat <- infile %>% read_rds %>% filter(web == "Model food web with 300 consumer and 100 basal species")
 
   pas <- unique(dat$alpha)
@@ -124,20 +123,19 @@ for(infile in infiles){
       #Define input for plotting functions
       pweb <- unique(dat_plot$web) #web
       pscenarios <-  unique(dat_plot$scenario) #scenarios
-      pspfs <- unique(dat_plot$spf) ## which focal species for patch loss
-      print(pspfs)
+      pspfs <- "basal" #unique(dat_plot$spf) ## which focal species for patch loss
       pbasals <- FALSE ## if TRUE basal species are plotted if FALSE only consumer species
       
       #Metapopulation capacity ~ patches removed
-      pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
-      # pparams <- unique(dat_plot$params)[1:2] ## selected pi_i and xi_i combinations
+      pparams <- c("pi[i]*' = 0.2,  '*xi[i]*' = 0.055'", "pi[i]*' TLB,  '*xi[i]*' = 0.055'", 
+                   "pi[i]*' and '*xi[i]*' TLB'", "pi[i]*' = 0.2,  '*xi[i]*' TLB'") ##selected pi_i and xi_i combinations
 
       #Create named vectors for facet labels with greek letters
       var_names <- pparams
       names(var_names) <- pparams
 
       #Plot name
-      lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
+      lambda <- paste0("../figures/", "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
                          paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
       
       #Generate the plot
@@ -145,22 +143,19 @@ for(infile in infiles){
                           a = pa, b = pb, basals = pbasals, ptitle=ptitles, labnames = var_names)
       
       #Save it
-      ggsave(filename = lambda, width=8, height=8, plot=p)
-    } 
+      ggsave(filename = lambda, width=14, height=8, plot=p)
+    }
   }
 }
+
 
 #Figure 4
 #If not yet done, generate .png plots for the different consumer responses to resource loss (functional forms) 
 
 #patch removal based on basal species (ACASEN	Acacia senegal, sole member of SG 12):
-infile <- "../data/summaries_round1/summary_serengeti.rds" #summary file
-#patch removal based on antoher basal species (BOSAUG Boscia augustifolia, SG 14):
+infile <- "../data/summaries_round2/summary_serengeti.rds" #summary file
+#patch removal bas  ed on antoher basal species (BOSAUG Boscia augustifolia, SG 14):
 # infile <- "../data/summaries_round2/summary_serengeti_BOSAUG.rds" #summary file
-
-infile <- "../data/summaries_round2/summary_serengeti.rds" %>% Sys.glob() #summary files
-# groups <- read_csv("../data/serengeti/serengeti_groups.csv")
-# dat <- infile %>% read_rds %>% left_join(groups) %>% saveRDS("../data/summaries_round2/summary_serengeti.rds")
 dat <- infile %>% read_rds %>% filter(spinput == "../data/species_input/serengeti_009.csv")
 
 pas <- unique(dat$alpha) 
@@ -183,7 +178,7 @@ for(pa in pas){ #loop over functional forms
     ## Define input
     pweb <- unique(dat_plot$web)
     pscenarios <- c("best-case scenario", "worst-case scenario", "random scenario")
-    pspfs <- "top"#unique(dat_plot$spf)
+    pspfs <- "basal"#unique(dat_plot$spf)
     pbasals <- TRUE
     
     #Metapopulation capacity ~ patches removed
@@ -191,7 +186,7 @@ for(pa in pas){ #loop over functional forms
 
     #Plot name  
     lambda <- paste0(figuredir, "lambda_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-                       paste(.,collapse="_") %>% unname, "_", pspfs, "_SGB_sym.pdf")
+                       paste(.,collapse="_") %>% unname, "_", pspfs, "_SGB.pdf")
                        # paste(.,collapse="_") %>% unname, "_", pspfs, "_SGB_BOSAUG.pdf")
     
     #Generate the plot
@@ -199,6 +194,5 @@ for(pa in pas){ #loop over functional forms
                              a = pa, b = pb, basals = pbasals)
     
     #Save it
-    ggsave(filename = lambda, width=6, height=8, plot=p)
-    # ggsave(filename = lambda, width=14, height=8, plot=p)
+    ggsave(filename = lambda, width=14, height=8, plot=p)
 

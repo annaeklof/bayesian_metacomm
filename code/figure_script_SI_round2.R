@@ -51,8 +51,8 @@ if(file.exists(figuredir)){
 
 #Figures S5, S7, S9, S11
 #Generate .png plots for the different consumer responses to resource loss (functional forms) 
-infiles <- "../data/summaries_round1/summary_largewebs_*.rds" %>% Sys.glob() #summary files
-infile <- "../data/summaries_round1/summary_serengeti.rds" %>% Sys.glob() #summary files
+infiles <- "../data/summaries_round2/summary_largewebs_*.rds" %>% Sys.glob() #summary files
+infile <- "../data/summaries_round2/summary_serengeti2.rds"  #summary files
 
 for(infile in infiles){
   dat0 <- infile %>% read_rds 
@@ -84,11 +84,12 @@ for(infile in infiles){
       pscenarios <-  unique(dat_plot$scenario) #scenarios
       pspfs <- "basal" #unique(dat_plot$spf) ## which focal species for patch loss
       print(pspfs)
-      pbasals <- ifelse(pweb=="Serengeti food web with 32 consumer and 129 basal species", TRUE, FALSE) ## if TRUE basal species are plotted if FALSE only consumer species
+      pbasals <- ifelse(pweb=="Serengeti food web with 32 consumer and 129 basal species", 
+                        TRUE, FALSE) ## if TRUE basal species are plotted if FALSE only consumer species
 
       #Metapopulation capacity ~ patches removed
-      pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
-      # pparams <- unique(dat_plot$params)[1:2] ## selected pi_i and xi_i combinations
+      pparams <- c("pi[i]*' = 0.2,  '*xi[i]*' = 0.055'", "pi[i]*' TLB,  '*xi[i]*' = 0.055'", 
+        "pi[i]*' and '*xi[i]*' TLB'", "pi[i]*' = 0.2,  '*xi[i]*' TLB'")
       
       #Create named vectors for facet labels with greek letters
       var_names <- pparams
@@ -106,8 +107,10 @@ for(infile in infiles){
       ggsave(filename = lambda, width=14, height=8, plot=p)
   
       #Average landscape persistence ~ dispersal distance 
-      pparams <- unique(dat$params)[c(1:5)] #pi TLB
-      
+      # pparams <- unique(dat$params)[c(1:5)] #pi TLB
+      vec <- which(unique(dat$params) %>% str_detect(pattern="TLB,") == TRUE)
+      pparams <- unique(dat$params)[vec]
+
       #Plot name
       sump <- paste0(figuredir, "sump_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
                          paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".png")
@@ -123,7 +126,7 @@ for(infile in infiles){
 } 
 
 #Figures S13
-#Generate .pdf plots for the different model food webs with the top species as focal species for patch los  
+#Generate .pdf plots for the different model food webs with the top species as focal species for patch loss 
 infile <- "../data/summaries_round1/summary_largewebs_1_1.rds" #summary files
 # infile <- "../data/summaries_round1/summary_serengeti.rds" #summary files
 
@@ -156,8 +159,9 @@ infile <- "../data/summaries_round1/summary_largewebs_1_1.rds" #summary files
         pbasals <- ifelse(pweb=="Serengeti food web with 32 consumer and 129 basal species", TRUE, FALSE) ## if TRUE basal species are plotted if FALSE only consumer species
         
         #Metapopulation capacity ~ patches removed
-        pparams <- unique(dat_plot$params)[c(3,6:8)] ## selected pi_i and xi_i combinations
-
+        pparams <- c("pi[i]*' = 0.2,  '*xi[i]*' = 0.055'", "pi[i]*' TLB,  '*xi[i]*' = 0.055'", 
+                     "pi[i]*' and '*xi[i]*' TLB'", "pi[i]*' = 0.2,  '*xi[i]*' TLB'")
+        
         #Create named vectors for facet labels with greek letters
         var_names <- pparams
         names(var_names) <- pparams
@@ -172,17 +176,51 @@ infile <- "../data/summaries_round1/summary_largewebs_1_1.rds" #summary files
 
         #Save it
         ggsave(filename = lambda, width=14, height=8, plot=p)
-
-        #Average landscape persistence ~ dispersal distance 
-        pparams <- unique(dat$params)[c(1:5)] #pi TLB
-        
-        #Plot name
-        # sump <- paste0(figuredir, "sump_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-        #                  paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".png")
-        # 
-        # p2 <- plot_persistence(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
-        #                       a = pa, b = pb, basals = pbasals, ptitle=ptitles)
-        
-        #Save it
-        # ggsave(filename = sump, width=14, height=8, plot=p2)
       } 
+
+  
+  #Figures S14
+  #Generate .pdf plot for a weigthted food web 
+  infile <- "../data/summaries_round2/summary_web503501.rds" #summary files
+  # infile <- "../data/summaries_round1/summary_serengeti.rds" #summary files
+  
+  dat0 <- infile %>% read_rds 
+  pweb <- dat0$web %>% unique
+  
+  dat <- dat0 %>% filter(weighted == TRUE)
+
+  ptitles=paste("Weighted model food web with 350 consumer and 50 basal species") 
+
+  #Add prem=0 to scenarios
+  temp <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "best-case scenario")
+  temp2 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "worst-case scenario")
+  temp3 <- dat %>% filter(scenario == "pre-patch loss", alpha == pa, beta == pb) %>% mutate(scenario = "random scenario")
+  dat_plot <- dat %>% bind_rows(temp) %>% bind_rows(temp2) %>% bind_rows(temp3) %>% 
+    filter(scenario != "pre-patch loss")
+    
+  #Define input for plotting functions
+  # pweb <- unique(dat_plot$web) #web
+  pscenarios <-  unique(dat_plot$scenario) #scenarios
+  pspfs <- "basal" #unique(dat_plot$spf) ## which focal species for patch loss
+  pbasals <- FALSE ## if TRUE basal species are plotted if FALSE only consumer species
+    
+  #Metapopulation capacity ~ patches removed
+  pparams <- c("pi[i]*' = 0.2,  '*xi[i]*' = 0.055'", "pi[i]*' TLB,  '*xi[i]*' = 0.055'", 
+                 "pi[i]*' and '*xi[i]*' TLB'", "pi[i]*' = 0.2,  '*xi[i]*' TLB'")
+    
+  #Create named vectors for facet labels with greek letters
+  var_names <- pparams
+  names(var_names) <- pparams
+    
+  #Plot name
+  lambda <- paste0(figuredir, "lambda_", ptitles %>% str_split(" ", simplify=TRUE) %>% as_tibble %>%
+                      paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
+    
+  #Generate the plot
+  p <- plot_patchloss(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
+                      a = pa, b = pb, basals = pbasals, ptitle=ptitles, labnames = var_names)
+    
+  #Save it
+  ggsave(filename = lambda, width=14, height=8, plot=p)
+ 
+  
