@@ -552,9 +552,7 @@ Let there be $S$ prey species $R_i$ with marginal extinction probabilities $\del
 \end{equation}
 where the average is taken over all prey species $R_i$. Eq.~\ref{eq:BN_marginal_CmanyR} is a direct generalization of Eq.~\ref{eq:BN_marginal_CRR_4} from two to an abritrary number of prey items.
 
-We prove this conjecture for the case of identical prey ($\delta_i^k \equiv \delta^k$, $p_{R_i}^k \equiv p_R^k$).
-% Denoting $p_{R_i}^k (1 - \delta_i^k)$ by $P^k(R_i)$, we have,
-Using Eq.~\ref{eq:BN_marginal_example}:
+We prove this conjecture for the case of identical prey ($\delta_i^k \equiv \delta^k$, $p_{R_i}^k \equiv p_R^k$). Using Eq.~\ref{eq:BN_marginal_example}:
 \begin{align}
   \label{eq:BN_marginal_twolayer}
   \delta_C^k &= P^k(\neg C|R_1 R_2 \ldots R_S) \underbrace{P^k(R_1)
@@ -892,7 +890,6 @@ Patch removal proceeds as described in the main text.
  \label{S_fig:patchloss_200_200_2}
 \end{figure}
 
-%Habitat connectivity
 \begin{figure}
   \includegraphics[width=0.8\textwidth,valign=t]{sump_Model_food_web_with_200_consumer_and_200_basal_species_basal_1_1.png}
   \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
@@ -948,13 +945,26 @@ Patch removal proceeds as described in the main text.
 \label{S_fig:patchloss_Serengeti_TLB_distance_2}
 \end{figure}
 
+\begin{figure}
+\centering
+\hspace{-5em}
+\includegraphics[width=0.2\textwidth]{fform_1_1.png}
+\hspace{0.5em}\includegraphics[width=0.2\textwidth]{fform_5_1.png}
+\hspace{0.5em}\includegraphics[width=0.2\textwidth]{fform_1_5.png} \hspace{0.5em}\includegraphics[width=0.2\textwidth]{fform_5_5.png}
+
+\vspace{1.5em} \includegraphics[width=\textwidth]{lambda_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_SGB_BOSAUG.pdf}
+\caption{As Figure~4 in the main text, except the species whose metapopulation capacity serves as the basis of patch removal is different. In the main text, this species was the Gum arabic tree (\textit{Acacia senegal}), the sole representative of spatial group 12. Here, we have instead chosen a species from spatial group 14, \textit{Boscia augustifolia}. Results are qualitatively unchanged by this alteration.}
+\label{S_fig:patchloss_Serengeti_SGB_alt}
+\end{figure}
+
+
 \clearpage
+
 \subsection{Removing patches based on the patch value rankings of top species} \label{sec:tsfs}
 
 For the linear functional form of a consumer's response to the loss of resources, we additionally looked at removing patches based on the patch value rankings of top species, instead of basal ones. This means that patch removal was stopped whenever the top species have gone extinct. In case of the Serengeti food web, we removed patches based on the patch value rankings of the leopard (\textit{Panthera pardus}). 
 
 
-%Top species as focal species for patch loss 
 \begin{figure}[!ht]
 \centering  \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_top_1_1.pdf}
   \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
@@ -993,30 +1003,71 @@ with the sum in the numerator going over prey that are absent, and the one in th
 \end{equation}
 We determine the $J_{ij}$ from a matrix of biomass flows at equilibrium, which we obtain as the Jacobian matrix evaluated at equilibrium (the community matrix) of the Allometric Trophic Network model (Section~\ref{sec:allo}, \citealp{Schneider2016}), which we have also used to generate our (non-weighted) trophic networks earlier.
 
-Repeating the patch removal analysis for such a weighted version of our model food web with $50$ basal and $350$ consumer species and $\alpha = \beta = 1$, we get the results in Figure~\ref{fig:patchloss_web1_11}. This shows that the results are robust to relaxing the assumption that species contribute equally to consumers' diets.
+Repeating the patch removal analysis for such a weighted version of our model food web with $50$ basal and $350$ consumer species, we get Figure~\ref{fig:patchloss_web1_11}. Comparing with Figure~\ref{S_fig:patchloss_350_50_1}, this shows that the results are robust to relaxing the assumption that species contribute equally to consumers' diets.
 
-\begin{figure}[!ht] \includegraphics[width=0.8\textwidth,valign=t]{lambda_Weighted_model_food_web_with_350_consumer_and_50_basal_species_basal_1_1.pdf}
+\begin{figure}[!p] \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_(1)_Weighted_basal_1_1.pdf}
   \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
-  \caption{As Figure~\ref{S_fig:patchloss_350_50_1}A, but with a weighted food web. Results are qualitatively unchanged compared with the non-weighted case.}
+\includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_(1)_Weighted_basal_5_1.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_1.png}
+  \caption{As Figure~\ref{S_fig:patchloss_350_50_1}, but with a weighted food web. Results are qualitatively unchanged compared with the non-weighted case.}
   \label{fig:patchloss_web1_11}
+\end{figure}
+
+\begin{figure}[!p]\ContinuedFloat 
+\includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_(1)_Weighted_basal_1_5.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_1_5.png}
+\includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_350_consumer_and_50_basal_species_(1)_Weighted_basal_5_5.pdf}
+  \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
+  \caption{Figure continued.}
+ \label{S_fig:patchloss_web1_11_2}
 \end{figure}
 
 
 \section{The maximum number of trophic levels as a function of landscape size and connectivity} \label{sec:ryser}
 
+Figure~S2 in \citet{Ryser2019} shows the maximum number of trophic levels that were able to persist, given the average patch distance and the number of patches. This was based on a fully-fledged dynamical model of the spatial food web. We have re-created this figure using our Bayesian network approach (Figure~\ref{fig:Ryser_repr}). The results are qualitatively unchanged, with a strong dependence of the maximum attainable trophic level on the spatial scale, and a weaker one on the number of patches.
+
+\begin{figure}[!p]
+  \centering
+  \includegraphics[width=\textwidth]{Ryser_reproduced.pdf}
+  \caption{The maximum number of trophic levels (colors) persisting on a landscape with different numbers of patches (ordinate) and average distance between them (abscissa). The web used, which has 50 basal and 350 consumer species, is the same as in Figure~\ref{S_fig:patchloss_350_50_1}. Landscapes were generated just like before, by randomly placing the appropriate number of patches in the unit square. In the top row, each species has an identical dispersal parameter $\xi$ (equal to the spatial scale indicated along the abscissa), while in the bottom row, they were trophic level-based (increasing linearly with trophic level such that their average was equal to the spatial scale parameter). Columns show various parameterizations of the consumer response to prey loss (linear, convex, concave, and sigmoid). The results are qualitatively identical to Figure~S2 in \citet{Ryser2019}: there is a strong dependence of the maximum attainable trophic level on the spatial scale, and a weaker one on the number of patches.}
+  \label{fig:Ryser_repr}
+\end{figure}
+
+Our approach can even be used to get a deeper, analytical understanding of this result. Approximating trophic networks as trophic chains, assuming a common baseline extinction probability $\pi_i = \pi$, and using the patch-averaging method described in Section~\ref{sec:chain}, we have $T \approx -\lambda_M \log(\pi)$, where $T$ is the maximum number of trophic levels and $\lambda_M$ is the dominant eigenvalue of the dispersal matrix (Eq.~\ref{eq:BN_lambda_chain_20}). Obtaining these eigenvalues for each of the landscapes used in Figure~\ref{fig:Ryser_repr}, we depict this approximation in Figure~\ref{fig:Ryser_semianal}. This figure strongly resembles Figure~S2 in \citet{Ryser2019}, and it is based on the fully tractable approximation $T \approx -\lambda_M \log(\pi)$. This lends further credence to the idea that the pattern observed here and in \citet{Ryser2019} is not contingent on model details, but is a robust logical consequence of combining trophic interactions and metacommunity structure.
+
+\begin{figure}[!p]
+  \centering
+  \includegraphics[width=0.62\textwidth]{Ryser_semianalytic.pdf}
+  \caption{Analytical approximation of the expected maximum number of trophic levels (colors), given species' dispersal ability (abscissa) and the number of patches in the landscape (ordinate). The heat map is based on the approximation $T \approx \lambda_M \log(\pi^{-1})$ (Eq.~\ref{eq:BN_lambda_chain_20}), with the leading eigenvalues of the landscapes explicitly calculated based on their associated dispersal matrices.}
+  \label{fig:Ryser_semianal}
+\end{figure}
+
 
 \section{The effect of removing the links between patches} \label{sec:linkrem}
 
-\begin{figure}[!ht]
+Instead of removing patches in a given sequence (best-case, worst-case, random), we may do the same with the links connecting those patches. This is tantamount to assuming that, instead of habitat destruction, it is the surrounding matrix that gets eroded or destroyed, making it impossible for individuals to travel between them. We remove links between pairs of patches, meaning that if the link from patch $A$ to patch $B$ is removed, then so is the link from $B$ to $A$.
+
+To determine the best-case/worst-case link removal sequences, we chose links contributing the least/most to a local change of the basal species' metapopulation capacity. Since this metapopulation capacity is the leading eigenvalue of the matrix $A_i^{kl} = -M_i^{kl} / \log(1 - \delta_i^k)$ (Eq.~\ref{eq:pmjac}), we can apply standard eigenvalue sensitivity analysis to find the links contributing the least/most to the metapopulation capacity \citep[ch.~9]{Caswell2001}. This tells us that
+\begin{equation}
+  \label{eq:sens_Caswell}
+  \frac{\partial \lambda_i}{\partial A_i^{kl}} =
+  \frac{v_i^k w_i^l}{\sum_{m=1}^N v_i^m w_i^m} ,
+\end{equation}
+where $\lambda_i$ is the metapopulation capacity of species $i$, $v_i^k$ is the $k$th entry of its corresponding left eigenvector, and $w_i^l$ the $l$th entry of the corresponding right eigenvector. Thus, we numerically determine the right-hand side of Eq.~\ref{eq:sens_Caswell}, and sequentially delete the links corresponding its smallest entries (best-case scenario) or largest entries (worst-case scenario). More precisey, since we are removing links symmetrically, we remove links with the smallest/largest average entry $(v_i^k w_i^l + v_i^l w_i^k)/2$. Since the matrix $A_i^{kl}$ has all positive entries, its leading eigenvectors have purely real and positive entries due to the Perron-frobenius theorem; so negative entries do not complicate this procedure.
+
+Since there are many links in a landscape (with $N$ patches, there are $N(N-1)/2$ links; for $N=300$, we have $44850$ of them), we remove $1500$ links in one iteration. Since the sensitivity formula is only accurate for small perturbations, this is somewhat crude but still produces consistent results. As seen in Figure~\ref{S_fig:linkrem}, the results are almost the same as with patch removal, with one important qualitative difference: the random link removal scenario now lies about mid-way between the best- and worst-case ones, instead of being as bad as the worst-case scenario.
+
+\begin{figure}[!p]
   \centering  \includegraphics[width=0.8\textwidth,valign=t]{linkrem_Model_food_web_with_300_consumer_and_100_basal_species_basal_1_1_sym.pdf}
   \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
   \includegraphics[width=0.8\textwidth,valign=t]{linkrem_Model_food_web_with_300_consumer_and_100_basal_species_basal_5_1_sym.pdf}
   \includegraphics[width=0.19\textwidth,valign=t]{fform_5_1.png}
-  \caption{As Figure~2 in the main text, except removing links between pairs of patches, instead of the patches themselves. The abscissa shows the fraction of links removed, out of all possible ones---with $N$ habitat patches, this number is $N(N-1)/2$. Results are very similar to those of patch removal, with one important qualitative difference: the worst-case scenario, instead of being as bad as the worst-case one, is now truly in between the two extremal scenarios.}
+  \caption{As Figure~2 in the main text, except removing links between pairs of patches, instead of the patches themselves. The abscissa shows the fraction of links removed, out of all possible ones---with $N$ habitat patches, this number is $N(N-1)/2$. Results are very similar to those of patch removal, with one important qualitative difference: the worst-case scenario, instead of being as bad as the worst-case one, is now in between the two extremal scenarios.}
   \label{S_fig:linkrem}
 \end{figure}
 
-\begin{figure}\ContinuedFloat \includegraphics[width=0.8\textwidth,valign=t]{linkrem_Model_food_web_with_300_consumer_and_100_basal_species_basal_1_5_sym.pdf}
+\begin{figure}[!p]\ContinuedFloat \includegraphics[width=0.8\textwidth,valign=t]{linkrem_Model_food_web_with_300_consumer_and_100_basal_species_basal_1_5_sym.pdf}
   \includegraphics[width=0.19\textwidth,valign=t]{fform_1_5.png}
   \includegraphics[width=0.8\textwidth,valign=t]{linkrem_Model_food_web_with_300_consumer_and_100_basal_species_basal_5_5_sym.pdf}
   \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
@@ -1026,6 +1077,16 @@ Repeating the patch removal analysis for such a weighted version of our model fo
 
 
 \section{Transitioning from a regular grid of habitat patches to random landscapes} \label{sec:gridlike}
+
+Here we highlight the importance of the spatial arrangement of patches across the landscape for our results. Instead of using random landscapes, we create a gradient of landscapes from one in which patches are arranged in a perfect two-dimensional grid, to completely random ones. We do this by creating a $18\times 18$ patch grid, and then jiggling the position of each patch by adding a uniform random value to both their x- and y-coordinates. The range in which the random addition happens ranges from $0$ (perfect grid) to $\pm 0.5$ (perfectly random). Coordinate values over $1$ and below $0$ are wrapped around to appear on the other side of the landscape; e.g., an x-coordinate of $1.2$ is treated as being $0.2$. We then performed the same patch removal analysis as before on each of these landscapes, for the case of $\alpha = \beta = 1$ (linear consumer response to prey loss). We recorded, for each scenario and parameterization, the number of patches that must be removed for the species of a given trophic level to disappear. Results are shown in Figure~\ref{S_fig:gridlike}. In sum, very regular grids of patches lead to more vulnerable species, with fewer patches needing removal to drive them extinct. As the landscapes transition from regular to random patch arrangements, we recover the results observed earlier.
+
+This result demonstrates that landscape arrangement matters, and that highly regular landscapes are more vulnerable than random ones (the same was found by \citealp{Grillietal2015}). The explanation for this is also the same: random landscapes have, by chance, clusters of close-by patches, boosting species' metapopulation capacities. Note though that there are diminishing returns: beyond a point, making  the landscapes even more aggregated no longer enhances persistence.
+
+\begin{figure}[!p]
+  \centering  \includegraphics[width=0.95\textwidth,valign=t]{gridlike.pdf}
+  \caption{The number of patches (ordinate) which, when removed, cause the extinction of species at various trophic levels (colors, with the lines showing the mean across the species of each trophic level, and the bands around it the one-sigma standard deviations). The abscissa shows how far the patches of the landscape are from being perfectly arranged in a grid ($0$: perfect grid; $0.5$: random landscape). Otherwise, layout is as in Figure~\ref{S_fig:patchloss_350_50_1}. We see that more grid-like landscapes lead to lower persistence thresholds, but that landscapes above a perturbation level of about $0.2$ behave as if they were completely random.}
+  \label{S_fig:gridlike}
+\end{figure}
 
 
 \clearpage

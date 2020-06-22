@@ -222,15 +222,15 @@ Despite its tractability, computational efficiency, and straightforward paramete
 
 The current consensus within community ecology is that new ways of thinking about trophic metacommunities are needed to move the field forward \citep{LeiboldChase2018, Guzman2018, Hirtetal2018}. Here we offered one possible approach to this problem, rooted in classic metapopulation theory and the method of Bayesian networks. Due to its flexibility and ability to handle large systems, we see our approach as a stepping-stone along the way to a fuller understanding. Our numerical experiments demonstrate that preserving high-value patches increases the likelihood of community persistence, even under severe habitat loss. Increasingly isolated landscapes, on the other hand, accelerate species extinctions and particularly drive top species towards extinction, reducing trophic complexity.  Using a different methodology, similar trends have been observed by \citet{Ryser2019}; in fact, our model is able to qualitatively reproduce their results (\SI, Section~\ref{SI:sec:ryser}). Our findings reinforce that trophic interactions, dispersal ability, and the spatial configuration of patches are crucial when assessing the extinction risk of species in fragmented landscapes. We hope that our method will be of use to ecologists interested in metacommunity processes and to provide useful insights for real-life conservation efforts to preserve complex trophic communities.
 
-\newpage
+%\newpage
 
 
 \section*{Acknowledgments} \label{sec:thanks}
 
-We would like to thank T.~Lindstr\"om, B.~Rosenbaum, B.~Rall, and U.~Brose for discussions. We carried out numerical work on the high-performance computing cluster EVE of the Helmholtz Centre for Environmental Research (UFZ) and iDiv; we thank the EVE staff for their support. JH was supported by the German Research Foundation (DFG) in the framework of the research unit FOR 1748---Network on Networks: The interplay of structure and dynamics in spatial ecological networks (RA 2339/2-2). JH was also supported by the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig funded by the German Research Foundation (FZT 118). GB and AE acknowledge funding by the Swedish Research Council (grant VR 2017-05245 to GB, VR 2016-04919 to AE).
+We thank T.~Lindstr\"om, B.~Rosenbaum, B.~Rall, and U.~Brose for discussions. We carried out numerical work on the high-performance computing cluster EVE of the Helmholtz Centre for Environmental Research (UFZ) and iDiv; we thank the EVE staff for their support. JH was supported by the German Research Foundation (DFG) in the framework of the research unit FOR 1748---Network on Networks: The interplay of structure and dynamics in spatial ecological networks (RA 2339/2-2). JH was also supported by the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig funded by the German Research Foundation (FZT 118). GB and AE acknowledge funding by the Swedish Research Council (grant VR 2017-05245 to GB, VR 2016-04919 to AE).
 
 
-%\clearpage
+\clearpage
 
 \bibliographystyle{ecollet}
 \bibliography{biblio.bib}
@@ -254,7 +254,7 @@ We would like to thank T.~Lindstr\"om, B.~Rosenbaum, B.~Rall, and U.~Brose for d
 
 \noindent \textbf{Bayesian network models} \citep{Eklofetal2013MEE} provide a middle-ground between the two methods above. Bayesian networks allow extinction probabilities to increase gradually with resource loss, and let them be nonzero even when species have full access to their resources (quantifying the probability of species going extinct for causes other than those represented by the network). The numerical evaluation of Bayesian networks is highly efficient. This greatly reduces computation times and permits analysis of large food webs with hundreds or even thousands of species (and, in a spatial context, habitat patches).
 
-Modeling the probability $P(\neg C|f)$ of a species $C$ going extinct as a function of just the fraction $f$ (and not the identity) of its resources that are absent:
+Modeling the probability $P(\neg C|f)$ of a species $C$ going extinct as a function of just the fraction $f$ (and not the identity) of its resources that are absent (see the \SI, Sections~\ref{SI:sec:BN} and \ref{SI:sec:weighted} for generalizations):
 \begin{equation}
   \label{eq:BN_prob}
   \tag{B1}
