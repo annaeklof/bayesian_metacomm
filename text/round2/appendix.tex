@@ -22,7 +22,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{mathptmx}
 
-\usepackage[export]{adjustbox}% http://ctan.org/pkg/adjustbox
+\usepackage[export]{adjustbox}
 
 \definecolor{mygray}{gray}{0.85}
 \newcommand{\code}[1]{\colorbox{mygray}{\texttt{#1}}}
@@ -57,8 +57,6 @@
 
 \maketitle
 
-%\begin{abstract}
-%\end{abstract}
 
 \section{Bayesian Networks} 
 \label{sec:BN}
@@ -67,7 +65,7 @@ A Bayesian network is a graphical model for the probabilistic relationships amon
 
 More specifically, a species $C$ has, first of all, a baseline probability of extinction $\pi_C$; the species goes extinct with this likelihood even if it has full access to its resources. Such a baseline extinction probability may be related, for instance, to the fact that individual habitat patches are small in size, supporting only a few individuals and therefore prone to extinction via demographic stochasticity. Second, if the species has access to only a subset of its resources, its extinction probability increases, reaching $1$ when all resources are absent.
 
-Let species $C$ have two prey items, $A$ and $B$ (the results below are straightforwardly generalizable to an arbitrary number of prey), and assume that the conditional probabilities of species $C$ being absent given the presence or absence of its prey items are known: $P(\neg C|A B)$ is the probability that $C$ is extinct given that both its prey are present; $P(\neg C|\neg A B)$ is the probability that $C$ is ectinct given that prey $A$ is absent but prey $B$ is present; and so on. To obtain the marginal probability $P(\neg C)$ of $C$ going extinct, we use the law of total probability:
+Let species $C$ have two prey items, $A$ and $B$ (the results below are straightforwardly generalizable to an arbitrary number of prey), and assume that the conditional probabilities of species $C$ being absent given the presence or absence of its prey items are known: $P(\neg C|A B)$ is the probability that $C$ is extinct given that both its prey are present; $P(\neg C|\neg A B)$ is the probability that $C$ is extinct given that prey $A$ is absent but prey $B$ is present; and so on. To obtain the marginal probability $P(\neg C)$ of $C$ going extinct, we use the law of total probability:
 \begin{equation}
   \label{eq:BN_marginal_example}
   \begin{split}
@@ -76,9 +74,9 @@ Let species $C$ have two prey items, $A$ and $B$ (the results below are straight
     P(\neg A)P(\neg B) \ .
   \end{split}
 \end{equation}
-In principle, the conditional probabilities may be as complicated as demanded by the natural history of the modeled ecological scenario. For instance, it is perfectly possible to have $P(\neg C|A B) > P(\neg C| \neg A B)$, even though one would think that having two available prey items should make the extinction of the consumer $C$ less likely than having just one. Nevertheless, if species $A$ and $B$ are mutualists (for example, $A$ emits an alarm call when a predator is present, alerting members of both $A$ and $B$), then the absence of $A$ may in fact make predation easier for $C$.
+In principle, the conditional probabilities may be as complicated as demanded by the natural history of the modeled ecological scenario. For instance, it is possible to have $P(\neg C|A B) > P(\neg C| \neg A B)$, with the probability of extinction greater in the presence of two alternative prey items than with only one. For example, if species $A$ and $B$ are mutualists (for example, $A$ emits an alarm call when a predator is present, alerting members of both $A$ and $B$), then the absence of $A$ may in fact make predation easier for $C$.
 
-Here, however, we operate with the simple assumption that the conditional probabilities of species $C$ going extinct depend only on the fraction $f$ of its resources lost (we relax this assumption in Section~\ref{sec:weighted}). We model this conditional probability as
+Here, however, we operate with the simple assumption that the conditional probabilities of species $C$ going extinct depend only on the fraction $f$ of its resources lost. (We relax this assumption later, in Section~\ref{sec:weighted}.) We model this conditional probability as
 \begin{equation}
   \label{eq:BN_prob}
   P(\neg C|f) = \pi_C + (1 - \pi_C) w(f) \ ,
@@ -121,12 +119,12 @@ For our trophic metacommunity approach, we model colonization using a species-de
   \label{eq:colonization}
   C_i^k = \sum_{l=1}^N M_i^{kl} p_i^l
 \end{equation}
-\citep{OvaskainenHanski2001}, where $M_i^{kl}$, the $(k,l)$th entry of species $i$'s landscape matrix, is the rate of dispersal of species $i$ from patch $l$ to $k$. In turn, the extinction rates are modeled based on the probability of extinction $\delta_i^k$ of species $i$ in patch $k$ per unit time. To convert this probability into the rate $E_i^k$, we treat extinction as a Poisson process. This is justified on the grounds that metapopulation approaches assume a time scale separation between migration and local population dynamics, with the former being much slower than the latter \citep{Hanski1994}. This allows one to treat populations in local patches as being in population dynamical quasi-equilibrium. In this quasi-equilibrium state, there is some constant probability of going extinct per unit of time in each patch, leading to the Poisson process. Since a species is extinct the first time an extinction event happens, the first term of the Poisson distribution suffices:
+\citep{OvaskainenHanski2001}, where $M_i^{kl}$, the $(k,l)$th entry of species $i$'s landscape matrix, is the rate of dispersal of species $i$ from patch $l$ to $k$. In turn, the extinction rates are modeled based on the probability of extinction $\delta_i^k$ of species $i$ in patch $k$ per unit time. To convert this probability into the rate $E_i^k$, we treat extinction as a Poisson process. This is justified on the grounds that metapopulation approaches assume a time scale separation between migration and local population dynamics, with the former being much slower than the latter \citep{Hanski1994}. This allows one to treat populations in local patches as being in population dynamical quasi-equilibrium. In this quasi-equilibrium state, there is some constant probability of going extinct per unit of time in each patch, leading to the Poisson process with rate parameter $E_i^k$:
 \begin{equation}
   \label{eq:probrate}
   \delta_i^k = 1 - \exp(-E_i^k) \ .
 \end{equation}
-This yields an extinction probability of $0$ when the rate $E_i^k$ is zero, and a probability of one for $E_i^k$ infinitely large. Solving for the rate, we get
+This yields an extinction probability of $0$ when $E_i^k$ is zero, and a probability of one for $E_i^k$ infinitely large. Solving for the rate, we get
 \begin{equation}
   \label{eq:extinction}
   E_i^k = -\log(1 - \delta_i^k) \ .
@@ -752,31 +750,7 @@ The prey-averaged trophic level $T_i$ of species $i$ is defined as
   \mathbf{T} = \left( \mathbf{I} - \mathbf{B}^{\mathrm{T}} \right)^{-1}
   \mathbf{e} \ ,
 \end{equation}
-$\mathbf{I}$ being the identity matrix. For the purposes of creating figures, we then grouped species based on the nearest half-integer value to their trophic level $T_i$.% (Table~\ref{table:trophic_levels}).
-
-% \Begin{table}[!ht]
-% \centering
-% \caption{Number of species per trophic level (coarse-grained, to closest half-integer). }
-% \begin{tabular}{cccccc}
-%   \hline
-%  Trophic level & 350:50 & 300:100 & 250:150 & 200:200 & Serengeti  \\ 
-%   \hline
-%   1   &  50 &  100 & 150 &  200 &  129 \\ 
-%   2   &  27 &  32 &  27 &   30  &  23  \\ 
-%   2.5 &  30 &  40  &  84 &  78  &  --  \\
-%   3   &  48 &  82  &  34 &  17  &  9   \\ 
-%   3.5 &  53 &  35  &  14 &  16  &  --  \\ 
-%   4   &  31 &  9   &  25 &  14  &  --  \\ 
-%   4.5 &  38 &  31  &  15 &  19  &  --  \\ 
-%   5   &  20 &  24  &  23 &  13  &  --  \\ 
-%   5.5 &  35 &  19  &  25 &  13  &  --  \\ 
-%   6   &  32 &  27  &   3 &  --  &  --  \\ 
-%   6.5 &  22 &   1  &  -- &  --  &  --  \\ 
-%   7   &  14 &   --  &  -- &  -- &  --  \\ 
-%    \hline
-% \end{tabular}
-% \label{table:trophic_levels}
-% \end{table}
+$\mathbf{I}$ being the identity matrix. For the purposes of creating figures, we then grouped species based on the nearest half-integer value to their trophic level $T_i$.
 
 
 \section{Supplementary model results} \label{sec:suppsim}
@@ -1001,9 +975,9 @@ with the sum in the numerator going over prey that are absent, and the one in th
   \label{eq:BN_prob_weighted}
   P(\neg C|f') = \pi_C + (1 - \pi_C) w(f') \ .
 \end{equation}
-We determine the $J_{ij}$ from a matrix of biomass flows at equilibrium, which we obtain as the Jacobian matrix evaluated at equilibrium (the community matrix) of the Allometric Trophic Network model (Section~\ref{sec:allo}, \citealp{Schneider2016}), which we have also used to generate our (non-weighted) trophic networks earlier.
+We determine the $J_{ji}$ from a matrix of biomass flows at equilibrium. which we obtain as the Jacobian matrix evaluated at equilibrium (the community matrix) of the Allometric Trophic Network model (Section~\ref{sec:allo}, \citealp{Schneider2016}), which we have also used to generate our non-weighted trophic networks earlier.
 
-Repeating the patch removal analysis for such a weighted version of our model food web with $50$ basal and $350$ consumer species, we get Figure~\ref{fig:patchloss_web1_11}. Comparing with Figure~\ref{S_fig:patchloss_350_50_1}, this shows that the results are robust to relaxing the assumption that species contribute equally to consumers' diets.
+Repeating the patch removal analysis for such a weighted version of our model food web with $50$ basal and $350$ consumer species, we get Figure~\ref{fig:patchloss_web1_11}. This is qualitatively identical to Figure~\ref{S_fig:patchloss_350_50_1}, which used the same setup but with non-weighted fractions of prey used (Eq.~\ref{eq:BN_prob}). This shows that the results are robust to relaxing the assumption that species contribute equally to consumers' diets.
 
 \begin{figure}[!p] \includegraphics[width=0.8\textwidth,valign=t]{lambda_Weighted_Model_food_web_with_350_consumer_and_50_basal_species_(1)_basal_1_1.pdf}
   \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
@@ -1025,7 +999,7 @@ Repeating the patch removal analysis for such a weighted version of our model fo
 
 \section{The maximum number of trophic levels as a function of landscape size and connectivity} \label{sec:ryser}
 
-Figure~S2 in \citet{Ryser2019} shows the maximum number of trophic levels that were able to persist, given the average patch distance and the number of patches. This was based on a fully-fledged dynamical model of the spatial food web. We have re-created this figure using our Bayesian network approach (Figure~\ref{fig:Ryser_repr}). The results are qualitatively unchanged, with a strong dependence of the maximum attainable trophic level on the spatial scale, and a weaker one on the number of patches.
+Based on a fully-fledged dynamical model of spatial food webs, \citet{Ryser2019} estimated the maximum number of trophic levels that can persist given the average patch distance and the number of patches of a landscape. We have re-created their result (which is summarized in Figure~S2 in \citealp{Ryser2019}) using our Bayesian network approach. The results are in Figure~\ref{fig:Ryser_repr}. They are qualitatively unchanged, with the maximum possible trophic level exhibiting a strong dependence of the maximum attainable trophic level on the spatial scale, and a weaker one on the number of patches.
 
 \begin{figure}[!p]
   \centering
@@ -1046,17 +1020,17 @@ Our approach can even be used to get a deeper, analytical understanding of this 
 
 \section{The effect of removing the links between patches} \label{sec:linkrem}
 
-Instead of removing patches in a given sequence (best-case, worst-case, random), we may do the same with the links connecting those patches. This is tantamount to assuming that, instead of habitat destruction, it is the surrounding matrix that gets eroded or destroyed, making it impossible for individuals to travel between them. We remove links between pairs of patches, meaning that if the link from patch $A$ to patch $B$ is removed, then so is the link from $B$ to $A$.
+Instead of removing patches in a given sequence (best-case, worst-case, random), we may do the same with the links connecting those patches. This is tantamount to assuming that, instead of habitat destruction, it is the surrounding matrix that gets eroded or destroyed, making it impossible for individuals to travel between patches. We remove links between pairs of patches, meaning that if the link from patch $A$ to patch $B$ is removed, then so is the link from $B$ to $A$.
 
 To determine the best-case/worst-case link removal sequences, we chose links contributing the least/most to a local change of the basal species' metapopulation capacity. Since this metapopulation capacity is the leading eigenvalue of the matrix $A_i^{kl} = -M_i^{kl} / \log(1 - \delta_i^k)$ (Eq.~\ref{eq:pmjac}), we can apply standard eigenvalue sensitivity analysis to find the links contributing the least/most to the metapopulation capacity \citep[ch.~9]{Caswell2001}. This tells us that
 \begin{equation}
   \label{eq:sens_Caswell}
   \frac{\partial \lambda_i}{\partial A_i^{kl}} =
-  \frac{v_i^k w_i^l}{\sum_{m=1}^N v_i^m w_i^m} ,
+  \frac{v_i^k w_i^l}{\sum_{m=1}^N v_i^m w_i^m} \ ,
 \end{equation}
-where $\lambda_i$ is the metapopulation capacity of species $i$, $v_i^k$ is the $k$th entry of its corresponding left eigenvector, and $w_i^l$ the $l$th entry of the corresponding right eigenvector. Thus, we numerically determine the right-hand side of Eq.~\ref{eq:sens_Caswell}, and sequentially delete the links corresponding its smallest entries (best-case scenario) or largest entries (worst-case scenario). More precisey, since we are removing links symmetrically, we remove links with the smallest/largest average entry $(v_i^k w_i^l + v_i^l w_i^k)/2$. Since the matrix $A_i^{kl}$ has all positive entries, its leading eigenvectors have purely real and positive entries due to the Perron-frobenius theorem; so negative entries do not complicate this procedure.
+where $\lambda_i$ is the metapopulation capacity of species $i$, $v_i^k$ is the $k$th entry of its corresponding left eigenvector, and $w_i^l$ the $l$th entry of the corresponding right eigenvector. Since the matrix $A_i^{kl}$ has all positive entries, its leading eigenvectors have purely real and positive entries due to the Perron-Frobenius theorem. We numerically determine the right-hand side of Eq.~\ref{eq:sens_Caswell}, and sequentially delete the links corresponding its smallest entries (best-case scenario) or largest entries (worst-case scenario). More precisey, since we are removing links symmetrically, we remove links with the smallest/largest average entry $(v_i^k w_i^l + v_i^l w_i^k)/2$.
 
-Since there are many links in a landscape (with $N$ patches, there are $N(N-1)/2$ links; for $N=300$, we have $44850$ of them), we remove $1500$ links in one iteration. Since the sensitivity formula is only accurate for small perturbations, this is somewhat crude but still produces consistent results. As seen in Figure~\ref{S_fig:linkrem}, the results are almost the same as with patch removal, with one important qualitative difference: the random link removal scenario now lies about mid-way between the best- and worst-case ones, instead of being as bad as the worst-case scenario.
+Since there are many links in a landscape (with $N$ patches, there are $N(N-1)/2$ links; for $N=300$, we have $44850$ of them), we remove $1500$ links in one iteration, and then re-calculate the sensitivity matrix via Eq.~\ref{eq:sens_Caswell} using the updated matrix $A_i^{kl}$ (from which certain links have already been deleted). The sensitivity formula is only accurate for small perturbations, so removing $1500$ links at a time is somewhat crude but still produces consistent results. As seen in Figure~\ref{S_fig:linkrem}, the results are almost the same as with patch removal, with one important qualitative difference: the random link removal scenario now lies about mid-way between the best- and worst-case ones, instead of being as bad as the worst-case scenario.
 
 \begin{figure}[!p]
   \centering  \includegraphics[width=0.8\textwidth,valign=t]{linkrem_Model_food_web_with_300_consumer_and_100_basal_species_basal_1_1_sym.pdf}
@@ -1080,7 +1054,7 @@ Since there are many links in a landscape (with $N$ patches, there are $N(N-1)/2
 
 Here we highlight the importance of the spatial arrangement of patches across the landscape for our results. Instead of using random landscapes, we create a gradient of landscapes from one in which patches are arranged in a perfect two-dimensional grid, to completely random ones. We do this by creating a $18\times 18$ patch grid, and then jiggling the position of each patch by adding a uniform random value to both their x- and y-coordinates. The range in which the random addition happens ranges from $0$ (perfect grid) to $\pm 0.5$ (perfectly random). Coordinate values over $1$ and below $0$ are wrapped around to appear on the other side of the landscape; e.g., an x-coordinate of $1.2$ is treated as being $0.2$. We then performed the same patch removal analysis as before on each of these landscapes, for the case of $\alpha = \beta = 1$ (linear consumer response to prey loss). We recorded, for each scenario and parameterization, the number of patches that must be removed for the species of a given trophic level to disappear. Results are shown in Figure~\ref{S_fig:gridlike}. In sum, very regular grids of patches lead to more vulnerable species, with fewer patches needing removal to drive them extinct. As the landscapes transition from regular to random patch arrangements, we recover the results observed earlier.
 
-This result demonstrates that landscape arrangement matters, and that highly regular landscapes are more vulnerable than random ones (the same was found by \citealp{Grillietal2015}). The explanation for this is also the same: random landscapes have, by chance, clusters of close-by patches, boosting species' metapopulation capacities. Note though that there are diminishing returns: beyond a point, making  the landscapes even more aggregated no longer enhances persistence.
+This result demonstrates that landscape arrangement matters, and that highly regular landscapes are more vulnerable than random ones (the same was found by \citealp{Grillietal2015}). The explanation for this is that random landscapes have, by chance, clusters of close-by patches, boosting species' metapopulation capacities. Note though that there are diminishing returns: beyond a point, making  the landscapes even more aggregated no longer enhances persistence, as seen from the figure.
 
 \begin{figure}[!p]
   \centering  \includegraphics[width=0.95\textwidth,valign=t]{gridlike.pdf}

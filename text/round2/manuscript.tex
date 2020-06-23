@@ -66,17 +66,17 @@
 
 \noindent\textbf{Article type:} Methods
 
-\noindent\textbf{Word count (abstract):} 241
+\noindent\textbf{Word count (abstract):} 145
 
-\noindent\textbf{Word count (main text):} 4696
+\noindent\textbf{Word count (main text):} 5023
 
-\noindent\textbf{Number of references:} 54
+\noindent\textbf{Number of references:} 59
 
 \noindent\textbf{Number of figures:} 4
 
 \noindent\textbf{Number of tables:} 0
 
-\noindent\textbf{Number of text boxes:} 1 (word count: 626)
+\noindent\textbf{Number of text boxes:} 1 (word count: 646)
 
 \noindent\textbf{Data and code availability:} Code to reproduce numerical results can be found at:
 \begin{verbatim*}
@@ -252,27 +252,27 @@ We thank T.~Lindstr\"om, B.~Rosenbaum, B.~Rall, and U.~Brose for discussions. We
 
 \bigskip
 
-\noindent \textbf{Bayesian network models} \citep{Eklofetal2013MEE} provide a middle-ground between the two methods above. Bayesian networks allow extinction probabilities to increase gradually with resource loss, and let them be nonzero even when species have full access to their resources (quantifying the probability of species going extinct for causes other than those represented by the network). The numerical evaluation of Bayesian networks is highly efficient. This greatly reduces computation times and permits analysis of large food webs with hundreds or even thousands of species (and, in a spatial context, habitat patches).
+\noindent \textbf{Bayesian network models} \citep{Eklofetal2013MEE} provide a middle-ground between the two methods above. Bayesian networks permit extinction probabilities to increase gradually with resource loss, and allow them to be nonzero even when species have full access to their resources (quantifying the probability of species going extinct for causes other than those represented by the network). The numerical evaluation of Bayesian networks is highly efficient. This greatly reduces computation times and permits analysis of large food webs with hundreds or even thousands of species (and, in a spatial context, habitat patches).
 
-Modeling the probability $P(\neg C|f)$ of a species $C$ going extinct as a function of just the fraction $f$ (and not the identity) of its resources that are absent (see the \SI, Sections~\ref{SI:sec:BN} and \ref{SI:sec:weighted} for generalizations):
-\begin{equation}
-  \label{eq:BN_prob}
-  \tag{B1}
-  P(\neg C|f) = \pi_C + (1 - \pi_C) w(f)
-\end{equation}
-where $\pi_C$ is species $C$'s baseline extinction probability (the likelihood of extinction despite all its resources being present), and the weighting function $w(f)$ is monotonically increasing in $f$ such that $w(0)=0$ and $w(1)=1$. For any basal species $A$, $P(\neg A) = \pi_A$ is simply its baseline extinction probability. For a non-basal species $C$, one obtains $P(\neg C)$ by using $P(A) = 1-P(\neg A)$ and the law of total probability. For instance, if $C$ has two prey items $A$ and $B$, we write
+In a Bayesian network, if a consumer species $C$ has two prey items $A$ and $B$ whose extinction probabilities $P(\neg A)$ and $P(\neg B)$ are known, then one can obtain the marginal extinction probability $P(\neg C)$ of the consumer using the law of total probability:
 \begin{equation}
   \label{eq:BN_marginal_example}
-  \tag{B2}
+  \tag{B1}
   \begin{split}
     P(\neg C) &= P(\neg C|A B)P(A)P(B) + P(\neg C|\neg A B)P(\neg A)P(B)
     \\ &\quad + P(\neg C|A \neg B)P(A)P(\neg B) + P(\neg C|\neg A \neg B)
     P(\neg A)P(\neg B)
   \end{split}
 \end{equation}
-where $P(\neg C|A \neg B)$ is the probability of $C$ being extinct given that $A$ is extant and $B$ is extinct, and so on. Knowing $P(\neg A)$ and $P(\neg B)$ (either because they are basal species, or the same formula has been already used to derive their values), we can then calculate $P(\neg C)$ from Eq.~\ref{eq:BN_marginal_example}. Thus, determining the extinction probabilities of all species in a food web is a bottom-up calculation process: we start with basal species, then move on to species only consuming those basal species, and so on.
+(this generalizes straightforwardly to more than two prey items). Here $P(A) = 1 - P(\neg A)$ (and similarly for species $B$), and the conditional probabilities are determined from some set of model assumptions. One such assumption is that the probability $P(\neg C|f)$ of a species $C$ going extinct is a function of just the fraction $f$, and not the identity, of its resources that are absent (see the \SI, Section~\ref{SI:sec:weighted} for a generalization):
+\begin{equation}
+  \label{eq:BN_prob}
+  \tag{B2}
+  P(\neg C|f) = \pi_C + (1 - \pi_C) w(f)
+\end{equation}
+where $\pi_C$ is species $C$'s baseline extinction probability (the likelihood of extinction despite all its resources being present), and the weighting function $w(f)$ is monotonically increasing in $f$ such that $w(0)=0$ and $w(1)=1$. For a basal species $A$, we assume its abiotic resources are always available ($f=0$), so $P(\neg A) = \pi_A + (1 - \pi_A) w(0) = \pi_A$. For a non-basal species $C$, one obtains $P(\neg C)$ by using the already calculated extinction probabilities of its prey, and then applying Eq.~\ref{eq:BN_marginal_example}. Thus, determining the extinction probabilities of all species in a food web is a bottom-up calculation process: we start with basal species, then move on to species only consuming those basal species, and so on.
 
-This also means that the Bayesian network approach has two important limitations. First, the food webs must be acyclic, otherwise this bottom-up approach would not work. Second, since predators are influenced by their prey but prey dynamics do not depend on the presence of their predators at all, the method cannot capture any top-down effects.
+This also means that the Bayesian network approach has two important limitations. First, the food webs must be acyclic, otherwise this bottom-up approach would not work. Second, since predators are influenced by their prey but prey dynamics do not depend on the presence of their predators at all, the method cannot capture any top-down effects (a property shared with topological models).
 
 \end{mdframed}
 
