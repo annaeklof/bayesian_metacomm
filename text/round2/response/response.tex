@@ -58,16 +58,26 @@ Johanna H\"aussler, Gy\"orgy Barab\'as \& Anna Eklöf
 
 Dear Dr.~Drake,
 
-Thank you for taking the time to consider our manuscript for publication in \textit{Ecology Letters}. We have revised the manuscript and written detailed point-by-point responses to the reviewers' comments below.
-% Authors should use concise writing, avoid giving several duplicate citations to support the same statement, and consider moving to Supplementary Information materials that are beyond the interest of most general readers who wish to understand what was done in general terms.
+Thank you for your consideration of our submission, and the chance to revise and resubmit our manuscript to \textit{Ecology Letters}. We additionally thank Dr.~Gravel and the anonymous reviewer for their thoughtful engagement with our work and valuable suggestions. Please see our detailed point-by-point responses to each of their comments below.
 
-We thank you once again for your time.
+Apart from a few minor changes, the main text has been left mostly intact compared with the previous version. However, we have made substantial new additions to the Supporting Information (\SI) based on the requests from the Reviewers. In particular, we have:
+\begin{itemize}
+\item Relaxed the assumption that the conditional probability of consumer extinction is strictly a function of the fraction of its resource species that are absent. We now also consider weighted Bayesian networks, where the importance of each prey species to the consumer's diet may be different (\SI, Section~\ref{SI:sec:weighted}).
+\item Reproduced published results on the maximum possile number of trophic levels a landscape can sustain, given some of its properties like the number of patches and the average distance between them. The published study \citep{Ryser2019} uses a fully-fledged dynamical metacommunity approach based on the Allometric Trophic Network model. Our simpler, Bayesian network-based results not only match those of the more complicated model qualitatively, but yield analytical insight into why such patterns arise in the first place.
+\item Further explored the role of space and spatial arrangement of habitat patches, by repeating our patch removal analyses both on random landscapes and ones with a regular layout of patches in a two-dimensional grid (and also landscapes that were in between these two extremes). It turns out that metacommunities tend to be more fragile when the landscape is highly regular, with random landscapes leading to higher metapopulation capacities.
+\item Implemented the removal of links between pairs of patches, instead of the patches themselves. As in the case of patch removal, we compared the scenarios of removing the most- and least valuable landscape connections first, and a scenario of random link removal. While results are similar to what we see with patch removal, there is an important difference: the adverse effects of random link removal on metacommunity persistence are in between the best- and worst-case ones (whereas in the case of patch removal, the random scenario was practically indistinguishable from the worst-case one).
+\end{itemize}
+
+
+We point out all additional changes in our detailed responses to the Reviewers below. Thank you once again for your time.
 
 \bigskip
 
 Best regards,
 
 Johanna H\"aussler, Gy\"orgy Barab\'as \& Anna Eklöf
+
+\newpage
 
 
 \section*{Response to reviewer comments}
@@ -90,7 +100,7 @@ My primary concern is that the Bayesian network model makes several strong assum
 
 \us
 
-This is a very important point, and in response, we have obtained several new results to emphasize 1) the robustness of the results; and 2) that predicted extintion patterns resemble those obtained via other methods. These were done to move beyond the broad but simple agreement of our results with existing literature mentioned by the Reviewer, to see if the model can be used more quantitatively. To this end, we have relaxed the assumption that each prey item contributes a fixed fraction to predators' diets, and show that results are robust to abandoning this assumption. We have also reproduced the predictions for the number of trophic levels as a function of landscape size and number of patches from a different study \citep{Ryser2019} which took both bottom-up and top-down effect into account. The patterns produced by the two methods are qualitatively identical. See below for details.
+This is a very important point, and in response, we have obtained several new results to emphasize 1) their robustness; and 2) that predicted extintion patterns resemble those obtained via other methods. These were done to move beyond the broad but simple agreement of our results with existing literature mentioned by the Reviewer, to see if the model can be used more quantitatively. To this end, we have relaxed the assumption that each prey item contributes a fixed fraction to predators' diets, and show that results are robust to abandoning this assumption. We have also reproduced the predictions for the number of trophic levels as a function of landscape size and number of patches from a different study \citep{Ryser2019} which took both bottom-up and top-down effect into account. The patterns produced by the two methods are qualitatively identical. See below for details.
 
 \them
 
@@ -100,7 +110,9 @@ One of the core assumptions of the author's model is that extinction risk depend
 
 The scenario envisioned by the Reviewer above might not be as strange as it looks. It means that we are tacitly assuming some sort of tradeoff between predator efficiency and generality. In the example above: if the specialist consumer preys on two resources available in the patch, and the generalist on three (but the third is locally absent), then, since the generalist is less efficient overall, it is at a disadvantage compared to the specialist.
 
-While such explanations are plausible, there is of course no telling how commonly they would apply without a detailed study of the natural history of the organisms involved. Fortunately, the extinction risk depending only on the fraction of prey lost is not so much a core assumption, but rather a methodological choice. It can easily be relaxed. We have now done so, re-doing the patch removal analysis with a weighted trophic network, where the contribution of each prey item to the persistence of its consumers depends on species identity. The relative importance of resource $j$ to consumer $i$, $\theta_{ji}$, is the proportion of biomass flowing from $j$ to $i$ per unit time relative to the other resources. We obtained the entries $\theta_{ji}$ of the flow matrix as the corresponding entry of the Jacobian matrix of the allometric trophic network model \citep{Schneider2016, Ryser2019}, evaluated at equilibrium. Repeating the patch removal analysis using these weighted feeding networks resulted in the same outcome as the original, purely fraction-dependent ones.
+While such explanations are plausible, there is of course no telling how commonly they would apply without a detailed study of the natural history of the organisms involved. Fortunately, the extinction risk depending only on the fraction of prey lost is not so much a core assumption, but rather a methodological choice. It can easily be relaxed. We have now done so, re-doing the patch removal analysis with a weighted trophic network, where the contribution of each prey item to the persistence of its consumers depends on species identity. The relative importance of resource $j$ to consumer $i$, $\theta_{ji}$, is the proportion of biomass flowing from $j$ to $i$ per unit time relative to the other resources. We obtained the entries $\theta_{ji}$ of the flow matrix as the corresponding entry of the Jacobian matrix of the allometric trophic network model \citep{Schneider2016, Ryser2019}, evaluated at equilibrium. Repeating the patch removal analysis using these weighted feeding networks resulted in the same outcome as the original, purely fraction-dependent ones. See the new Section~\ref{SI:sec:weighted} in the Supporting Information (\SI) for the detailed results and methodology.
+
+Additionally, to emphasize that the assumption of conditional extinction probabilities being a function of the fraction of prey lost is a methodological choice and not a core assumption, we have revised the Box in the main text and Section~\ref{SI:sec:BN} in the \SI.
 
 \them
 
@@ -108,21 +120,23 @@ A second core assumption of this model is that extinction risks only depend on b
 
 \us
 
-This is an excellent suggestion. Figure~S2 in \citet{Ryser2019} shows the maximum number of trophic levels that were able to persist, given the average patch distance and the number of patches. We have re-created this figure using our Bayesian network approach (Figure~\ref{fig:Ryser_repr}). The results are qualitatively unchanged, with a strong dependence of the maximum attainable trophic level on the spatial scale, and a weaker one on the number of patches.
+This is an excellent suggestion. Figure~S2 in \citet{Ryser2019} shows the maximum number of trophic levels of a food web that were able to persist, given the average patch distance and the number of patches. We have re-created this figure using our Bayesian network approach (Figure~\ref{fig:Ryser_repr}). The results are qualitatively unchanged, with a strong dependence of the maximum attainable trophic level on the spatial scale, and a weaker one on the number of patches.
 
-\begin{figure}[!ht]
+Moreover, this case study can also be used to highlight another advantage of our method: due to its analytical tractability, it is possible to get a deeper understanding of its results. Approximating trophic networks as trophic chains, assuming a common baseline extinction probability $\pi_i = \pi$, and using the patch-averaging method described in our \SI, Section~\ref{SI:sec:chain}, we have $T \approx \lambda_M \log(\pi^{-1})$, where $T$ is the maximum number of trophic levels and $\lambda_M$ is the dominant eigenvalue of the dispersal matrix (Eq.~\ref{main:eq:Tapprox} in our main text). Obtaining these eigenvalues for each of the landscapes used in Figure~\ref{fig:Ryser_repr}, we can depict this approximation (Figure~\ref{fig:Ryser_semianal}). This figure looks very much like Figure~S2 in \citet{Ryser2019}, and it is based on the fully tractable approximation $T \approx \lambda_M \log(\pi^{-1})$. This lends further credence to the idea that the pattern observed here and in \citet{Ryser2019} is not contingent on model details, but is a robust logical consequence of combining trophic interactions and metacommunity structure.
+
+We present and discuss these results in Section~\ref{SI:sec:ryser} of the \SI.
+
+\begin{figure}[!p]
   \centering
   \includegraphics[width=\textwidth]{Ryser_reproduced.pdf}
   \caption{The maximum number of trophic levels (colors) persisting on a landscape with different numbers of patches (ordinate) and average distance between them (abscissa). The web we used, which had 50 basal and 350 consumer species, was the same as the one in the main text. In the top row, each species has an identical dispersal parameter $\xi$ (equal to the spatial scale indicated along the abscissa), while in the bottom row, they were trophic level-based (increasing linearly with trophic level such that their average was equal to the spatial scale parameter). Columns show various parameterizations of the consumer response to prey loss (linear, convex, concave, and sigmoid). The results are qualitatively identical to Figure~S2 in \citet{Ryser2019}: there is a strong dependence of the maximum attainable trophic level on the spatial scale, and a weaker one on the number of patches.}
   \label{fig:Ryser_repr}
 \end{figure}
 
-Moreover, this case study can also be used to highlight another advantage of our method: due to its analytical tractability, it is possible to get a deeper understanding of its results. Approximating trophic networks as trophic chains, assuming a common baseline extinction probability $\pi_i = \pi$, and using the patch-averaging method described in our Supporting Information (\SI), Section~\ref{SI:sec:chain}, we have $T \approx \lambda_M \log(\pi^{-1})$, where $T$ is the maximum number of trophic levels and $\lambda_M$ is the dominant eigenvalue of the dispersal matrix (Eq.~\ref{main:eq:Tapprox} in our main text). Obtaining these eigenvalues for each of the landscapes used in Figure~\ref{fig:Ryser_repr}, we can depict this approximation (Figure~\ref{fig:Ryser_semianal}). This figure looks very much like Figure~S2 in \citet{Ryser2019}, and it is based on the fully tractable approximation $T \approx \lambda_M \log(\pi^{-1})$. This lends further credence to the idea that the pattern observed here and in \citet{Ryser2019} is not contingent on model details, but is a robust logical consequence of combining trophic interactions and metacommunity structure.
-
-\begin{figure}[!ht]
+\begin{figure}[!p]
   \centering
   \includegraphics[width=0.65\textwidth]{Ryser_semianalytic.pdf}
-  \caption{}
+  \caption{Analytical approximation of the expected maximum number of trophic levels (colors), given species' dispersal ability (abscissa) and the number of patches in the landscape (ordinate). The heat map is based on the approximation $T \approx \lambda_M \log(\pi^{-1})$ (Eq.~\ref{main:eq:Tapprox} in the main text), with the leading eigenvalues of the landscapes explicitly calculated based on their associated dispersal matrices.}
   \label{fig:Ryser_semianal}
 \end{figure}
 
@@ -134,7 +148,7 @@ Page 4, line 55: It would have been useful to me to have the broad model assumpt
 
 \us
 
-We rearranged the text
+We have now added an introductory paragraph outlining the core model assumptions, before diving into the details (lines ...).
 
 \them
 
@@ -142,7 +156,7 @@ Page 5 line 5: The notation is a bit confusing here. $M^{kl}_i$ is stated to be 
 
 \us
 
-Now we say they are modeled using a species-dependent landscape matrix, whose $(k,l)$th entry $M_i^{kl}$ gives the dispersal rate of species $i$ from patch $l$ to patch $k$.
+Now we say they are modeled using a species-dependent landscape matrix, whose $(k,l)$th entry $M_i^{kl}$ gives the dispersal rate of species $i$ from patch $l$ to patch $k$ (lines ...).
 
 \them
 
@@ -150,7 +164,7 @@ Page 5, line 9-12: this text is a bit unclear, as it is confusing an extinction 
 
 \us
 
-We have rewritten the sentence in the suggested way.
+We have rewritten the sentence in the suggested way (lines ...).
 
 \them
 
@@ -158,7 +172,7 @@ Page 6, line 43:56: why are these in a different order than in the figure? For i
 
 \us
 
-We have changed the ordering to match the list.
+We have changed the ordering to match the list. We now always follow this order: linear ($\alpha = \beta = 1$), convex ($\alpha = 5$, $\beta = 1$), concave ($\alpha = 1$, $\beta = 5$), and sigmoid ($\alpha = \beta = 5$).
 
 \them
 
@@ -166,7 +180,7 @@ Page 8, line 52: ``In the best-case scenario, unless consumer response to prey a
 
 \us
 
-We have added the subfigure reference.
+We have added the subfigure reference (subpanel C; lines ...).
 
 \them
 
@@ -174,7 +188,7 @@ Page 9, line 18: dispersal rates may not always increase with trophic level, and
 
 \us
 
-This is a fair point---we now mention that this assumption need not hold in all systems.
+This is a fair point---we have added a paragraph discussing that this assumption need not hold in all systems (lines ...).
 
 \them
 
@@ -182,7 +196,19 @@ Page 11, line 18: Why was this specific species chosen?
 
 \us
 
-It is the only basal species that is also the sole member of a spatial group. So it was a natural choice. But there is no need to do this; in fact, we have done the analysis with another basal species' metapopulation capacity (see figure below).
+It is the only basal species that is also the sole member of a spatial group. So it was a natural choice. But there is no need to do this; in fact, we have done the analysis with another basal species' patch rankings (see Figure~\ref{fig:ser} below; Figure~\ref{SI:S_fig:patchloss_Serengeti_SGB_alt} in the revised \SI). As seen, the results are qualitatively unchanged.
+
+\begin{figure}[!ht]
+\centering
+\hspace{-5em}
+\includegraphics[width=0.2\textwidth]{fform_1_1.png}
+\hspace{0.5em}\includegraphics[width=0.2\textwidth]{fform_5_1.png}
+\hspace{0.5em}\includegraphics[width=0.2\textwidth]{fform_1_5.png} \hspace{0.5em}\includegraphics[width=0.2\textwidth]{fform_5_5.png}
+
+\vspace{1.5em} \includegraphics[width=\textwidth]{lambda_Serengeti_food_web_with_32_consumer_and_129_basal_species_basal_SGB_BOSAUG.pdf}
+\caption{As Figure~4 in the main text, except the species whose metapopulation capacity serves as the basis of patch removal is different. In the main text, this species was the Gum arabic tree (\textit{Acacia senegal}), the sole representative of spatial group 12. Here, we have instead chosen a species from spatial group 14, \textit{Boscia augustifolia}. Results are qualitatively unchanged by this alteration.}
+\label{fig:ser}
+\end{figure}
 
 \them
 
@@ -190,7 +216,7 @@ Page 14, line 25: It is also important to note another limitation of this approa
 
 \us
 
-Indeed, this is the case, we mentioned it in the Methods in passing, but now bring it up again here.
+This is indeed the case; we now discuss this in lines ...
 
 \them
 
@@ -198,7 +224,7 @@ Figure 2: I would recommend labelling the axes of the insets. Currently, the fun
 
 \us
 
-We have revised the figure insets and changed the plot to show integer trophic levels (we did thesame in all corresponding figures in the supplement as well).
+We have revised the figure insets and changed the plot to show integer trophic levels (we did the same in all corresponding figures in the \SI\ as well). Please note that, as per the recommendation of Reviewer 2 (Dr.~Gravel), we have changed the order of Figures~2 and 3, so the relevant figure is now Figure~2 in the main text.
 
 \them
 
@@ -206,7 +232,7 @@ S1, page 1: B(f) refers to the extinction probability as a function of the numbe
 
 \us
 
-We changed the notation for $B(f)$, to \ldots
+Good point---we have changed the notation from $B(f)$ to $w(f)$ (suggesting that it is a \emph{w}eighting function) in both the main text and the \SI.
 
 \them
 
@@ -214,7 +240,7 @@ S1, page 2: ``In this quasi-equilibrium state, there is some constant probabilit
 
 \us
 
-We revised the text (the rate of going extinct is constant through time). We also clarified that this refers to local extinction.
+We have revised Section~\ref{SI:sec:tmm} of the \SI\ to clarify both that the rate of going extinct is constant through time, and that this refers to local extinction.
 
 \them
 
@@ -222,9 +248,10 @@ S1 page 2, equation S9: I think this relates to my previous question; I may be m
 
 \us
 
-Clarify that we assume constant rates, which lead to constant probabilities per unit time---from which we infer the rates. So it's just as described above.
+The Reviewer is entirely correct: we assume constant rates, which then lead to constant probabilities \emph{per unit time}, which we have not mentioned explicitly. We have rewritten Section~\ref{SI:sec:tmm}, and also cast Eq.~\ref{SI:eq:bayesprob} in a different form to clarify this.
 
 \them
+
 
 \subsection*{Reviewer 2 (Dominique Gravel)}
 
