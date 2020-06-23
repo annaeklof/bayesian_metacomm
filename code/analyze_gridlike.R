@@ -48,12 +48,12 @@ gl %>%
   facet_grid(scenario~spinput,
              labeller=labeller(.rows=label_value, .cols=label_parsed)) +
   scale_colour_manual(values=colorRampPalette(brewer.pal(11, "RdYlBu"))(7),
-                      name="Trophic\nlevels", guide=FALSE) +
+                      name="Trophic\nlevel", guide=FALSE) +
   scale_fill_manual(values=colorRampPalette(brewer.pal(11, "RdYlBu"))(7),
-                      name="Trophic\nlevels") +
+                      name="Trophic\nlevel") +
   scale_x_continuous(name="Perturbation to perfect grid structure") +
   scale_y_continuous(name="Patches to remove for eliminating trophic level",
                      limits=c(0, 330)) +
   guides(fill=guide_legend(override.aes=list(alpha=1))) +
   theme_bw()
-##ggsave("../figures/gridlike.pdf", width=7, height=4.66)
+##ggsave("../SI/gridlike.pdf", width=7, height=4.66)
