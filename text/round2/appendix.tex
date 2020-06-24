@@ -368,7 +368,7 @@ To simplify Eq.~\ref{eq:BN_lambda_chain_4} further, let us assume that the basel
   \lambda_{i+1} \approx \frac{\lambda_M}{\lambda_M / \lambda_i -\log \left[ (1 -
       \pi) (1-1/\lambda_i) \right]} \ ,
 \end{equation}
-with $\lambda_0 = \infty$. The recursion is only meaningful until $\lambda_i$ drops below $1$, meaning that the $i$th trophic level cannot persist. We now show that the sequence of metapopulation capacities defined by Eq.~\ref{eq:BN_lambda_chain_5} is strictly decreasing, and it is guaranteed to drop below $1$ at some point (as long as the baseline extinction probability $\pi$ is not exactly zero, in which case trophic chains of arbirary length will trivially be able to persist). Indeed, assuming $\lambda_i < \lambda_{i+1}$, we reach a contradiction:
+with $\lambda_0 = \infty$. The recursion is only meaningful until $\lambda_i$ drops below $1$, meaning that the $i$th trophic level cannot persist. We now show that the sequence of metapopulation capacities defined by Eq.~\ref{eq:BN_lambda_chain_5} is strictly decreasing, and it is guaranteed to drop below $1$ at some point (as long as the baseline extinction probability $\pi$ is not exactly zero, in which case trophic chains of arbitrary length will trivially be able to persist). Indeed, assuming $\lambda_i < \lambda_{i+1}$, we reach a contradiction:
 \begin{equation}
   \label{eq:BN_lambda_chain_6}
   \begin{split}
@@ -548,7 +548,7 @@ Let there be $S$ prey species $R_i$ with marginal extinction probabilities $\del
   \label{eq:BN_marginal_CmanyR}
   \delta_C^k = 1 - (1 - \pi_C^k) \ol{p_R^k (1 - \delta_R^k)} \ ,
 \end{equation}
-where the average is taken over all prey species $R_i$. Eq.~\ref{eq:BN_marginal_CmanyR} is a direct generalization of Eq.~\ref{eq:BN_marginal_CRR_4} from two to an abritrary number of prey items.
+where the average is taken over all prey species $R_i$. Eq.~\ref{eq:BN_marginal_CmanyR} is a direct generalization of Eq.~\ref{eq:BN_marginal_CRR_4} from two to an arbitrary number of prey items.
 
 We prove this conjecture for the case of identical prey ($\delta_i^k \equiv \delta^k$, $p_{R_i}^k \equiv p_R^k$). Using Eq.~\ref{eq:BN_marginal_example}:
 \begin{align}
@@ -1028,7 +1028,7 @@ To determine the best-case/worst-case link removal sequences, we chose links con
   \frac{\partial \lambda_i}{\partial A_i^{kl}} =
   \frac{v_i^k w_i^l}{\sum_{m=1}^N v_i^m w_i^m} \ ,
 \end{equation}
-where $\lambda_i$ is the metapopulation capacity of species $i$, $v_i^k$ is the $k$th entry of its corresponding left eigenvector, and $w_i^l$ the $l$th entry of the corresponding right eigenvector. Since the matrix $A_i^{kl}$ has all positive entries, its leading eigenvectors have purely real and positive entries due to the Perron-Frobenius theorem. We numerically determine the right-hand side of Eq.~\ref{eq:sens_Caswell}, and sequentially delete the links corresponding its smallest entries (best-case scenario) or largest entries (worst-case scenario). More precisey, since we are removing links symmetrically, we remove links with the smallest/largest average entry $(v_i^k w_i^l + v_i^l w_i^k)/2$.
+where $\lambda_i$ is the metapopulation capacity of species $i$, $v_i^k$ is the $k$th entry of its corresponding left eigenvector, and $w_i^l$ the $l$th entry of the corresponding right eigenvector. Since the matrix $A_i^{kl}$ has all positive entries, its leading eigenvectors have purely real and positive entries due to the Perron-Frobenius theorem. We numerically determine the right-hand side of Eq.~\ref{eq:sens_Caswell}, and sequentially delete the links corresponding its smallest entries (best-case scenario) or largest entries (worst-case scenario). More precisely, since we are removing links symmetrically, we remove links with the smallest/largest average entry $(v_i^k w_i^l + v_i^l w_i^k)/2$.
 
 Since there are many links in a landscape (with $N$ patches, there are $N(N-1)/2$ links; for $N=300$, we have $44850$ of them), we remove $1500$ links in one iteration, and then re-calculate the sensitivity matrix via Eq.~\ref{eq:sens_Caswell} using the updated matrix $A_i^{kl}$ (from which certain links have already been deleted). The sensitivity formula is only accurate for small perturbations, so removing $1500$ links at a time is somewhat crude but still produces consistent results. As seen in Figure~\ref{S_fig:linkrem}, the results are almost the same as with patch removal, with one important qualitative difference: the random link removal scenario now lies about mid-way between the best- and worst-case ones, instead of being as bad as the worst-case scenario.
 
