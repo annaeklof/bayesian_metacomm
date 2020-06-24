@@ -35,7 +35,7 @@
 \bibpunct{(}{)}{,}{a}{}{,}
 \clubpenalty = 10000
 \widowpenalty = 10000
-\graphicspath{{../../../figures/}}
+\graphicspath{{../../../SI/}}
 \externaldocument[SI:]{../appendix}
 \externaldocument[main:]{../manuscript}
 
@@ -272,6 +272,8 @@ That said, there are also (known and acknowledged) limitations of the model :
 
 \us
 
+We thank Dr.~Gravel for his very thorough reading or our work and the constructive suggestions for improvement. We respond to his points below.
+
 \them
 
 The manuscript itself is very well prepared, I do not have specific comments other than figure 3 should appear before figure 2.
@@ -286,7 +288,17 @@ My overall feeling is that this study could be a nice and welcome contribution t
 
 \us
 
-Maybe analyze landscapes ranging from gridlike to random arrangement.
+These are all very good points. Apart from mentioning the work of \citet{Calcagnoetal2011} in relation to the maximum number of trophic levels being limited by metacommunity structure alone (lines ...), we have also added a new analysis, comparing a gradient of landscapes ranging from a perfectly grid-like patch arrangement to random ones.
+
+We created this gradient by starting out with a $18\times 18$ perfect two-dimensional grid of patches, and then jiggling the position of each patch by adding a uniform random value to both their x- and y-coordinates. The range in which the random addition happens ranges from $0$ (perfect grid) to $\pm 0.5$. Since the landscape is assumed to be in the unit square, coordinate values over $1$ and below $0$ were wrapped around to appear on the other side of the landscape. E.g., an x-coordinate of $1.2$ was treated as being $0.2$. We then performed the same patch removal analysis as before on each of these landscapes, for the case of $\alpha = \beta = 1$ (linear consumer response to prey loss). We recorded, for each scenario and parameterization, the number of patches that must be removed for the species of a given trophic level to disappear. Results are in Figure~\ref{fig:gridlike} (Section~\ref{SI:sec:gridlike} in the updated \SI). What we see is that very regular grids of patches lead to more vulnerable species, with fewer patches needing removal to drive them extinct. (The lines are noisy, because we have only generated a single landscape with a given level of grid perturbation. Averaging results over multiple landscapes would smooth them out.) The reason random landscapes are better is that they have, by chance, clusters of close-by patches, boosting species' metapopulation capacities. Note though that there are diminishing returns: beyond a point, making  the landscapes even more aggregated no longer enhances persistence, as seen from the figure.
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.95\textwidth]{gridlike.pdf}
+  \caption{The number of patches (ordinate) which, when removed, cause the extinction of species at various trophic levels (colors, with the lines showing the mean across the species of each trophic level, and the bands around it the one-sigma standard deviations). The abscissa shows how far the patches of the landscape are from being perfectly arranged in a grid ($0$: perfect grid; $0.5$: random landscape). We see that more grid-like landscapes lead to lower persistence thresholds, but that landscapes above a perturbation level of about $0.2$ behave as if they were completely random.}
+  \label{fig:gridlike}
+\end{figure}
+
 
 \them
 
@@ -294,74 +306,59 @@ What follows are suggestions, it is up to the authors to decide what to do with 
 
 - I think that the most original contribution of the study is the inclusion of explicit space following Hanski's work on metapopulation capacity. But unfortunately the analysis does not build on it, the same results could have been derived using a island-mainland approach (again, nothing in Figure 3 is taking advantage of explicit space). There are several ways to build on this, among them :
 
-\us
-
-Side note: Figures~1-2 all depend on the spatial structure. Also, the fact that the best-case scenario is so different from the worst and random is due to the explicit spatial arrangement and removal (Figure~1).
-
-\them
-
-\begin{itemize}
-\item Contribution of individual patches to metapopulation carrying capacity could be explored;
+* Contribution of individual patches to metapopulation carrying capacity could be explored;
   
 \us
 
-That \emph{is} what we're doing (see above). We now emphasize this better in our text.
+We are grateful for these suggestions, because they indeed drive more attention to the advantages of having a spatially explicit framework. In relation to the specific comment above, we have in fact done just this when we removed patches in the best and worst possible sequence. To determine these, we evaluated the contribution of each patch to the metapopulation capacity of a basal species (and also a top predator, in Section~\ref{SI:sec:tsfs}). So in that sense we were already building on the spatially explicit nature of our model: the ranking of patches for their importance of metacommunity maintenance would not have been possible with any spatially implicit approach. Thus, Figures~\ref{main:fig:loss_example}, \ref{main:fig:patchloss}, and \ref{main:fig:Serengeti} in the main text do take spatial configuration into account.
 
 \them
 
-\item Only dispersal links in the spatial network could be removed, allowing an analysis of fragmentation in addition to habitat loss;
+* Only dispersal links in the spatial network could be removed, allowing an analysis of fragmentation in addition to habitat loss
 
 \us
 
-We have redone our analyses by removing, instead of randomly chosen patches, randomly chosen links. Once a link is removed between two patches, no species can travel between them, regardless of their dispersal ability. We compare the outcome of this random link removal experiment with the random patch removal. Results are \ldots
+This was a very good suggestion, one that produced interesting results. We have redone our analyses by removing, instead of randomly chosen patches, randomly chosen links between pairs of patches. Once a link is removed between two patches, no species can travel between them, regardless of their dispersal ability. We compared the outcome of this random link removal experiment with the random patch removal. Just as before, we have done best-case, worst-case, and random removal scenarios (\SI, Section~\ref{SI:sec:linkrem}). The results are qualitatively the same as with patch removal, but with one important exception: the random removal scenario now lies about mid-way between the best- and worst-case ones. This is in contrast with patch removal, where random removal was as bad as the worst-case scenario. We now mention this new result in the main text as well (lines ...).
 
 \them
-
-\end{itemize}
 
 - The analysis could also build further on how Bayesian networks are used to study represent extinction sequences:
 
-\begin{itemize}
-\item It would be interesting to define a "metacommunity robustness" index, similar to the robustness analysis of topological networks (e.g. the amount of habitat loss a metacommunity could stand before 50\% of the species are going extinct). This index could be calculated for the whole food web and perhaps per trophic level, since higher trophic levels will have lower robustness
+* It would be interesting to define a ``metacommunity robustness'' index, similar to the robustness analysis of topological networks (e.g. the amount of habitat loss a metacommunity could stand before 50\% of the species are going extinct). This index could be calculated for the whole food web and perhaps per trophic level, since higher trophic levels will have lower robustness
 
 \us
 
-The problem is that such a metric would give different robustness values depending on landscape layout, order of patch removal, etc. While this direction is definitely interesting, we feel that its magnitude is beyond the scope of this work.
+The problem is that such a metric would give different robustness values depending on landscape layout, order of patch removal, and so on. (Comparing the point at which top predators go extinct in Figure~\ref{main:fig:patchloss} shows just how sensitive it is to the sequence in which we dispose of patches, for example.) For this reason, there is probably no universally useful, single metacommunity robustness index, but rather a suite of indices depending on spatial patch aggregation, whether patch removal is random, etc., which together may help give an intuitive feel for for fragile a given metacommunity is under various types of disturbances. While this direction is definitely interesting, we feel that its magnitude is beyond the scope of our work, so we decided not to pursue it further here.
 
 \them
 
-\item Further, it would be interesting to compare the extinction sequence that is observe if one conduct a traditional node deletion numerical experiment vs a patch removal experiment. Are species extinctions following the same sequence ? At the same rate ? Such an analysis (which is easy to run) would provide a more process-based interpretation of extinction sequences, a common critique of such analyses.
+* Further, it would be interesting to compare the extinction sequence that is observe if one conduct a traditional node deletion numerical experiment vs a patch removal experiment. Are species extinctions following the same sequence ? At the same rate ? Such an analysis (which is easy to run) would provide a more process-based interpretation of extinction sequences, a common critique of such analyses.
 
 \us
 
-(Maybe do this after all other chages are done.)
+While we have not done a systematic analysis of this, it is certain that the extinction sequence from node deletion would be quite different from patch removal. With patch removal, all species are affected to an extent, but the adverse effects are cumulatively felt by species at higher trophic levels. As seen from our results, there is a reasonably well-groomed sequence to the disappearance of species at different trophic levels (Figure~\ref{main:fig:patchloss} in the main text), with higher levels going extinct first. With species removal, we could see many more basal species (or generally, those at lower levels) go extinct first, as long as they are not critical to the maintenance of the food web as a whole. As we said, we have not explored this in any greater detail, but would be happy to come back to it if Dr.~Gravel felt this would be a needed addition.
 
 \them
-
-\end{itemize}
 
 - I also have two technical remarks about the representation of how interactions impact extinction:
 
-\begin{itemize}
-\item A smoother and conceptually similar way to account for the cumulative effects of prey availability on extinction probability was introduced before by \citet{Cazellesetal2015}. The formulation in this model, inspired by Lotka-Volterra equations, is not as elegant and computationally efficient as a Bayesian network, but it has the advantage of integrating variation in the contribution of each species to function B(f).
+* A smoother and conceptually similar way to account for the cumulative effects of prey availability on extinction probability was introduced before by \citet{Cazellesetal2015}. The formulation in this model, inspired by Lotka-Volterra equations, is not as elegant and computationally efficient as a Bayesian network, but it has the advantage of integrating variation in the contribution of each species to function B(f).
 
 \us
 
-We now mention \citet{Cazellesetal2015}. Also, we don't need to use the $B(f)$ function; we can make extinction likelihoods a function of the individual prey items and consumers' reliance on them (see our comment to Reviewer 1).
+We are grateful for the pointer to \citet{Cazellesetal2015}, which we now mention in the Discussion (lines ...). As we have written to Reviewer 1, the assumption that each prey species contributes equally to predator persistence can be relaxed in our framework, and we have now done so (\SI, Section~\ref{SI:sec:weighted}). To be consistent with this possibility, we have also revised the Box in the main text and Section~\ref{SI:sec:tmm} to treat the assumption of equal prey contribution as just a particular methodological choice, and not as a core assumption of our approach.
 
 \them
 
-\item Further, I disagree with the interpretation that it is impossible to have a top-down effect in Bayesian representation of interactions (P14). Equation B1 could easily be modified such that it is the number of predators that is influencing the baseline extinction rate, instead of the number (or fraction) of prey. Again, \citet{Cazellesetal2015} implemented both in their formulation.
+* Further, I disagree with the interpretation that it is impossible to have a top-down effect in Bayesian representation of interactions (P14). Equation B1 could easily be modified such that it is the number of predators that is influencing the baseline extinction rate, instead of the number (or fraction) of prey. Again, \citet{Cazellesetal2015} implemented both in their formulation.
 
 \us
 
-(Check Cazelles paper). This is probably technically true; the Bayesian network can be turned around. The problem is that it's difficult to justify a form of top-down extinction. (Should extinction likelihood \emph{increase} with number of consumers? If so, then are prey the most likely to go extinct if they have all their consumers present?) There are too many possible implementations.
+This is of course true: the Bayesian network can be turned around an applies ``upside down'' to implement top-down effects. One problem though is that it is difficult to justify a biologically relevant form of conditional prey persistence as a function of predator extinction. For prey and their resources, things are clear: no consumer can persist without a food source. However, this is not so clear-cut the other way round. Should prey extinction likelihood increase or decrease with the number of consumer species? If it increases, then are we ignoring the fact that apparent competition can be reduced via predator-partitioning? And if it decreases, then are we saying that having more predator species ravaging a prey makes it less likely to be hunted to extinction? Without committing to any of these options, we merely highlight that implementing top-down effects raises important methodological problems which must first be resolved.
 
-We changed our text. We no longer say this is impossible to implement. Instead, we say it is a bit arbitrary to do so.
+In response to this comment, we did change our text to no longer say that top-down effects are impossible to implement. Instead, we point out that it would not be a straightforward exercise to do so (lines ...).
 
 \them
-
-\end{itemize}
 
 
 \section*{Comments from the Editor}
