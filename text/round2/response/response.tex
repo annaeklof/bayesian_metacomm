@@ -60,16 +60,16 @@ Dear Dr.~Drake,
 
 Thank you for your consideration of our submission, and the chance to revise and resubmit our manuscript to \textit{Ecology Letters}. We additionally thank Dr.~Gravel and the anonymous reviewer for their thoughtful engagement with our work and valuable suggestions. Please see our detailed point-by-point responses to each of their comments below.
 
-Apart from a few minor changes, the main text has been left mostly intact compared with the previous version. However, we have made substantial new additions to the Supporting Information (\SI) based on the requests from the Reviewers. In particular, we have:
+In response to the comments and requests, we have made substantial new additions to our study. We summarize the most important ones here:
 \begin{itemize}
-\item Relaxed the assumption that the conditional probability of consumer extinction is strictly a function of the fraction of its resource species that are absent. We now also consider weighted Bayesian networks, where the importance of each prey species to the consumer's diet may be different (\SI, Section~\ref{SI:sec:weighted}).
-\item Reproduced published results on the maximum possile number of trophic levels a landscape can sustain, given some of its properties like the number of patches and the average distance between them. The published study \citep{Ryser2019} uses a fully-fledged dynamical metacommunity approach based on the Allometric Trophic Network model. Our simpler, Bayesian network-based results not only match those of the more complicated model qualitatively, but yield analytical insight into why such patterns arise in the first place.
-\item Further explored the role of space and spatial arrangement of habitat patches, by repeating our patch removal analyses both on random landscapes and ones with a regular layout of patches in a two-dimensional grid (and also landscapes that were in between these two extremes). It turns out that metacommunities tend to be more fragile when the landscape is highly regular, with random landscapes leading to higher metapopulation capacities.
-\item Implemented the removal of links between pairs of patches, instead of the patches themselves. As in the case of patch removal, we compared the scenarios of removing the most- and least valuable landscape connections first, and a scenario of random link removal. While results are similar to what we see with patch removal, there is an important difference: the adverse effects of random link removal on metacommunity persistence are in between the best- and worst-case ones (whereas in the case of patch removal, the random scenario was practically indistinguishable from the worst-case one).
+\item We relaxed the assumption that the conditional probability of consumer extinction is strictly a function of the fraction of its resource species that are absent. We now also consider weighted Bayesian networks, where the importance of each prey species to the consumer's diet may be different (\SI, Section~\ref{SI:sec:weighted}).
+\item We reproduced published results on the maximum possile number of trophic levels a landscape can sustain, given some of its properties like the number of patches and the average distance between them. The published study \citep{Ryser2019} uses a fully-fledged dynamical metacommunity approach based on the Allometric Trophic Network model. Our simpler, Bayesian network-based results not only match those of the more complicated model qualitatively, but yield analytical insight into why such patterns arise in the first place.
+\item We further explored the role of space and spatial arrangement of habitat patches, by repeating our patch removal analyses both on random landscapes and ones with a regular layout of patches in a two-dimensional grid (and also landscapes that were in between these two extremes). It turns out that metacommunities tend to be more fragile when the landscape is highly regular, with random landscapes leading to higher metapopulation capacities.
+\item We implemented the removal of links between pairs of patches, instead of removing the patches themselves. As in the case of patch removal, we compared the scenarios of removing the most- and least valuable landscape connections first, and a scenario of random link removal. While results are similar to what we see with patch removal, there is an important difference: the adverse effects of random link removal on metacommunity persistence are in between the best- and worst-case ones (whereas in the case of patch removal, the random scenario was practically indistinguishable from the worst-case one).
 \end{itemize}
 
 
-We point out all additional changes in our detailed responses to the Reviewers below. Thank you once again for your time.
+We discuss all additional changes in our detailed responses to the Reviewers below. Thank you once again for your time.
 
 \bigskip
 
@@ -148,7 +148,7 @@ Page 4, line 55: It would have been useful to me to have the broad model assumpt
 
 \us
 
-We have now added an introductory paragraph outlining the core model assumptions, before diving into the details (lines ...).
+We have now added an introductory paragraph outlining the core model assumptions, before diving into the details (lines 70-76).
 
 \them
 
@@ -156,7 +156,7 @@ Page 5 line 5: The notation is a bit confusing here. $M^{kl}_i$ is stated to be 
 
 \us
 
-Now we say they are modeled using a species-dependent landscape matrix, whose $(k,l)$th entry $M_i^{kl}$ gives the dispersal rate of species $i$ from patch $l$ to patch $k$ (lines ...).
+Now we say they are modeled using a species-dependent landscape matrix, whose $(k,l)$th entry $M_i^{kl}$ gives the dispersal rate of species $i$ from patch $l$ to patch $k$ (lines 78-80).
 
 \them
 
@@ -164,7 +164,7 @@ Page 5, line 9-12: this text is a bit unclear, as it is confusing an extinction 
 
 \us
 
-We have rewritten the sentence in the suggested way (lines ...).
+We have rewritten the sentence in the suggested way (lines 81-84).
 
 \them
 
@@ -180,7 +180,7 @@ Page 8, line 52: ``In the best-case scenario, unless consumer response to prey a
 
 \us
 
-We have added the subfigure reference (subpanel C; lines ...).
+We have added the subfigure reference (subpanel C; line 183).
 
 \them
 
@@ -188,7 +188,7 @@ Page 9, line 18: dispersal rates may not always increase with trophic level, and
 
 \us
 
-This is a fair point---we have added a paragraph discussing that this assumption need not hold in all systems (lines ...).
+This is a fair point---we have added a paragraph discussing that this assumption need not hold in all systems (lines 208-213).
 
 \them
 
@@ -216,7 +216,7 @@ Page 14, line 25: It is also important to note another limitation of this approa
 
 \us
 
-This is indeed the case; we now discuss this in lines ...
+This is indeed the case; we now discuss this in lines 352-358.
 
 \them
 
@@ -224,7 +224,7 @@ Figure 2: I would recommend labelling the axes of the insets. Currently, the fun
 
 \us
 
-We have revised the figure insets and changed the plot to show integer trophic levels (we did the same in all corresponding figures in the \SI\ as well). Please note that, as per the recommendation of Reviewer 2 (Dr.~Gravel), we have changed the order of Figures~2 and 3, so the relevant figure is now Figure~2 in the main text.
+We have revised the figure insets and changed the plot to show integer trophic levels only (we did the same in all corresponding figures in the \SI\ as well). Please note that, as per the recommendation of Reviewer 2 (Dr.~Gravel), we have changed the order of Figures~2 and 3, so the relevant figure is now Figure~2 in the main text.
 
 \them
 
@@ -259,20 +259,22 @@ This manuscript reports an investigation of the effect of habitat loss in a trop
 
 I particularly appreciated certain aspects of the model : 
 
-\begin{itemize}
-\item It generalizes previous approaches using the spatially explicit formulation of Hanski and collaborators of the Levins model;
-\item It nicely integrates a technique of network robustness analysis within a metacommunity framework, allowing a smoother representation of extinction probabilities and sequences;
-\item It accounts for size/trophic level variation in colonization and extinction probabilities (in agreement with conclusions of Guzman et al.)
-\end{itemize}
+- It generalizes previous approaches using the spatially explicit formulation of Hanski and collaborators of the Levins model;
+
+- It nicely integrates a technique of network robustness analysis within a metacommunity framework, allowing a smoother representation of extinction probabilities and sequences;
+
+- It accounts for size/trophic level variation in colonization and extinction probabilities (in agreement with conclusions of Guzman et al.)
+
 That said, there are also (known and acknowledged) limitations of the model :
-\begin{itemize}
-\item Only extinction depends on interactions, while previous models and a an empirical analysis (Cirtwill and Stouffer, 2015 GEB) have shown that both that it could also impact colonization;
-\item The analysis (as most robustness analyses too) relies only on a bottom-up view of the world, neglecting potential effects of trophic cascades and indirect interactions on extinctions.
-\end{itemize}
+
+- Only extinction depends on interactions, while previous models and a an empirical analysis (Cirtwill and Stouffer, 2015 GEB) have shown that both that it could also impact colonization;
+
+- The analysis (as most robustness analyses too) relies only on a bottom-up view of the world, neglecting potential effects of trophic cascades and indirect interactions on extinctions.
+
 
 \us
 
-We thank Dr.~Gravel for his very thorough reading or our work and the constructive suggestions for improvement. We respond to his points below.
+We thank Dr.~Gravel for his thorough reading and engagement with our work, and the constructive suggestions for improvement. We respond to his comments below.
 
 \them
 
@@ -288,7 +290,7 @@ My overall feeling is that this study could be a nice and welcome contribution t
 
 \us
 
-These are all very good points. Apart from mentioning the work of \citet{Calcagnoetal2011} in relation to the maximum number of trophic levels being limited by metacommunity structure alone (lines ...), we have also added a new analysis, comparing a gradient of landscapes ranging from a perfectly grid-like patch arrangement to random ones.
+These are all very good points. Apart from mentioning the work of \citet{Calcagnoetal2011} in relation to the maximum number of trophic levels being limited by metacommunity structure alone (lines 174-177), we have also added a new analysis, comparing a gradient of landscapes ranging from a perfectly grid-like patch arrangement to random ones.
 
 We created this gradient by starting out with a $18\times 18$ perfect two-dimensional grid of patches, and then jiggling the position of each patch by adding a uniform random value to both their x- and y-coordinates. The range in which the random addition happens ranges from $0$ (perfect grid) to $\pm 0.5$. Since the landscape is assumed to be in the unit square, coordinate values over $1$ and below $0$ were wrapped around to appear on the other side of the landscape. E.g., an x-coordinate of $1.2$ was treated as being $0.2$. We then performed the same patch removal analysis as before on each of these landscapes, for the case of $\alpha = \beta = 1$ (linear consumer response to prey loss). We recorded, for each scenario and parameterization, the number of patches that must be removed for the species of a given trophic level to disappear. Results are in Figure~\ref{fig:gridlike} (Section~\ref{SI:sec:gridlike} in the updated \SI). What we see is that very regular grids of patches lead to more vulnerable species, with fewer patches needing removal to drive them extinct. (The lines are noisy, because we have only generated a single landscape with a given level of grid perturbation. Averaging results over multiple landscapes would smooth them out.) The reason random landscapes are better is that they have, by chance, clusters of close-by patches, boosting species' metapopulation capacities. Note though that there are diminishing returns: beyond a point, making  the landscapes even more aggregated no longer enhances persistence, as seen from the figure.
 
@@ -318,7 +320,7 @@ We are grateful for these suggestions, because they indeed drive more attention 
 
 \us
 
-This was a very good suggestion, one that produced interesting results. We have redone our analyses by removing, instead of randomly chosen patches, randomly chosen links between pairs of patches. Once a link is removed between two patches, no species can travel between them, regardless of their dispersal ability. We compared the outcome of this random link removal experiment with the random patch removal. Just as before, we have done best-case, worst-case, and random removal scenarios (\SI, Section~\ref{SI:sec:linkrem}). The results are qualitatively the same as with patch removal, but with one important exception: the random removal scenario now lies about mid-way between the best- and worst-case ones. This is in contrast with patch removal, where random removal was as bad as the worst-case scenario. We now mention this new result in the main text as well (lines ...).
+This was a very good suggestion, one that produced interesting results. We have redone our analyses by removing, instead of randomly chosen patches, randomly chosen links between pairs of patches. Once a link is removed between two patches, no species can travel between them, regardless of their dispersal ability. We compared the outcome of this random link removal experiment with the random patch removal. Just as before, we have done best-case, worst-case, and random removal scenarios (\SI, Section~\ref{SI:sec:linkrem}). The results are qualitatively the same as with patch removal, but with one important exception: the random removal scenario now lies about mid-way between the best- and worst-case ones. This is in contrast with patch removal, where random removal was as bad as the worst-case scenario. We now mention this new result in the main text as well (lines 191-193).
 
 \them
 
@@ -328,7 +330,7 @@ This was a very good suggestion, one that produced interesting results. We have 
 
 \us
 
-The problem is that such a metric would give different robustness values depending on landscape layout, order of patch removal, and so on. (Comparing the point at which top predators go extinct in Figure~\ref{main:fig:patchloss} shows just how sensitive it is to the sequence in which we dispose of patches, for example.) For this reason, there is probably no universally useful, single metacommunity robustness index, but rather a suite of indices depending on spatial patch aggregation, whether patch removal is random, etc., which together may help give an intuitive feel for for fragile a given metacommunity is under various types of disturbances. While this direction is definitely interesting, we feel that its magnitude is beyond the scope of our work, so we decided not to pursue it further here.
+The problem is that such a metric would give qualitatively different robustness values depending on landscape layout, order of patch removal, and so on. (Comparing the point at which top predators go extinct in Figure~\ref{main:fig:patchloss} shows just how sensitive it is to the sequence in which we dispose of patches, for example.) For this reason, there is probably no universally useful, single metacommunity robustness index, but rather a suite of indices depending on spatial patch aggregation, whether patch removal is random, etc., which together may help give an intuitive feel for for fragile a given metacommunity is under various types of disturbances. While this direction is definitely interesting, we feel that its magnitude is beyond the scope of our work, so we decided not to pursue it further here.
 
 \them
 
@@ -346,7 +348,7 @@ While we have not done a systematic analysis of this, it is certain that the ext
 
 \us
 
-We are grateful for the pointer to \citet{Cazellesetal2015}, which we now mention in the Discussion (lines ...). As we have written to Reviewer 1, the assumption that each prey species contributes equally to predator persistence can be relaxed in our framework, and we have now done so (\SI, Section~\ref{SI:sec:weighted}). To be consistent with this possibility, we have also revised the Box in the main text and Section~\ref{SI:sec:tmm} to treat the assumption of equal prey contribution as just a particular methodological choice, and not as a core assumption of our approach.
+We are grateful for the pointer to \citet{Cazellesetal2015}, which we now mention in the Discussion (lines 290-293). As we have written to Reviewer 1, the assumption that each prey species contributes equally to predator persistence can be relaxed in our framework, and we have now done so (\SI, Section~\ref{SI:sec:weighted}). To be consistent with this possibility, we have also revised the Box in the main text and Section~\ref{SI:sec:tmm} to treat the assumption of equal prey contribution as just a particular methodological choice, and not as a core assumption of our approach.
 
 \them
 
@@ -354,9 +356,9 @@ We are grateful for the pointer to \citet{Cazellesetal2015}, which we now mentio
 
 \us
 
-This is of course true: the Bayesian network can be turned around an applies ``upside down'' to implement top-down effects. One problem though is that it is difficult to justify a biologically relevant form of conditional prey persistence as a function of predator extinction. For prey and their resources, things are clear: no consumer can persist without a food source. However, this is not so clear-cut the other way round. Should prey extinction likelihood increase or decrease with the number of consumer species? If it increases, then are we ignoring the fact that apparent competition can be reduced via predator-partitioning? And if it decreases, then are we saying that having more predator species ravaging a prey makes it less likely to be hunted to extinction? Without committing to any of these options, we merely highlight that implementing top-down effects raises important methodological problems which must first be resolved.
+This is of course true: the Bayesian network can be turned around an applied ``upside down'' to implement top-down effects. One problem though is that it is difficult to justify a biologically relevant form of conditional prey persistence as a function of predator extinction without detailed information about the natural history of particular systems. For prey and their resources, things are clear: no consumer can persist without a food source. However, this is not so clear-cut the other way round. Should prey extinction likelihood increase or decrease with the number of consumer species? If it increases, then are we ignoring the fact that apparent competition can be reduced via predator-partitioning? And if it decreases, then are we saying that having more predator species ravaging a prey makes it less likely to be hunted to extinction? These questions highlight that implementing top-down effects raises important methodological problems which must first be resolved.
 
-In response to this comment, we did change our text to no longer say that top-down effects are impossible to implement. Instead, we point out that it would not be a straightforward exercise to do so (lines ...).
+In response to this comment, we did change our text to no longer say that top-down effects are impossible to implement. Instead, we point out that it would not be a straightforward exercise to do so (lines 368-372).
 
 \them
 
@@ -367,12 +369,12 @@ The authors have greatly interested two reviewers who nonetheless have some rath
 
 \us
 
-Thank you for your consideration of the manuscript, and the chance to revise and resubmit our work. Please see our detailed responses to the Reviewers above, and the summary of major changes we have made on the top page. We have included several new results both to showcase the applicability of our method to a variety of problems (especially to be able to capitalize on its spatially explicit nature, in line with the suggestions of Dr.~Gravel), and to demonstrate its robustness against relaxing model assumptions.
+Thank you for your consideration of the manuscript, and the chance to revise and resubmit our work. Please see our detailed responses to the Reviewers above, and the summary of major changes we have made on the top page. We have included several new results both to showcase the applicability of our method to a variety of problems (especially to be able to capitalize on its spatially explicit nature, in line with the suggestions of Dr.~Gravel), and to demonstrate its robustness against relaxing model assumptions. We do hope you will find that the changes have improved our manuscript.
 
 \them \rm
 
 
-\newpage
+%\newpage
 \bibliographystyle{../elsarticle-harv}
 \bibliography{../biblio}
 
