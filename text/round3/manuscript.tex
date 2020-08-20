@@ -105,7 +105,7 @@ https://github.com/johannahae/bayesian_metacommunities
 
 Global biodiversity loss progresses at a rapid pace, with human-induced landscape changes such as habitat fragmentation and habitat loss being important drivers \citep{Tylianakis2008, Haddad2015}. To accurately forecast species extinction rates and develop efficient conservation strategies, ecologists must understand how species respond to these changes in habitat. Changes in the spatial configuration of a landscape drive species extinctions both directly but also through their effect on the interactions among species \citep{Tylianakis2008, Valiente-Banuet2015}. Their direction and extent is difficult to predict however, especially when considering complex ecological communities such as food webs.
 
-In food webs species are inextricably linked, both directly and indirectly. Therefore, the extinction of one species can lead to a cascade of secondary extinctions which might affect the entire network \citep{EbenmanJonsson2005, Dunne2009}. This can have unpredictable consequences for the community as it might drastically change its structure and, at worst, lead to a highly impoverished community \citep{EklofEbenman2006, Dunne2009}.
+Species in the same food web are inextricably linked, both directly and indirectly. Therefore, the extinction of one species can lead to a cascade of secondary extinctions which might affect the entire network \citep{EbenmanJonsson2005, Dunne2009}. This can have unpredictable consequences for the community as it might drastically change its structure and, at worst, lead to a highly impoverished community \citep{EklofEbenman2006, Dunne2009}.
 
 Theoretical studies typically consider secondary extinctions in food webs without taking their spatial extent into account \citep{EklofEbenman2006, Dunne2009, Staniczenko2010, Binzer2011, Curtsdotter2011, Broseetal2017}. In non-spatial webs, the main approaches to model secondary extinctions are purely topological models, solely based on food web structure \citep{Dunne2009}, and dynamical models, which explicitly simulate population dynamics using a system of differential equations \citep{Binzer2011, Curtsdotter2011}. A middle-ground approach between them are Bayesian networks (\citealp{Eklofetal2013MEE}; Box~1).
 
@@ -124,7 +124,7 @@ The article is structured as follows. After briefly presenting our modeling fram
 
 Our starting point is a spatially explicit, Levins-type metapopulation model over a fragmented landscape consisting of $N$ habitat patches connected by dispersal \citep{HanskiOvaskainen2000, HanskiOvaskainen2003, OvaskainenHanski2001, Grillietal2015}. Each of $S$ species has a metapopulation over this landscape. Colonization depends on species' current patch occupancies and dispersal abilities, and is unaffected by interspecific interactions. Extinctions, on the other hand, happen both due to local patch conditions and the fact that the species form a trophic network: extinction risk in a given patch increases when more prey items of a species are locally absent. We do not consider non-trophic interactions here.
 
-More formally, we model the probability $p_i^k$ that species $i$ is found in patch $k$. (Here and elsewhere, subscripts refer to species and superscripts to patches.) Colonization rates of patch $k$ by species $i$, $C_i^k = \sum_{l=1}^N M_i^{kl} p_i^l$, are modeled using a species-dependent landscape matrix whose $(k,l)$th entry $M_i^{kl}$ gives the dispersal rate of species $i$ from patch $l$ to $k$. In turn, extinction rates are obtained from the probability $\delta_i^k$ that species $i$ disappears from patch $k$. As metapopulation models assume that migration operates on a slower time scale than local population dynamics \citep{Hanski1994}, within-patch extinction is modeled as a Poisson process with rate $E_i^k$. So the probability of extinction occurring within one unit of time is $\delta_i^k = 1 - \exp(-E_i^k)$, from which $E_i^k = -\log(1-\delta_i^k)$. With these colonization and extinction rates, the model reads (\SI, Section~\ref{SI:sec:tmm}):
+More formally, we model the probability $p_i^k$ that species $i$ is found in patch $k$. (Here and elsewhere, subscripts refer to species and superscripts to patches.) Colonization rates of patch $k$ by species $i$, $C_i^k = \sum_{l=1}^N M_i^{kl} p_i^l$, are modeled using a species-dependent landscape matrix whose $(k,l)$th entry $M_i^{kl}$ gives the dispersal rate of species $i$ from patch $l$ to $k$. In turn, extinction rates are obtained from the probability $\delta_i^k$ that species $i$ disappears from patch $k$. As metapopulation models assume that migration operates on a slower time scale than local population dynamics \citep{Hanski1994}, we assume that within-patch extinction rates are not affected by the occupancy rates of other patches, so that within-patch extinction can be modelled as a Poisson process with rate $E_i^k$. So the probability of extinction occurring within one unit of time is $\delta_i^k = 1 - \exp(-E_i^k)$, from which $E_i^k = -\log(1-\delta_i^k)$. With these colonization and extinction rates, the model reads (\SI, Section~\ref{SI:sec:tmm}):
 \begin{equation}
   \label{eq:model}
   \frac{\ud p_i^k}{\ud t} = (1 - p_i^k) \sum_{l=1}^N M_i^{kl} p_i^l +
@@ -140,7 +140,7 @@ We first constructed four model food webs via the allometric method of \citet{Sc
 
 We assume homogeneous landscapes where all patches have the same abiotic conditions and each patch can potentially harbor the full food web. This means that both the baseline extinction probabilities $\pi_i$ and dispersal distances $\xi_i$ are patch-independent. Their species-dependence may take one of two forms. First, they can be constant across all species, with $\pi_i = 0.2$ and $\xi_i = 0.055$. Second, they may be trophic level-based. We calculated the trophic level $T_i$ of each species $i$  as a prey-averaged trophic level (\citealp{WilliamsMartinez2004}; \SI, Section~\ref{SI:sec:tls}). Denoting their arithmetic average by $\overline{T}$, we set $\pi_i = 0.2 \, T_i / \overline{T}$ and $\xi_i = 0.055 \, T_i / \overline{T}$. The numerical factors adjust the arithmetic average $\overline{\pi}$ and $\overline{\xi}$ to be equal to $0.2$ and $0.055$ respectively, for a better comparison with the constant case. Additionally, to explore the role of habitat connectivity in general, we gradually increased $\xi_i$ from $0.01$ to $0.1$ (keeping it equal across species), and let $\pi_i$ be trophic level-based (\SI, Section~\ref{SI:sec:suppsim}).
 
-We also looked at how the functional form of a consumer's response to the loss of resources affects the response of a food web to habitat loss, by implementing four different forms of the response function. All are are described by regularized beta functions of the fraction $f$ of resource species lost, with different shape parameters $\alpha$ and $\beta$:
+We also looked at how the functional form of a consumer's response to the loss of resources affects the response of a food web to habitat loss, by implementing four different forms of the response function. All are described by regularized beta functions of the fraction $f$ of resource species lost, with different shape parameters $\alpha$ and $\beta$:
 \begin{enumerate}
 \item $\alpha = \beta = 1$ (linear function; see inset in top right corner of Figure~\ref{fig:patchloss}A). Here a consumer's probability of extinction is simply proportional to the fraction of resources lost.
 \item $\alpha=5$, $\beta=1$ (Figure~\ref{fig:patchloss}B). This is a convex function, meaning that consumer extinction probabilities only start appreciably increasing after some fixed fraction of the resources have already been lost.
@@ -162,6 +162,8 @@ We start implementing habitat loss if at least one consumer species persists. We
 The patch ranking formula only applies for small perturbations of the landscape. Therefore, after each patch loss step (simultaneous removal of $10$ patches), we recalculate the patch values to re-rank the order in which we will remove patches next. We repeat this process until either all but basal species have gone extinct, or less than two patches remain in a landscape. Figure~\ref{fig:loss_example} illustrates the habitat loss scenarios by displaying the patch occupancies for a basal species and a top predator over a landscape.
 
 For the linear functional form of predator response to prey loss ($\alpha = \beta = 1$), we additionally looked at removing patches based on the patch value rankings of top species, instead of basal ones (\SI, Section~\ref{SI:sec:tsfs}). This means that patch removal was stopped whenever the top species have gone extinct.
+
+Finally, we have also implemented a numerical experiment where we remove the links connecting the patches, instead of the patches themselves. This was also done in a random, best-case, and worst-case sequence (\SI, Section~\ref{SI:sec:linkrem}). Link removal expresses the assumption that individuals have more difficulty travelling across patches due to the deterioration of the habitat matrix, even though the patches themselves are intact.
 
 
 \section{Results} \label{sec:results}
@@ -296,6 +298,18 @@ This also means that the Bayesian network approach has two important limitations
 
 \clearpage
 
+
+\begin{figure}[!p]
+  \centering
+  \includegraphics[width=0.65\textwidth]{TL_chain.pdf}
+  \caption{The maximum number of trophic levels in trophic chain metacommunities, as a function of a common baseline extinction probability $\pi$ and the leading eigenvalue of a common landscape matrix $\lambda_M$. Unless $\pi$ is low and $\lambda_M$ simultaneously high, the metacommunity structure itself puts a cap on the number of possible trophic levels. This color map was generated by iterating Eq.~\ref{eq:chain} until metapopulation capacities dropped below the persistence threshold of $1$. However, the same result obtains by approximating the maximum number of trophic levels simply with $-\lambda_M\log(\pi)$ (Eq.~\ref{eq:Tapprox}; see also \SI, Figure~\ref{SI:fig:TL_compare}).}
+  \label{fig:TL_chain}
+\end{figure}
+
+
+\clearpage
+
+
 \begin{figure}
   \includegraphics[width=0.8\textwidth,valign=t]{lambda_Model_food_web_with_300_consumer_and_100_basal_species_basal_1_1.pdf}
   \includegraphics[width=0.19\textwidth,valign=t]{fform_1_1.png}
@@ -312,16 +326,6 @@ This also means that the Bayesian network approach has two important limitations
   \includegraphics[width=0.19\textwidth,valign=t]{fform_5_5.png}
   \caption{Figure continued.}
   \label{fig:patchloss_2}
-\end{figure}
-
-\clearpage
-
-
-\begin{figure}[!p]
-  \centering
-  \includegraphics[width=0.65\textwidth]{TL_chain.pdf}
-  \caption{The maximum number of trophic levels in trophic chain metacommunities, as a function of a common baseline extinction probability $\pi$ and the leading eigenvalue of a common landscape matrix $\lambda_M$. Unless $\pi$ is low and $\lambda_M$ simultaneously high, the metacommunity structure itself puts a cap on the number of possible trophic levels. This color map was generated by iterating Eq.~\ref{eq:chain} until metapopulation capacities dropped below the persistence threshold of $1$. However, the same result obtains by approximating the maximum number of trophic levels simply with $-\lambda_M\log(\pi)$ (Eq.~\ref{eq:Tapprox}; see also \SI, Figure~\ref{SI:fig:TL_compare}).}
-  \label{fig:TL_chain}
 \end{figure}
 
 
