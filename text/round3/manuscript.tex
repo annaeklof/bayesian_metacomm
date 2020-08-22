@@ -15,7 +15,6 @@
 \usepackage{setspace}
 \usepackage{mdframed}
 \usepackage{verbatim}
-\usepackage{xr}
 \usepackage[usenames,dvipsnames,table]{xcolor}
 \usepackage[protrusion=true,expansion=true]{microtype}
 \usepackage[authoryear]{natbib}
@@ -25,7 +24,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{mathptmx}
 
-\usepackage[export]{adjustbox}% http://ctan.org/pkg/adjustbox
+\usepackage[export]{adjustbox} % http://ctan.org/pkg/adjustbox
 
 \definecolor{mygray}{gray}{0.85}
 \newcommand{\code}[1]{\colorbox{mygray}{\texttt{#1}}}
@@ -42,8 +41,7 @@
 \clubpenalty = 10000
 \widowpenalty = 10000
 \bibpunct{(}{)}{,}{a}{}{,}
-\graphicspath{{../../figures/}}
-\externaldocument[SI:]{appendix}
+% \graphicspath{{../../figures/}}
 
 
 \title{A Bayesian network approach to trophic metacommunities shows habitat loss accelerates top species extinctions}
@@ -113,7 +111,7 @@ Predictions derived from non-spatial studies are crucial for understanding how s
 
 More recently, several advances in food web ecology address the effect of spatial change on food webs \citep{Pillai2011, Eklof2012}, mostly however in small food webs and/or landscapes. For example, \citet{Liao2016, Liao2017JAE, Liao2017RSPB} studied how the loss of habitat patches and landscape fragmentation affect food chains and simple food web motifs. An explicit population dynamical approach was taken by \citet{Ryser2019}, who theoretically studied complex food webs in fragmented landscapes and found that habitat isolation drives top species extinctions due to bottom-up energy limitation. Using a system of differential equations, \citet{Ryser2019} explicitly simulate feeding and dispersal dynamics which allows for greater biological realism but also restricts the network sizes that are computationally feasible (Box~1).
 
-To be able to explore much larger systems, here we develop a novel approach to studying trophic metacommunities which is rooted in single-species metapopulation models on fragmented landscapes \citep{HanskiOvaskainen2000, OvaskainenHanski2001, HanskiOvaskainen2003, Grillietal2015}. The essence of our method is that species' extinction rates are calculated from a Bayesian network representation of the food web \citep{Eklofetal2013MEE}, which allows us to model food webs with hundreds of species and patches. Our approach can also be used for obtaining analytical solutions for simple community modules (Supporting Information [\SI], Section~\ref{SI:sec:anal}). The method retains many known properties of metapopulation theory, such as being able to rank the habitat patches of the landscape with respect to their importance to the persistence of the metacommunity \citep{OvaskainenHanski2001}. We make use of this ranking to study how progressive habitat loss affects species extinctions, depending on whether one prioritizes the removal of valuable vs.\ non-valuable patches.
+To be able to explore much larger systems, here we develop a novel approach to studying trophic metacommunities which is rooted in single-species metapopulation models on fragmented landscapes \citep{HanskiOvaskainen2000, OvaskainenHanski2001, HanskiOvaskainen2003, Grillietal2015}. The essence of our method is that species' extinction rates are calculated from a Bayesian network representation of the food web \citep{Eklofetal2013MEE}, which allows us to model food webs with hundreds of species and patches. Our approach can also be used for obtaining analytical solutions for simple community modules (Supporting Information [\SI], Section~S4). The method retains many known properties of metapopulation theory, such as being able to rank the habitat patches of the landscape with respect to their importance to the persistence of the metacommunity \citep{OvaskainenHanski2001}. We make use of this ranking to study how progressive habitat loss affects species extinctions, depending on whether one prioritizes the removal of valuable vs.\ non-valuable patches.
 
 The article is structured as follows. After briefly presenting our modeling framework and its parameterization (Section~\ref{sec:methods}), we use it to study the effect of habitat loss on community persistence---first on model food webs (Section~\ref{sec:results}), then in a case study on an empirical example (Section~\ref{sec:empirical}). We finish by reflecting on the advantages and limitations of our approach, and its place in the wider context of trophic metacommunity theory (Section~\ref{sec:discussion}).
 
@@ -124,21 +122,21 @@ The article is structured as follows. After briefly presenting our modeling fram
 
 Our starting point is a spatially explicit, Levins-type metapopulation model over a fragmented landscape consisting of $N$ habitat patches connected by dispersal \citep{HanskiOvaskainen2000, HanskiOvaskainen2003, OvaskainenHanski2001, Grillietal2015}. Each of $S$ species has a metapopulation over this landscape. Colonization depends on species' current patch occupancies and dispersal abilities, and is unaffected by interspecific interactions. Extinctions, on the other hand, happen both due to local patch conditions and the fact that the species form a trophic network: extinction risk in a given patch increases when more prey items of a species are locally absent. We do not consider non-trophic interactions here.
 
-More formally, we model the probability $p_i^k$ that species $i$ is found in patch $k$. (Here and elsewhere, subscripts refer to species and superscripts to patches.) Colonization rates of patch $k$ by species $i$, $C_i^k = \sum_{l=1}^N M_i^{kl} p_i^l$, are modeled using a species-dependent landscape matrix whose $(k,l)$th entry $M_i^{kl}$ gives the dispersal rate of species $i$ from patch $l$ to $k$. In turn, extinction rates are obtained from the probability $\delta_i^k$ that species $i$ disappears from patch $k$. As metapopulation models assume that migration operates on a slower time scale than local population dynamics \citep{Hanski1994}, we assume that within-patch extinction rates are not affected by the occupancy rates of other patches, so that within-patch extinction can be modelled as a Poisson process with rate $E_i^k$. So the probability of extinction occurring within one unit of time is $\delta_i^k = 1 - \exp(-E_i^k)$, from which $E_i^k = -\log(1-\delta_i^k)$. With these colonization and extinction rates, the model reads (\SI, Section~\ref{SI:sec:tmm}):
+More formally, we model the probability $p_i^k$ that species $i$ is found in patch $k$. (Here and elsewhere, subscripts refer to species and superscripts to patches.) Colonization rates of patch $k$ by species $i$, $C_i^k = \sum_{l=1}^N M_i^{kl} p_i^l$, are modeled using a species-dependent landscape matrix whose $(k,l)$th entry $M_i^{kl}$ gives the dispersal rate of species $i$ from patch $l$ to $k$. In turn, extinction rates are obtained from the probability $\delta_i^k$ that species $i$ disappears from patch $k$. As metapopulation models assume that migration operates on a slower time scale than local population dynamics \citep{Hanski1994}, we assume that within-patch extinction rates are not affected by the occupancy rates of other patches, so that within-patch extinction can be modelled as a Poisson process with rate $E_i^k$. So the probability of extinction occurring within one unit of time is $\delta_i^k = 1 - \exp(-E_i^k)$, from which $E_i^k = -\log(1-\delta_i^k)$. With these colonization and extinction rates, the model reads (\SI, Section~S2):
 \begin{equation}
   \label{eq:model}
   \frac{\ud p_i^k}{\ud t} = (1 - p_i^k) \sum_{l=1}^N M_i^{kl} p_i^l +
   p_i^k \log(1 - \delta_i^k) \qquad (i = 1, \ldots, S; \; k = 1, \ldots, N)
 \end{equation}
-The central idea of our approach is to couple these independent metapopulation equations by making the extinction probabilities $\delta_i^k$ depend on the local persistence probabilities of species $i$'s prey items via a Bayesian network representation of the food web \citep{Eklofetal2013MEE}. When modeling species extinctions using Bayesian networks, each species $i$ in patch $k$ has a baseline probability of extinction $\pi_i^k$; the species goes extinct with this probability even if it has full access to its resources. Second, the conditional probability of a species to go extinct in a patch depends on the fraction $f$ of its resources that are locally absent. This conditional probability increases monotonically with $f$, from the baseline probability $\pi_i^k$ to certainty as $f$ increases from $0$ to $1$. The marginal probability $\delta_i^k$ is then obtained by substituting all conditional probabilities into the law of total probability (Box~1; \SI, Section~\ref{SI:sec:BN}).
+The central idea of our approach is to couple these independent metapopulation equations by making the extinction probabilities $\delta_i^k$ depend on the local persistence probabilities of species $i$'s prey items via a Bayesian network representation of the food web \citep{Eklofetal2013MEE}. When modeling species extinctions using Bayesian networks, each species $i$ in patch $k$ has a baseline probability of extinction $\pi_i^k$; the species goes extinct with this probability even if it has full access to its resources. Second, the conditional probability of a species to go extinct in a patch depends on the fraction $f$ of its resources that are locally absent. This conditional probability increases monotonically with $f$, from the baseline probability $\pi_i^k$ to certainty as $f$ increases from $0$ to $1$. The marginal probability $\delta_i^k$ is then obtained by substituting all conditional probabilities into the law of total probability (Box~1; \SI, Section~S1).
 
-The model retains many known results from the classic metapopulation theory on which it is based. We can determine the persistence of any species $i$ by its metapopulation capacity $\lambda_i$: this quantity exceeding $1$ means the metapopulation persists at equilibrium, otherwise all $p_i^k$ are zero. For Eq.~\ref{eq:model}, $\lambda_i$ is given by the leading eigenvalue of the matrix $A_i^{kl} = -M_i^{kl} / \log(1 - \delta_i^k)$ (\SI, Section~\ref{SI:sec:simpleprops}). Also, the relative patch value $V_i^k = (\lambda_i - \lambda_i^{-k})/\lambda_i$ (where $\lambda_i^{-k}$ is species $i$'s metapopulation capacity after patch $k$ is removed) can be obtained as the normalized product of the dominant left and right eigenvectors of $A_i^{kl}$ \citep{OvaskainenHanski2001}. This quantity measures how important a patch is for the persistence of a species. We use it to rank the patches of a landscape with respect to their importance to the persistence of the metacommunity.
+The model retains many known results from the classic metapopulation theory on which it is based. We can determine the persistence of any species $i$ by its metapopulation capacity $\lambda_i$: this quantity exceeding $1$ means the metapopulation persists at equilibrium, otherwise all $p_i^k$ are zero. For Eq.~\ref{eq:model}, $\lambda_i$ is given by the leading eigenvalue of the matrix $A_i^{kl} = -M_i^{kl} / \log(1 - \delta_i^k)$ (\SI, Section~S3). Also, the relative patch value $V_i^k = (\lambda_i - \lambda_i^{-k})/\lambda_i$ (where $\lambda_i^{-k}$ is species $i$'s metapopulation capacity after patch $k$ is removed) can be obtained as the normalized product of the dominant left and right eigenvectors of $A_i^{kl}$ \citep{OvaskainenHanski2001}. This quantity measures how important a patch is for the persistence of a species. We use it to rank the patches of a landscape with respect to their importance to the persistence of the metacommunity.
 
 \subsection{Model parameterization}
 
-We first constructed four model food webs via the allometric method of \citet{Schneider2016} (\SI, Section~\ref{SI:sec:allo}). Each web has $400$ species, but with a varying fraction of consumer to basal species (200:200, 250:150, 300:100, and 350:50). To study how progressive habitat loss affects these webs, we generated five landscapes, each with $300$ uniformly distributed patches in the unit square. The landscape matrices were constructed by making their entries decline exponentially with the distance $d^{kl}$ between patches $k$ and $l$: $M_i^{kl} = \exp(-d^{kl} / \xi_i)$, where $\xi_i$ is the characteristic dispersal distance of species $i$.
+We first constructed four model food webs via the allometric method of \citet{Schneider2016} (\SI, Section~S5.1). Each web has $400$ species, but with a varying fraction of consumer to basal species (200:200, 250:150, 300:100, and 350:50). To study how progressive habitat loss affects these webs, we generated five landscapes, each with $300$ uniformly distributed patches in the unit square. The landscape matrices were constructed by making their entries decline exponentially with the distance $d^{kl}$ between patches $k$ and $l$: $M_i^{kl} = \exp(-d^{kl} / \xi_i)$, where $\xi_i$ is the characteristic dispersal distance of species $i$.
 
-We assume homogeneous landscapes where all patches have the same abiotic conditions and each patch can potentially harbor the full food web. This means that both the baseline extinction probabilities $\pi_i$ and dispersal distances $\xi_i$ are patch-independent. Their species-dependence may take one of two forms. First, they can be constant across all species, with $\pi_i = 0.2$ and $\xi_i = 0.055$. Second, they may be trophic level-based. We calculated the trophic level $T_i$ of each species $i$  as a prey-averaged trophic level (\citealp{WilliamsMartinez2004}; \SI, Section~\ref{SI:sec:tls}). Denoting their arithmetic average by $\overline{T}$, we set $\pi_i = 0.2 \, T_i / \overline{T}$ and $\xi_i = 0.055 \, T_i / \overline{T}$. The numerical factors adjust the arithmetic average $\overline{\pi}$ and $\overline{\xi}$ to be equal to $0.2$ and $0.055$ respectively, for a better comparison with the constant case. Additionally, to explore the role of habitat connectivity in general, we gradually increased $\xi_i$ from $0.01$ to $0.1$ (keeping it equal across species), and let $\pi_i$ be trophic level-based (\SI, Section~\ref{SI:sec:suppsim}).
+We assume homogeneous landscapes where all patches have the same abiotic conditions and each patch can potentially harbor the full food web. This means that both the baseline extinction probabilities $\pi_i$ and dispersal distances $\xi_i$ are patch-independent. Their species-dependence may take one of two forms. First, they can be constant across all species, with $\pi_i = 0.2$ and $\xi_i = 0.055$. Second, they may be trophic level-based. We calculated the trophic level $T_i$ of each species $i$  as a prey-averaged trophic level (\citealp{WilliamsMartinez2004}; \SI, Section~S5.2). Denoting their arithmetic average by $\overline{T}$, we set $\pi_i = 0.2 \, T_i / \overline{T}$ and $\xi_i = 0.055 \, T_i / \overline{T}$. The numerical factors adjust the arithmetic average $\overline{\pi}$ and $\overline{\xi}$ to be equal to $0.2$ and $0.055$ respectively, for a better comparison with the constant case. Additionally, to explore the role of habitat connectivity in general, we gradually increased $\xi_i$ from $0.01$ to $0.1$ (keeping it equal across species), and let $\pi_i$ be trophic level-based (\SI, Section~S6).
 
 We also looked at how the functional form of a consumer's response to the loss of resources affects the response of a food web to habitat loss, by implementing four different forms of the response function. All are described by regularized beta functions of the fraction $f$ of resource species lost, with different shape parameters $\alpha$ and $\beta$:
 \begin{enumerate}
@@ -151,7 +149,7 @@ We also looked at how the functional form of a consumer's response to the loss o
 
 \subsection{Implementing habitat loss}
 
-First, we obtain the equilibrium patch occupancies for each food web on each landscape. We do so beginning with the basal species (for whom $\delta_i^k = \pi_i^k$), by solving for their equilibrium state in Eq.~\ref{eq:model} (\SI, Section~\ref{SI:sec:simpleprops}). We use these occupancy data and the Bayesian network representation of the food web (Box~1) to obtain their $\delta_i^k$. With these parameters, we then solve Eq.~\ref{eq:model} for all those species consuming only basal ones. We then obtain their $\delta_i^k$ in turn, and go on to solve for the patch occupancies of species consuming only basal- and primary consumer species---and so on, until top predators are reached (\SI, Section~\ref{SI:sec:BN}-\ref{SI:sec:tmm}).
+First, we obtain the equilibrium patch occupancies for each food web on each landscape. We do so beginning with the basal species (for whom $\delta_i^k = \pi_i^k$), by solving for their equilibrium state in Eq.~\ref{eq:model} (\SI, Section~S3). We use these occupancy data and the Bayesian network representation of the food web (Box~1) to obtain their $\delta_i^k$. With these parameters, we then solve Eq.~\ref{eq:model} for all those species consuming only basal ones. We then obtain their $\delta_i^k$ in turn, and go on to solve for the patch occupancies of species consuming only basal- and primary consumer species---and so on, until top predators are reached (\SI, Section~S1-S2).
 
 We start implementing habitat loss if at least one consumer species persists. We do this by gradually removing patches from each landscape, always $10$ at a time. The order of removal differs between three habitat loss scenarios:
 \begin{enumerate}
@@ -161,14 +159,14 @@ We start implementing habitat loss if at least one consumer species persists. We
 \end{enumerate}
 The patch ranking formula only applies for small perturbations of the landscape. Therefore, after each patch loss step (simultaneous removal of $10$ patches), we recalculate the patch values to re-rank the order in which we will remove patches next. We repeat this process until either all but basal species have gone extinct, or less than two patches remain in a landscape. Figure~\ref{fig:loss_example} illustrates the habitat loss scenarios by displaying the patch occupancies for a basal species and a top predator over a landscape.
 
-For the linear functional form of predator response to prey loss ($\alpha = \beta = 1$), we additionally looked at removing patches based on the patch value rankings of top species, instead of basal ones (\SI, Section~\ref{SI:sec:tsfs}). This means that patch removal was stopped whenever the top species have gone extinct.
+For the linear functional form of predator response to prey loss ($\alpha = \beta = 1$), we additionally looked at removing patches based on the patch value rankings of top species, instead of basal ones (\SI, Section~S6.2). This means that patch removal was stopped whenever the top species have gone extinct.
 
-Finally, we have also implemented a numerical experiment where we remove the links connecting the patches, instead of the patches themselves. This was also done in a random, best-case, and worst-case sequence (\SI, Section~\ref{SI:sec:linkrem}). Link removal expresses the assumption that individuals have more difficulty travelling across patches due to the deterioration of the habitat matrix, even though the patches themselves are intact.
+Finally, we have also implemented a numerical experiment where we remove the links connecting the patches, instead of the patches themselves. This was also done in a random, best-case, and worst-case sequence (\SI, Section~S9). Link removal expresses the assumption that individuals have more difficulty travelling across patches due to the deterioration of the habitat matrix, even though the patches themselves are intact.
 
 
 \section{Results} \label{sec:results}
 
-Our approach can be used to obtain analytical approximations for the metapopulation capacities in simple food web structures (\SI, Section~\ref{SI:sec:anal}). One such structure is a linear food chain (species $1$ is the basal species eaten by species $2$, which is in turn eaten by species $3$, and so on, until the top species) over a homogeneous landscape (baseline extinction probabilities are patch-independent, $\pi_i^k = \pi_i$). In this case the following recursion equation approximates the metapopulation capacities $\lambda_i$:
+Our approach can be used to obtain analytical approximations for the metapopulation capacities in simple food web structures (\SI, Section~S4). One such structure is a linear food chain (species $1$ is the basal species eaten by species $2$, which is in turn eaten by species $3$, and so on, until the top species) over a homogeneous landscape (baseline extinction probabilities are patch-independent, $\pi_i^k = \pi_i$). In this case the following recursion equation approximates the metapopulation capacities $\lambda_i$:
 \begin{equation}
   \label{eq:chain_full}
   \lambda_{i+1} \approx \frac{\lambda_{M_{i+1}}}{\lambda_{M_i} / \lambda_i
@@ -180,14 +178,14 @@ for all $i > 1$, and $\lambda_1 = -\lambda_{M_1} / \log(1-\pi_1)$ for the basal 
   \lambda_{i+1} \approx \frac{\lambda_M}{\lambda_M / \lambda_i
     - \log \left[ (1 - \pi) (1-1/\lambda_i) \right]}
 \end{equation}
-One can show that Eq.~\ref{eq:chain} implies strictly decreasing metapopulation capacities with increasing trophic level, eventually dropping them below $1$ (\SI, Section~\ref{SI:sec:chain}). This imposes a limit on the maximum length of the trophic chain, because species persistence requires $\lambda_i > 1$. The following simple approximation can be derived for the maximum number of trophic levels $T$:
+One can show that Eq.~\ref{eq:chain} implies strictly decreasing metapopulation capacities with increasing trophic level, eventually dropping them below $1$ (\SI, Section~S4.2). This imposes a limit on the maximum length of the trophic chain, because species persistence requires $\lambda_i > 1$. The following simple approximation can be derived for the maximum number of trophic levels $T$:
 \begin{equation}
   \label{eq:Tapprox}
   T = -\lambda_M \log(\pi)
 \end{equation}
-Empirical estimates of $\lambda_M$ from three different butterfly metapopulations \citep{Hanski1994} gave $3.9$, $0.97$, and $0.74$ (\SI, Section~\ref{SI:sec:chain}). If these are indeed typical values, then Eq.~\ref{eq:Tapprox} reveals that trophic chain length is quite restricted unless $\pi$ is quite low (Figure~\ref{fig:TL_chain}). For instance, with $\lambda_M=2$ and $\pi=0.1$, the number of trophic levels is already limited to $5$ at most. The upshot is that, quite apart from energetic or other constraints, the simple realities of metacommunity structure alone can restrict the maximum possible number of trophic levels to a handful---a conclusion consistent with an earlier study employing a slightly different modeling approach \citep{Calcagnoetal2011}.
+Empirical estimates of $\lambda_M$ from three different butterfly metapopulations \citep{Hanski1994} gave $3.9$, $0.97$, and $0.74$ (\SI, Section~S4.2). If these are indeed typical values, then Eq.~\ref{eq:Tapprox} reveals that trophic chain length is quite restricted unless $\pi$ is quite low (Figure~\ref{fig:TL_chain}). For instance, with $\lambda_M=2$ and $\pi=0.1$, the number of trophic levels is already limited to $5$ at most. The upshot is that, quite apart from energetic or other constraints, the simple realities of metacommunity structure alone can restrict the maximum possible number of trophic levels to a handful---a conclusion consistent with an earlier study employing a slightly different modeling approach \citep{Calcagnoetal2011}.
 
-Beyond such simple food web structures, one can rely on numerical solutions to Eq.~\ref{eq:model}, which we have done to explore our four large model food webs. Since they produce similar trends, we present results for the one with $300$ consumer and $100$ basal species (Figure~\ref{fig:patchloss}; see \SI, Section~\ref{SI:sec:suppsim} for the others). The extent to which habitat loss threatens species persistence differs significantly between patch removal scenarios. In the best-case scenario, unless consumer response to prey absence is described by a strongly concave function (Figure~\ref{fig:patchloss}C), species have a high chance to persist even if a large fraction of habitat patches are lost. This applies to species at all trophic levels, though metapopulation capacities are generally higher at lower levels. By contrast, in the random and worst-case scenarios, species across all trophic levels have a much higher risk of extinction even after moderate levels of habitat removal. Interestingly, it makes almost no difference whether habitat loss starts with the most valuable patches or occurs randomly. This means that random patch removal is practically as harmful to a metacommunity as if one intentionally tried to cause the greatest damage. This pattern was observed for all food webs, landscapes, and parameterizations, and highlights the importance of planned landscape alterations whereby only patches of low value are removed. Note however that when removing links between patches instead of the patches themselves, random removal falls more in-between the best- and worst-case link removal scenarios, even though all other aspects of the results are qualitatively identical (\SI, Section~\ref{SI:sec:linkrem}).
+Beyond such simple food web structures, one can rely on numerical solutions to Eq.~\ref{eq:model}, which we have done to explore our four large model food webs. Since they produce similar trends, we present results for the one with $300$ consumer and $100$ basal species (Figure~\ref{fig:patchloss}; see \SI, Section~S6 for the others). The extent to which habitat loss threatens species persistence differs significantly between patch removal scenarios. In the best-case scenario, unless consumer response to prey absence is described by a strongly concave function (Figure~\ref{fig:patchloss}C), species have a high chance to persist even if a large fraction of habitat patches are lost. This applies to species at all trophic levels, though metapopulation capacities are generally higher at lower levels. By contrast, in the random and worst-case scenarios, species across all trophic levels have a much higher risk of extinction even after moderate levels of habitat removal. Interestingly, it makes almost no difference whether habitat loss starts with the most valuable patches or occurs randomly. This means that random patch removal is practically as harmful to a metacommunity as if one intentionally tried to cause the greatest damage. This pattern was observed for all food webs, landscapes, and parameterizations, and highlights the importance of planned landscape alterations whereby only patches of low value are removed. Note however that when removing links between patches instead of the patches themselves, random removal falls more in-between the best- and worst-case link removal scenarios, even though all other aspects of the results are qualitatively identical (\SI, Section~S9).
 
 Both the baseline extinction probability $\pi_i$ and dispersal distance $\xi_i$ affect the described outcomes, but in most cases do not change the overall trends (Figure~\ref{fig:patchloss}). If $\pi_i$ (but not $\xi_i$) increases with trophic level, differences in metapopulation capacity across trophic levels are elevated compared to the constant case, with higher values for lower trophic levels. When both $\pi_i$ and $\xi_i$ increase with trophic level (a likely scenario if trophic level and body mass are correlated, since larger-bodied organisms disperse faster and also tend to have lower population sizes, increasing extinction risk), these differences are reduced, and metapopulation capacities start decreasing even after moderate habitat loss. Finally, when $\xi_i$ but not $\pi_i$ increases with trophic level, we find a reversed relationship between metapopulation capacity and trophic level for low to moderate habitat loss, with higher trophic levels now also having higher metapopulation capacities. In line with our Bayesian network approach which neglects top-down effects, species at the top of the food web generally have lower metapopulation capacities and are more likely to go extinct than species at lower levels. The reason we do not see this here is that the stronger landscape connectivity gained by faster dispersal at higher trophic levels offsets the increased risk of extinction due to local prey absence.
 
@@ -195,7 +193,7 @@ Note that, while we have assumed that dispersal ability is either constant or in
 
 Changing the functional form of a consumer's response to the loss of its resources alters the overall, absolute scaling of the metapopulation capacities, with little effect on their relative values (compare Figure~\ref{fig:patchloss}A-D). For functional forms leading to reduced metapopulation capacities, this means extinctions happen at lower numbers of removed patches. In the case of a concave response function for instance, we find that the highest trophic levels are often unable to persist even on a fully intact landscape. This is because their persistence probabilities are disproportionately reduced by the absence of even a few of their prey items.
 
-Predictably, an overall increase in habitat connectivity, emulated by gradually increasing $\xi_i$ from $0.01$ to $0.1$ (keeping it equal across species, and letting $\pi_i$ be trophic level-based), acts as a general buffer against species extinctions up until habitat loss becomes too severe (\SI, Section~\ref{SI:sec:suppsim}). Also, removing patches based on the patch value rankings of top species instead of basal ones does not alter the general patterns we observed, at least for the linear consumer response to prey loss we tested ($\alpha = \beta = 1$). The only difference is that, since patch removal is stopped whenever the top species go extinct, there is no information on metapopulation capacities beyond that point (\SI, Section~\ref{SI:sec:tsfs}). Finally, we have also checked what happens over landscapes where patches are arranged in a more regular, grid-like manner than expected by chance (\SI, Section~\ref{SI:sec:gridlike}). It turns out that more regular landscapes behave much like random ones; however, they lead to reduce metapopulation capacities overall, hindering metacommunity persistence.
+Predictably, an overall increase in habitat connectivity, emulated by gradually increasing $\xi_i$ from $0.01$ to $0.1$ (keeping it equal across species, and letting $\pi_i$ be trophic level-based), acts as a general buffer against species extinctions up until habitat loss becomes too severe (\SI, Section~S6). Also, removing patches based on the patch value rankings of top species instead of basal ones does not alter the general patterns we observed, at least for the linear consumer response to prey loss we tested ($\alpha = \beta = 1$). The only difference is that, since patch removal is stopped whenever the top species go extinct, there is no information on metapopulation capacities beyond that point (\SI, Section~S6.2). Finally, we have also checked what happens over landscapes where patches are arranged in a more regular, grid-like manner than expected by chance (\SI, Section~S10). It turns out that more regular landscapes behave much like random ones; however, they lead to reduce metapopulation capacities overall, hindering metacommunity persistence.
 
 
 \section{A case study} \label{sec:empirical}
@@ -204,11 +202,11 @@ We demonstrate that our framework can be readily applied to empirical systems us
 
 The Serengeti food web data set \citep{Baskerville2011} contains a total of 161 species and 592 feeding links across three distinct trophic levels, with 9 carnivore species feeding on 23 herbivore species feeding on 129 plant species. Apart from a single cannibalistic link (belonging to \textit{Panthera leo}, the lion), the web is completely acyclic. Since the Bayesian network approach requires acyclic networks, we removed this self-link from the data.
 
-In their work, \citet{Baskerville2011} used a modified version of the group model \citep{AllesinaPascual2009ELE} and showed that the web contains functionally distinct groups of plants strongly associated with habitat types, connected to distinct groups of primary consumers that in turn are connected to distinct groups of secondary consumers. The nested network structure coupled to a spatial component, together with a high species richness, make the Serengeti food web a good case study to apply our method to. However, since there are only three distinct trophic levels in this system (with a strong bias towards basal species), we use the groups to parameterize our model in addition to the constant and trophic level-based parameterizations we relied on earlier (\SI, Section~\ref{SI:sec:suppsim}). We follow the group labeling in \citet{Baskerville2011} and assign carnivores to groups 1-2, herbivores to groups 3-6, and basal species to groups 7-14. Since group labels decrease with trophic level but we would like both the baseline extinction probabilities $\pi_i$ and dispersal distances $\xi_i$ to increase with them, we define $\pi_i = 0.2 \, (15 - G_i) / \overline{G}$ and $\xi_i = 0.055 \, (15 - G_i) / \overline{G}$, where $G_i$ is the group index and $\overline{G}$ their arithmetic average. While this particular parameterization of groups within a trophic level does not have any specific ecological relevance, it demonstrates how parameter values can be assigned if, for example, ecological information on dispersal properties for certain groups of species is available.
+In their work, \citet{Baskerville2011} used a modified version of the group model \citep{AllesinaPascual2009ELE} and showed that the web contains functionally distinct groups of plants strongly associated with habitat types, connected to distinct groups of primary consumers that in turn are connected to distinct groups of secondary consumers. The nested network structure coupled to a spatial component, together with a high species richness, make the Serengeti food web a good case study to apply our method to. However, since there are only three distinct trophic levels in this system (with a strong bias towards basal species), we use the groups to parameterize our model in addition to the constant and trophic level-based parameterizations we relied on earlier (\SI, Section~S6). We follow the group labeling in \citet{Baskerville2011} and assign carnivores to groups 1-2, herbivores to groups 3-6, and basal species to groups 7-14. Since group labels decrease with trophic level but we would like both the baseline extinction probabilities $\pi_i$ and dispersal distances $\xi_i$ to increase with them, we define $\pi_i = 0.2 \, (15 - G_i) / \overline{G}$ and $\xi_i = 0.055 \, (15 - G_i) / \overline{G}$, where $G_i$ is the group index and $\overline{G}$ their arithmetic average. While this particular parameterization of groups within a trophic level does not have any specific ecological relevance, it demonstrates how parameter values can be assigned if, for example, ecological information on dispersal properties for certain groups of species is available.
 
 The original dataset does not contain any explicit spatial arrangement of the food web in a landscape. Therefore we use the same approach here as for our model food webs and construct a landscape of $300$ patches uniformly placed in the unit square. In the best- and worst-case habitat loss scenarios, we ranked patches for removal based on their contribution to the metapopulation capacity of a basal species. This species was chosen to be the Gum arabic tree (\textit{Acacia senegal}), because it is a basal species that is also the sole member of spatial group $12$.
 
-The patterns we obtain for the Serengeti food web when $\pi_i$ and $\xi_i$ are constant or trophic level-based are consistent with the results found for the model food webs (\SI, Section~\ref{SI:sec:suppsim}), with one exception. We find that the negative effect of a concave predator response on metacommunity persistence is strongly mitigated, with the metacommunity persisting even under severe habitat loss and a worst-case patch removal scenario. This is in contrast to the pattern seen in the model food webs, where the concave form immediately leads to the loss of the topmost trophic levels. However, this result is an artifact of the overabundance of basal species in the Serengeti dataset, and the low baseline extinction probability they all receive under a strictly trophic level-based parameterization. When parameters are spatial group-based (Figure~\ref{fig:Serengeti}), the better resolution of the parameterization leads to an outcome in line with those seen in the model food webs when both $\pi_i$ and $\xi_i$ are trophic level-based.
+The patterns we obtain for the Serengeti food web when $\pi_i$ and $\xi_i$ are constant or trophic level-based are consistent with the results found for the model food webs (\SI, Section~S6), with one exception. We find that the negative effect of a concave predator response on metacommunity persistence is strongly mitigated, with the metacommunity persisting even under severe habitat loss and a worst-case patch removal scenario. This is in contrast to the pattern seen in the model food webs, where the concave form immediately leads to the loss of the topmost trophic levels. However, this result is an artifact of the overabundance of basal species in the Serengeti dataset, and the low baseline extinction probability they all receive under a strictly trophic level-based parameterization. When parameters are spatial group-based (Figure~\ref{fig:Serengeti}), the better resolution of the parameterization leads to an outcome in line with those seen in the model food webs when both $\pi_i$ and $\xi_i$ are trophic level-based.
 
 
 \section{Discussion} \label{sec:discussion}
@@ -227,7 +225,7 @@ However, regardless of such details, it follows from the structure of our model 
 
 Despite its tractability, computational efficiency, and straightforward parameterizability, our metacommunity approach also has idiosyncrasies and important limitations. First, it should be noted that only extinction rates depend on species interactions, not colonization rates. This may look strange, implying that a predator $i$ may establish in a patch $k$ that is devoid of any prey. That, however, turns out to be irrelevant, because the extinction probability $\delta_i^k$ of the predator in such a patch is equal to one. Thus, the extinction rate $E_i^k = -\log(1-\delta_i^k)$ is infinitely large, immediately negating the effect of the colonization process (Eq.~\ref{eq:model}). While incorporating interaction-dependent colonization in the model is definitely a promising avenue for future development, the lack of this dependence does not undermine the model's results or applicability.
 
-Second, throughout this work, we have made conditional predator extinction probabilities either a function of the fraction, or weighted fraction (\SI, Section~\ref{SI:sec:weighted}), of prey species lost. There may be cases when it is better to make them some absolute function of the available prey in a given location---such as for opportunistic feeders which consume anything within a certain size range. Fortunately, our model is extensible to deal with such scenarios (\SI, Section~\ref{SI:sec:BN}), though at the cost of replacing Eq.~\ref{eq:BN_prob} with something more complicated.
+Second, throughout this work, we have made conditional predator extinction probabilities either a function of the fraction, or weighted fraction (\SI, Section~S7), of prey species lost. There may be cases when it is better to make them some absolute function of the available prey in a given location---such as for opportunistic feeders which consume anything within a certain size range. Fortunately, our model is extensible to deal with such scenarios (\SI, Section~S1), though at the cost of replacing Eq.~\ref{eq:BN_prob} with something more complicated.
 
 Third, the calculation of extinction rates depends heavily on the assumption of the separation of time scales between extinction and colonization: the Bayesian network method of calculating extinction probabilities assumes that there is no chance of an extinction cascade within a patch being stopped by a colonist of a prey species arriving midway through. This essentially means that mass effects are assumed not to influence extinction dynamics. It also explicitly assumes that everything is in (quasi-)equilibrium when calculating local extinction rates, so our method might not be suited for calculating extinction debts or patch occupancy dynamics far from equilibrium.
 
@@ -235,9 +233,7 @@ Fourth, the food web structure must be acyclic (no ``A eats B eats C eats A'' sc
 
 Finally, an important limitation is that species' dynamics depend only on the persistence probabilities of their prey, not their predators. In real food webs, secondary extinctions can emerge bottom-up (if consumers lose their resources), and top-down, by resources responding to the loss of their consumers. Species may, for example, be locally predated to extinction \citep{Huffaker1958, Schoeneretal2001}, and the loss of a predator can release a prey species which then grows to the point of eliminating other species in the web \citep{Paine1966, Paine1974, LaffertySuchanek2016}. However, since Bayesian networks operate on a strict bottom-up principle whereby prey influence their predators but not vice versa (from the perspective of prey, their predators might as well not even be present), extinctions resulting from top-down effects are not implemented in our framework. This is a severe limitation; moreover, there is no immediate, straightforward remedy that would unambiguously extend the model to take top-down effects into account. This has to be considered when interpreting its results and applying the method to empirical systems: if, in a given system, top-down effects are deemed important, other methods should be used instead.
 
-The current consensus within community ecology is that new ways of thinking about trophic metacommunities are needed to move the field forward \citep{LeiboldChase2018, Guzman2018, Hirtetal2018}. Here we offered one possible approach to this problem, rooted in classic metapopulation theory and the method of Bayesian networks. Due to its flexibility and ability to handle large systems, we see our approach as a stepping-stone along the way to a fuller understanding. Our numerical experiments demonstrate that preserving high-value patches increases the likelihood of community persistence, even under severe habitat loss. Increasingly isolated landscapes, on the other hand, accelerate species extinctions and particularly drive top species towards extinction, reducing trophic complexity.  Using a different methodology, similar trends have been observed by \citet{Ryser2019}; in fact, our model qualitatively reproduces their results (\SI, Section~\ref{SI:sec:ryser}). Our findings reinforce that trophic interactions, dispersal ability, and the spatial configuration of patches are crucial when assessing the extinction risk of species in fragmented landscapes. We hope that our method will be of use to ecologists interested in metacommunity processes and to provide useful insights for real-life conservation efforts to preserve complex trophic communities.
-
-%\newpage
+The current consensus within community ecology is that new ways of thinking about trophic metacommunities are needed to move the field forward \citep{LeiboldChase2018, Guzman2018, Hirtetal2018}. Here we offered one possible approach to this problem, rooted in classic metapopulation theory and the method of Bayesian networks. Due to its flexibility and ability to handle large systems, we see our approach as a stepping-stone along the way to a fuller understanding. Our numerical experiments demonstrate that preserving high-value patches increases the likelihood of community persistence, even under severe habitat loss. Increasingly isolated landscapes, on the other hand, accelerate species extinctions and particularly drive top species towards extinction, reducing trophic complexity.  Using a different methodology, similar trends have been observed by \citet{Ryser2019}; in fact, our model qualitatively reproduces their results (\SI, Section~S8). Our findings reinforce that trophic interactions, dispersal ability, and the spatial configuration of patches are crucial when assessing the extinction risk of species in fragmented landscapes. We hope that our method will be of use to ecologists interested in metacommunity processes and to provide useful insights for real-life conservation efforts to preserve complex trophic communities.
 
 
 \section*{Acknowledgments} \label{sec:thanks}
@@ -245,10 +241,420 @@ The current consensus within community ecology is that new ways of thinking abou
 We thank T.~Lindstr\"om, B.~Rosenbaum, B.~Rall, and U.~Brose for discussions. We carried out numerical work on the high-performance computing cluster EVE of the Helmholtz Centre for Environmental Research (UFZ) and iDiv; we thank the EVE staff for their support. JH was supported by the German Research Foundation (DFG) in the framework of the research unit FOR 1748---Network on Networks: The interplay of structure and dynamics in spatial ecological networks (RA 2339/2-2). JH was also supported by the German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig funded by the German Research Foundation (FZT 118). GB and AE acknowledge funding by the Swedish Research Council (grant VR 2017-05245 to GB, VR 2016-04919 to AE).
 
 
-%\clearpage
+\begin{thebibliography}{59}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 
-\bibliographystyle{ecollet}
-\bibliography{biblio.bib}
+\bibitem[{Allesina \emph{et~al.}(2009)Allesina, Bodini \&
+  Pascual}]{Allesinaetal2009}
+Allesina, S., Bodini, A. \& Pascual, M. (2009).
+\newblock Functional links and robustness in food webs.
+\newblock \emph{Philosophical Transactions of the Royal Society B}, 364,
+  1701--1709.
+
+\bibitem[{Allesina \& Pascual(2009)}]{AllesinaPascual2009ELE}
+Allesina, S. \& Pascual, M. (2009).
+\newblock Food web models: a plea for groups.
+\newblock \emph{Ecology Letters}, 12, 652--662.
+
+\bibitem[{{\AA}revall \emph{et~al.}(2018){\AA}revall, Early, Estrada,
+  Wennergren \& Ekl{\"o}f}]{Arevalletal2018}
+{\AA}revall, J., Early, R., Estrada, A., Wennergren, U. \& Ekl{\"o}f, A.
+  (2018).
+\newblock Conditions for successful range shifts under climate change: The role
+  of species dispersal and landscape configuration.
+\newblock \emph{Diversity and Distributions}, 24, 1598--1611.
+
+\bibitem[{Baskerville \emph{et~al.}(2011)Baskerville, Dobson, Bedford,
+  Allesina, Anderson \& Pascual}]{Baskerville2011}
+Baskerville, Edward~B., Dobson, Andy~P., Bedford, Trevor, Allesina, Stefano,
+  Anderson, T.~Michael \& Pascual, Mercedes (2011).
+\newblock Spatial guilds in the serengeti food web revealed by a bayesian group
+  model.
+\newblock \emph{PLOS Computational Biology}, 7, 1--11.
+
+\bibitem[{Beisner \emph{et~al.}(2006)Beisner, Peres-Neto, Lindstr{\"o}m,
+  Barnett \& Longhi}]{Beisneretal2006}
+Beisner, B.~E., Peres-Neto, P.~R., Lindstr{\"o}m, E.~S., Barnett, A. \& Longhi,
+  M.~L. (2006).
+\newblock The role of environmental and spatial processes in structuring lake
+  communities from bacteria to fish.
+\newblock \emph{Ecology}, 87, 2985--2991.
+
+\bibitem[{Berlow \emph{et~al.}(2009)Berlow, Dunne, Martinez, Stark, Williams \&
+  Brose}]{Berlow2009}
+Berlow, Eric~L., Dunne, Jennifer~A., Martinez, Neo~D., Stark, Philip~B.,
+  Williams, Richard~J. \& Brose, Ulrich (2009).
+\newblock Simple prediction of interaction strengths in complex food webs.
+\newblock \emph{of the National Academy of Sciences}, 106, 187--191.
+
+\bibitem[{Binzer \emph{et~al.}(2011)Binzer, Brose, Curtsdotter, Eklöf, Rall,
+  Riede \& de~Castro}]{Binzer2011}
+Binzer, Amrei, Brose, Ulrich, Curtsdotter, Alva, Eklöf, Anna, Rall, Björn~C.,
+  Riede, Jens~O. \& de~Castro, Francisco (2011).
+\newblock The susceptibility of species to extinctions in model communities.
+\newblock \emph{Basic and Applied Ecology}, 12, 590--599.
+
+\bibitem[{Bonte \emph{et~al.}(2012)Bonte, Van~Dyck, Bullock, Coulon, Delgado,
+  Gibbs \emph{et~al.}}]{Bonte2012}
+Bonte, Dries, Van~Dyck, Hans, Bullock, James~M., Coulon, Aurélie, Delgado,
+  Maria, Gibbs, Melanie \emph{et~al.} (2012).
+\newblock Costs of dispersal.
+\newblock \emph{Biological Reviews}, 87, 290--312.
+
+\bibitem[{Brose \emph{et~al.}(2017)Brose, Blanchard, Eklöf, Galiana, Hartvig,
+  R.~Hirt, Kalinkat, Nordström, O'Gorman, Rall, Schneider, Thébault \&
+  Jacob}]{Broseetal2017}
+Brose, Ulrich, Blanchard, Julia~L., Eklöf, Anna, Galiana, Nuria, Hartvig,
+  Martin, R.~Hirt, Myriam, Kalinkat, Gregor, Nordström, Marie~C., O'Gorman,
+  Eoin~J., Rall, Björn~C., Schneider, Florian~D., Thébault, Elisa \& Jacob,
+  Ute (2017).
+\newblock Predicting the consequences of species loss using size-structured
+  biodiversity approaches.
+\newblock \emph{Biological Reviews}, 92, 684--697.
+
+\bibitem[{Calcagno \emph{et~al.}(2011)Calcagno, Massol, Mouquet, Jarne \&
+  David}]{Calcagnoetal2011}
+Calcagno, V., Massol, G., Mouquet, N., Jarne, P. \& David, P. (2011).
+\newblock Constraints on food chain length arising from regional metacommunity
+  dynamics.
+\newblock \emph{Proceedings of the Royal Society B}, 278, 3042--3049.
+
+\bibitem[{Cardillo \emph{et~al.}(2005)Cardillo, Mace, Jones, Bielby,
+  Bininda-Emonds, Sechrest, Orme \& Purvis}]{Cardillo2005}
+Cardillo, Marcel, Mace, Georgina~M., Jones, Kate~E., Bielby, Jon,
+  Bininda-Emonds, Olaf R.~P., Sechrest, Wes, Orme, C. David~L. \& Purvis, Andy
+  (2005).
+\newblock Multiple causes of high extinction risk in large mammal species.
+\newblock \emph{Science}, 309, 1239--1241.
+
+\bibitem[{Cazelles \emph{et~al.}(2015)Cazelles, Mouquet, Mouillot \&
+  Gravel}]{Cazellesetal2015}
+Cazelles, K., Mouquet, N., Mouillot, D. \& Gravel, D. (2015).
+\newblock On the integration of biotic interaction and environmental
+  constraints at the biogeographical scale.
+\newblock \emph{Ecography}, 39, 921--931.
+
+\bibitem[{Curtsdotter \emph{et~al.}(2011)Curtsdotter, Binzer, Brose, de~Castro,
+  Ebenman, Eklöf, Riede, Thierry \& Rall}]{Curtsdotter2011}
+Curtsdotter, Alva, Binzer, Amrei, Brose, Ulrich, de~Castro, Francisco, Ebenman,
+  Bo, Eklöf, Anna, Riede, Jens~O., Thierry, Aaron \& Rall, Björn~C. (2011).
+\newblock Robustness to secondary extinctions: Comparing trait-based sequential
+  deletions in static and dynamic food webs.
+\newblock \emph{Basic and Applied Ecology}, 12, 571--580.
+
+\bibitem[{Davidson \emph{et~al.}(2009)Davidson, Hamilton, Boyer, Brown \&
+  Ceballos}]{Davidson2009}
+Davidson, Ana~D., Hamilton, Marcus~J., Boyer, Alison~G., Brown, James~H. \&
+  Ceballos, Gerardo (2009).
+\newblock Multiple ecological pathways to extinction in mammals.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 106,
+  10702--10705.
+
+\bibitem[{Dunne \& Williams(2009)}]{Dunne2009}
+Dunne, Jennifer~A. \& Williams, Richard~J. (2009).
+\newblock Cascading extinctions and community collapse in model food webs.
+\newblock \emph{Philosophical Transactions of the Royal Society B: Biological
+  Sciences}, 364, 1711--1723.
+
+\bibitem[{Ebenman \& Jonsson(2005)}]{EbenmanJonsson2005}
+Ebenman, Bo \& Jonsson, Tomas (2005).
+\newblock Using community viability analysis to identify fragile systems and
+  keystone species.
+\newblock \emph{Trends in Ecology and Evolution}, 20, 568--575.
+
+\bibitem[{Ekl\"{o}f \emph{et~al.}(2013)Ekl\"{o}f, Tang \&
+  Allesina}]{Eklofetal2013MEE}
+Ekl\"{o}f, A., Tang, S. \& Allesina, S. (2013).
+\newblock {Secondary extinctions in food webs: a Bayesian network approach}.
+\newblock \emph{Methods in Ecology and Evolution}, 4, 760--770.
+
+\bibitem[{Eklöf \& Ebenman(2006)}]{EklofEbenman2006}
+Eklöf, Anna \& Ebenman, Bo (2006).
+\newblock Species loss and secondary extinctions in simple and complex model
+  communities.
+\newblock \emph{Journal of Animal Ecology}, 75, 239--246.
+
+\bibitem[{Eklöf \emph{et~al.}(2012)Eklöf, Kaneryd \& Münger}]{Eklof2012}
+Eklöf, Anna, Kaneryd, Linda \& Münger, Peter (2012).
+\newblock Climate change in metacommunities: dispersal gives double-sided
+  effects on persistence.
+\newblock \emph{Philosophical Transactions of the Royal Society B: Biological
+  Sciences}, 367, 2945--2954.
+
+\bibitem[{Gaston \& Blackburn(1995)}]{GastonBlackburn1995}
+Gaston, Kevin~J. \& Blackburn, Tim~M. (1995).
+\newblock Birds, body size and the threat of extinction.
+\newblock \emph{Philosophical Transactions of the Royal Society of London.
+  Series B: Biological Sciences}, 347, 205--212.
+
+\bibitem[{Gibert \& Yeakel(2019)}]{GibertYeakel2019}
+Gibert, J.~P. \& Yeakel, J.~D. (2019).
+\newblock Laplacian matrices and turing bifurcations: revisiting levin 1974 and
+  the consequences of spatial structure and movement for ecological dynamics.
+\newblock \emph{Theoretical Ecology}, 12, 265--281.
+
+\bibitem[{Gravel \emph{et~al.}(2011{\natexlab{a}})Gravel, Canard, Guichard \&
+  Mouquet}]{Gravel2011PONE}
+Gravel, Dominique, Canard, Elsa, Guichard, Frédéric \& Mouquet, Nicolas
+  (2011{\natexlab{a}}).
+\newblock Persistence increases with diversity and connectance in trophic
+  metacommunities.
+\newblock \emph{PLOS ONE}, 6, 1--9.
+
+\bibitem[{Gravel \emph{et~al.}(2011{\natexlab{b}})Gravel, Massol, Canard,
+  Mouillot \& Mouquet}]{Gravel2011ELE}
+Gravel, D., Massol, F., Canard, E., Mouillot, D. \& Mouquet, N.
+  (2011{\natexlab{b}}).
+\newblock Trophic theory of island biogeography.
+\newblock \emph{Ecology Letters}, 14, 1010--1016.
+
+\bibitem[{Grilli \emph{et~al.}(2015)Grilli, Barab\'{a}s \&
+  Allesina}]{Grillietal2015}
+Grilli, J., Barab\'{a}s, G. \& Allesina, S. (2015).
+\newblock Metapopulation persistence in random fragmented landscapes.
+\newblock \emph{PLoS Computational Biology}, 11, e1004251.
+
+\bibitem[{Guzman \emph{et~al.}(2018)Guzman, Germain, Forbes, Straus, O'Connor,
+  Gravel, Srivastava \& Thompson}]{Guzman2018}
+Guzman, Laura~Melissa, Germain, Rachel~M., Forbes, Coreen, Straus, Samantha,
+  O'Connor, Mary~I., Gravel, Dominique, Srivastava, Diane~S. \& Thompson,
+  Patrick~L. (2018).
+\newblock Towards a multi-trophic extension of metacommunity ecology.
+\newblock \emph{Ecology Letters}, 22, 19--33.
+
+\bibitem[{Haddad \emph{et~al.}(2015)Haddad, Brudvig, Clobert, Davies, Gonzalez,
+  Holt \emph{et~al.}}]{Haddad2015}
+Haddad, Nick~M., Brudvig, Lars~A., Clobert, Jean, Davies, Kendi~F., Gonzalez,
+  Andrew, Holt, Robert~D. \emph{et~al.} (2015).
+\newblock Habitat fragmentation and its lasting impact on
+  earth{\textquoteright}s ecosystems.
+\newblock \emph{Science Advances}, 1.
+
+\bibitem[{Hanski(1994)}]{Hanski1994}
+Hanski, I. (1994).
+\newblock A practical model of metapopulation dynamics.
+\newblock \emph{Journal of Animal Ecology}, 63, 151--162.
+
+\bibitem[{Hanski \& Ovaskainen(2000)}]{HanskiOvaskainen2000}
+Hanski, I. \& Ovaskainen, O. (2000).
+\newblock The metapopulation capacity of a fragmented landscape.
+\newblock \emph{Nature}, 404, 755--758.
+
+\bibitem[{Hanski \& Ovaskainen(2003)}]{HanskiOvaskainen2003}
+Hanski, I. \& Ovaskainen, O. (2003).
+\newblock Metapopulation theory for fragmented landscapes.
+\newblock \emph{Theoretical Population Biology}, 64, 119--127.
+
+\bibitem[{Hirt \emph{et~al.}(2018)Hirt, Grimm, Li, Rall, Rosenbaum \&
+  Brose}]{Hirtetal2018}
+Hirt, Myriam~R., Grimm, Volker, Li, Yuanheng, Rall, Björn~C., Rosenbaum,
+  Benjamin \& Brose, Ulrich (2018).
+\newblock Bridging scales: Allometric random walks link movement and
+  biodiversity research.
+\newblock \emph{Trends in Ecology and Evolution}, 33, 701--712.
+
+\bibitem[{Holt(2009)}]{Holt2009}
+Holt, R.~D. (2009).
+\newblock Towards a trophic island biogeography: reflections on the interface
+  of island biogeography and food web ecology.
+\newblock In: \emph{The Theory of Island Biogeography Revisited} (eds. Losos,
+  J.~B. \& Ricklefs, R.~E.).
+\newblock Princeton University Press, Princeton, New Jersey, USA, pp. 143--185.
+
+\bibitem[{Huffaker(1958)}]{Huffaker1958}
+Huffaker, C.~B. (1958).
+\newblock Experimental studies on predation: Dispersion factors and
+  predator-prey oscillations.
+\newblock \emph{Hilgardia}, 27, 795--834.
+
+\bibitem[{Kondoh(2003)}]{Kondoh2003}
+Kondoh, Michio (2003).
+\newblock Habitat fragmentation resulting in overgrazing by herbivores.
+\newblock \emph{Journal of Theoretical Biology}, 225, 453--460.
+
+\bibitem[{Lafferty \& Suchanek(2016)}]{LaffertySuchanek2016}
+Lafferty, K.~D. \& Suchanek, T.~H. (2016).
+\newblock {Revisiting Paine's 1966 Sea Star Removal Experiment, the Most-Cited
+  Empirical Article in the American Naturalist}.
+\newblock \emph{American Naturalist}, 188, 365--378.
+
+\bibitem[{Lee \& Jetz(2011)}]{LeeJetz2011}
+Lee, Tien~Ming \& Jetz, Walter (2011).
+\newblock Unravelling the structure of species extinction risk for predictive
+  conservation science.
+\newblock \emph{Proceedings of the Royal Society B: Biological Sciences}, 278,
+  1329--1338.
+
+\bibitem[{Leibold \& Chase(2018)}]{LeiboldChase2018}
+Leibold, M.~A. \& Chase, J.~M. (2018).
+\newblock \emph{Metacommunity ecology}.
+\newblock Princeton University Press, Princeton, New Jersey, USA.
+
+\bibitem[{Leibold \emph{et~al.}(2004)Leibold, Holyoak, Mouquet, Amarasekare,
+  Chase, Hoopes, Holt, Shurin, Law, Tilman, Loreau \& Gonzalez}]{Leibold2004}
+Leibold, M.~A., Holyoak, M., Mouquet, N., Amarasekare, P., Chase, J.~M.,
+  Hoopes, M.~F., Holt, R.~D., Shurin, J.~B., Law, R., Tilman, D., Loreau, M. \&
+  Gonzalez, A. (2004).
+\newblock {The metacommunity concept: a framework for multi-scale community
+  ecology}.
+\newblock \emph{Ecology Letters}, 7, 601--613.
+
+\bibitem[{Liao \emph{et~al.}(2017{\natexlab{a}})Liao, Bearup \&
+  Blasius}]{Liao2017JAE}
+Liao, Jinbao, Bearup, Daniel \& Blasius, Bernd (2017{\natexlab{a}}).
+\newblock Diverse responses of species to landscape fragmentation in a simple
+  food chain.
+\newblock \emph{Journal of Animal Ecology}, 86, 1169--1178.
+
+\bibitem[{Liao \emph{et~al.}(2017{\natexlab{b}})Liao, Bearup \&
+  Blasius}]{Liao2017RSPB}
+Liao, Jinbao, Bearup, Daniel \& Blasius, Bernd (2017{\natexlab{b}}).
+\newblock Food web persistence in fragmented landscapes.
+\newblock \emph{Proceedings of the Royal Society B: Biological Sciences}, 284,
+  20170350.
+
+\bibitem[{Liao \emph{et~al.}(2016)Liao, Chen, Ying, Hiebeler \&
+  Nijs}]{Liao2016}
+Liao, Jinbao, Chen, Jiehong, Ying, Zhixia, Hiebeler, David~E \& Nijs, Ivan
+  (2016).
+\newblock An extended patch-dynamic framework for food chains in fragmented
+  landscapes.
+\newblock \emph{Scientific Reports}, 6.
+
+\bibitem[{McWilliams \emph{et~al.}(2019)McWilliams, Lurgi, Montoya, Sauve \&
+  Montoya}]{McWilliams2019}
+McWilliams, Chris, Lurgi, Miguel, Montoya, Jose~M., Sauve, Alix \& Montoya,
+  Daniel (2019).
+\newblock The stability of multitrophic communities under habitat loss.
+\newblock \emph{Nature Communications}, 10, 2322.
+
+\bibitem[{van Nouhuys(2005)}]{vanNouhuys2005}
+van Nouhuys, Saskya (2005).
+\newblock Effects of habitat fragmentation at different trophic levels in
+  insect communities.
+\newblock \emph{Annales Zoologici Fennici}, 42, 433--447.
+
+\bibitem[{Ovaskainen \& Hanski(2001)}]{OvaskainenHanski2001}
+Ovaskainen, O. \& Hanski, I. (2001).
+\newblock Spatially structured metapopulation models: global and local
+  assessment of metapopulation capacity.
+\newblock \emph{Theoretical Population Biology}, 60, 281--302.
+
+\bibitem[{Paine(1966)}]{Paine1966}
+Paine, R.~T. (1966).
+\newblock Food web complexity and species diversity.
+\newblock \emph{American Naturalist}, 100, 65--75.
+
+\bibitem[{Paine(1974)}]{Paine1974}
+Paine, R.~T. (1974).
+\newblock Intertidal community structure.
+\newblock \emph{Oecologia}, 15, 93--120.
+
+\bibitem[{Pedersen \emph{et~al.}(2016)Pedersen, Marleau, Granados, Moeller \&
+  Guichard}]{Pedersenetal2016}
+Pedersen, E.~J., Marleau, J.~N., Granados, M., Moeller, H.~V. \& Guichard, F.
+  (2016).
+\newblock Nonhierarchical dispersal promotes stability and resilience in a
+  tritrophic metacommunity.
+\newblock \emph{American Naturalist}, 187, E116--E128.
+
+\bibitem[{Pillai \emph{et~al.}(2011)Pillai, Gonzalez \& Loreau}]{Pillai2011}
+Pillai, Pradeep, Gonzalez, Andrew \& Loreau, Michel (2011).
+\newblock Metacommunity theory explains the emergence of food web complexity.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 108,
+  19293--19298.
+
+\bibitem[{Purvis \emph{et~al.}(2000)Purvis, Gittleman, Cowlishaw \&
+  Mace}]{Purvisetal2000}
+Purvis, Andy, Gittleman, John~L., Cowlishaw, Guy \& Mace, Georgina~M. (2000).
+\newblock Predicting extinction risk in declining species.
+\newblock \emph{Proceedings of the Royal Society of London. Series B:
+  Biological Sciences}, 267, 1947--1952.
+
+\bibitem[{Riede \emph{et~al.}(2011)Riede, Binzer, Brose, de~Castro,
+  Curtsdotter, Rall \& Eklöf}]{Riede2011}
+Riede, Jens~O., Binzer, Amrei, Brose, Ulrich, de~Castro, Francisco,
+  Curtsdotter, Alva, Rall, Björn~C. \& Eklöf, Anna (2011).
+\newblock Size-based food web characteristics govern the response to species
+  extinctions.
+\newblock \emph{Basic and Applied Ecology}, 12, 581--589.
+
+\bibitem[{Ritchie(2008)}]{Ritchie2008global}
+Ritchie, Mark~E (2008).
+\newblock Global environmental changes and their impact on the serengeti.
+\newblock \emph{Serengeti III: human impacts on ecosystem dynamics}, pp.
+  209--240.
+
+\bibitem[{Ryser \emph{et~al.}(2019)Ryser, Häussler, Stark, Brose, Rall \&
+  Guill}]{Ryser2019}
+Ryser, Remo, Häussler, Johanna, Stark, Markus, Brose, Ulrich, Rall, Björn~C.
+  \& Guill, Christian (2019).
+\newblock The biggest losers: habitat isolation deconstructs complex food webs
+  from top to bottom.
+\newblock \emph{Proceedings of the Royal Society B: Biological Sciences}, 286,
+  20191177.
+
+\bibitem[{Schneider \emph{et~al.}(2016)Schneider, Brose, Rall \&
+  Guill}]{Schneider2016}
+Schneider, Florian~D., Brose, Ulrich, Rall, Björn~C. \& Guill, Christian
+  (2016).
+\newblock {Animal diversity and ecosystem functioning in dynamic food webs}.
+\newblock \emph{Nat. Comm.}, 7, 1--8.
+
+\bibitem[{Schoener \emph{et~al.}(2001)Schoener, Spiller \&
+  Losos}]{Schoeneretal2001}
+Schoener, T.~W., Spiller, D.~A. \& Losos, J.~B. (2001).
+\newblock Predators increase the risk of catastrophic extinction of prey
+  populations.
+\newblock \emph{Nature}, 412, 183--186.
+
+\bibitem[{Staniczenko \emph{et~al.}(2010)Staniczenko, Lewis, Jones \&
+  Reed-Tsochas}]{Staniczenko2010}
+Staniczenko, Phillip P.~A., Lewis, Owen~T., Jones, Nick~S. \& Reed-Tsochas,
+  Felix (2010).
+\newblock Structural dynamics and robustness of food webs.
+\newblock \emph{Ecology Letters}, 13, 891--899.
+
+\bibitem[{Tylianakis \emph{et~al.}(2008)Tylianakis, Didham, Bascompte \&
+  Wardle}]{Tylianakis2008}
+Tylianakis, Jason~M., Didham, Raphael~K., Bascompte, Jordi \& Wardle, David~A.
+  (2008).
+\newblock Global change and species interactions in terrestrial ecosystems.
+\newblock \emph{Ecology Letters}, 11, 1351--1363.
+
+\bibitem[{Valiente-Banuet \emph{et~al.}(2015)Valiente-Banuet, Aizen,
+  Alcántara, Arroyo, Cocucci, Galetti \emph{et~al.}}]{Valiente-Banuet2015}
+Valiente-Banuet, Alfonso, Aizen, Marcelo~A., Alcántara, Julio~M., Arroyo,
+  Juan, Cocucci, Andrea, Galetti, Mauro \emph{et~al.} (2015).
+\newblock Beyond species loss: the extinction of ecological interactions in a
+  changing world.
+\newblock \emph{Functional Ecology}, 29, 299--307.
+
+\bibitem[{Veldhuis \emph{et~al.}(2019)Veldhuis, Ritchie, Ogutu, Morrison,
+  Beale, Estes, Mwakilema, Ojwang, Parr, Probert
+  \emph{et~al.}}]{Veldhuis2019cross}
+Veldhuis, Michiel~P, Ritchie, Mark~E, Ogutu, Joseph~O, Morrison, Thomas~A,
+  Beale, Colin~M, Estes, Anna~B, Mwakilema, William, Ojwang, Gordon~O, Parr,
+  Catherine~L, Probert, James \emph{et~al.} (2019).
+\newblock Cross-boundary human impacts compromise the serengeti-mara ecosystem.
+\newblock \emph{Science}, 363, 1424--1428.
+
+\bibitem[{Villarino \emph{et~al.}(2018)Villarino, Watson, J{\"o}nsson, Gasol,
+  Salazar, Acinas, Estrada, Massana, Logares, Giner
+  \emph{et~al.}}]{Villarinoetal2018}
+Villarino, E., Watson, J.~R., J{\"o}nsson, B., Gasol, J.~M., Salazar, G.,
+  Acinas, S.~G., Estrada, M., Massana, R., Logares, R., Giner, C.~R.
+  \emph{et~al.} (2018).
+\newblock Large-scale ocean connectivity and planktonic body size.
+\newblock \emph{Nature Communications}, 9, 142.
+
+\bibitem[{Williams \& Martinez(2004)}]{WilliamsMartinez2004}
+Williams, R.~J. \& Martinez, N.~D. (2004).
+\newblock Limits to trophic levels and omnivory in complex food webs: theory
+  and data.
+\newblock \emph{American Naturalist}, 163, 458--68.
+
+\end{thebibliography}
 
 
 \clearpage
@@ -279,7 +685,7 @@ In a Bayesian network, if a consumer species $C$ has two prey items $A$ and $B$ 
     P(\neg A)P(\neg B)
   \end{split}
 \end{equation}
-(this generalizes straightforwardly to more than two prey items). Here $P(A) = 1 - P(\neg A)$ (and similarly for species $B$), and the conditional probabilities are determined from some set of model assumptions. One such assumption is that the probability $P(\neg C|f)$ of a species $C$ going extinct is a function of just the fraction $f$, and not the identity, of its resources that are absent (see the \SI, Section~\ref{SI:sec:weighted} for a generalization, where each prey contributes a different amount to the consumer's diet):
+(this generalizes straightforwardly to more than two prey items). Here $P(A) = 1 - P(\neg A)$ (and similarly for species $B$), and the conditional probabilities are determined from some set of model assumptions. One such assumption is that the probability $P(\neg C|f)$ of a species $C$ going extinct is a function of just the fraction $f$, and not the identity, of its resources that are absent (see the \SI, Section~S7 for a generalization, where each prey contributes a different amount to the consumer's diet):
 \begin{equation}
   \label{eq:BN_prob}
   \tag{B2}
@@ -312,7 +718,7 @@ This also means that the Bayesian network approach has two important limitations
 \begin{figure}[!p]
   \centering
   \includegraphics[width=0.65\textwidth]{TL_chain.pdf}
-  \caption{The maximum number of trophic levels in trophic chain metacommunities, as a function of a common baseline extinction probability $\pi$ and the leading eigenvalue of a common landscape matrix $\lambda_M$. Unless $\pi$ is low and $\lambda_M$ simultaneously high, the metacommunity structure itself puts a cap on the number of possible trophic levels. This color map was generated by iterating Eq.~\ref{eq:chain} until metapopulation capacities dropped below the persistence threshold of $1$. However, the same result obtains by approximating the maximum number of trophic levels simply with $-\lambda_M\log(\pi)$ (Eq.~\ref{eq:Tapprox}; see also \SI, Figure~\ref{SI:fig:TL_compare}).}
+  \caption{The maximum number of trophic levels in trophic chain metacommunities, as a function of a common baseline extinction probability $\pi$ and the leading eigenvalue of a common landscape matrix $\lambda_M$. Unless $\pi$ is low and $\lambda_M$ simultaneously high, the metacommunity structure itself puts a cap on the number of possible trophic levels. This color map was generated by iterating Eq.~\ref{eq:chain} until metapopulation capacities dropped below the persistence threshold of $1$. However, the same result obtains by approximating the maximum number of trophic levels simply with $-\lambda_M\log(\pi)$ (Eq.~\ref{eq:Tapprox}; see also \SI, Figure~S3).}
   \label{fig:TL_chain}
 \end{figure}
 
