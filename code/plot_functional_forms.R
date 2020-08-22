@@ -1,10 +1,9 @@
 
 library(tidyverse)
-library(ggplot2)
 
 ggplot_fform <- function(alpha, beta)
 {
-  x <- sort(runif(10000))
+  x <- seq(0, 1, l=101)
   fform <- data.frame(
     x = x,
     y = pbeta(x, alpha, beta),
@@ -18,7 +17,7 @@ ggplot_fform <- function(alpha, beta)
   facetnames <- case_when(alpha==1 & beta==1 ~ expression("linear "* alpha *" = "* beta * " = 1"),
                         alpha==1 & beta==5 ~ expression("concave "* alpha *" = 1 "* beta * " = 5"),
                         alpha==5 & beta==1 ~ expression("convex "* alpha * " = 5 "* beta *" = 1"),
-                        alpha==5 & beta==5 ~ expression("sigmoidal "* alpha *"= " *beta *" = 5"))
+                        alpha==5 & beta==5 ~ expression("sigmoidal "* alpha *" = " *beta *" = 5"))
   
   levels(fform$ff) <- facetnames
   par(pty="s")
@@ -42,24 +41,22 @@ ggplot_fform <- function(alpha, beta)
 
 plot_functional_form <- function(figuredir, alpha, beta){
       ggsave(
-        paste0(figuredir, "fform_",alpha,"_",beta,".png"),
+        paste0(figuredir, "fform_",alpha,"_",beta,".pdf"),
         ggplot_fform(alpha, beta),
         width = 3.25,
-        height = 3.25,
-        dpi = 1200
+        height = 3.25
       )
 }
 
-# for(a in c(1,5))
-#     for(b in c(1,5))
-#       plot_functional_form("../figures/",a,b)
+for(a in c(1,5))
+    for(b in c(1,5))
+      plot_functional_form("../figures/",a,b)
 
 
-#Empty place holer plot for latex 
-# ggsave(
-#   paste0(figuredir, "fform_0_0.png"),
-#   ggplot() + theme_void(),
-#   width = 3.25,
-#   height = 3.25,
-#   dpi = 1200
-# )    
+## Empty place holder plot for latex 
+## ggsave(
+##   "../figures/fform_0_0.pdf",
+##   ggplot() + theme_void(),
+##   width = 3.25,
+##   height = 3.25
+## )    

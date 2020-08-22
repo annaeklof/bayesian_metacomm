@@ -119,7 +119,7 @@ for(infile in infiles){
                           a = pa, b = pb, basals = pbasals, ptitle=ptitles)
 
       #Save it
-      ggsave(filename = sump, width=14, height=8, plot=p2)
+      ggsave(filename = sump, width=14, height=8, plot=p2, dpi=200)
     } 
   }
  }
