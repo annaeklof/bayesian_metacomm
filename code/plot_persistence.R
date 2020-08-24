@@ -28,6 +28,7 @@ plot_persistence <- function(data, webs, paramss, scenarioss, spfs, a, b, basals
   data %>% filter(web == webs, params %in% paramss, spf==spfs, alpha == a, beta == b, scenario %in% scenarioss, 
                   prem %in% c(0, 100, 200, 290)) %>%
     rename(`patches rem.`=prem) %>%
+    ##slice_sample(prop=0.1) %>%
     ggplot() +
     aes(x=as.factor(xi), y=(sump/300), colour=as.factor(ITL), fill=as.factor(ITL)) +
     geom_point(alpha=1, size=5, shape=1) +

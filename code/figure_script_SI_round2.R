@@ -52,7 +52,7 @@ if(file.exists(figuredir)){
 #Figures S5, S7, S9, S11
 #Generate .png plots for the different consumer responses to resource loss (functional forms) 
 infiles <- "../data/summaries_round2/summary_largewebs_*.rds" %>% Sys.glob() #summary files
-infile <- "../data/summaries_round2/summary_serengeti2.rds"  #summary files
+infile <- "../data/summaries_round2/summary_serengeti.rds"  #summary files
 
 for(infile in infiles){
   dat0 <- infile %>% read_rds 
@@ -113,17 +113,17 @@ for(infile in infiles){
 
       #Plot name
       sump <- paste0(figuredir, "sump_", pweb %>% str_split(" ", simplify=TRUE) %>% as_tibble %>% 
-                         paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".png")
+                         paste(.,collapse="_") %>% unname, "_", pspfs, "_", pa, "_", pb,".pdf")
       
       p2 <- plot_persistence(data = dat_plot, webs = pweb, paramss = pparams, scenarioss = pscenarios, spfs = pspfs,
                           a = pa, b = pb, basals = pbasals, ptitle=ptitles)
 
       #Save it
-      ggsave(filename = sump, width=14, height=8, plot=p2, dpi=200)
+      ggsave(filename = sump, width=14, height=8, plot=p2)
     } 
   }
  }
-} 
+}
 
 #Figures S13
 #Generate .pdf plots for the different model food webs with the top species as focal species for patch loss 
